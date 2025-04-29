@@ -1,0 +1,8 @@
+_build/*
+
+docs/html/*
+docs/_build/*
+docs/_static/*
+docs/_templates/*
+
+doctrees/*
