@@ -1,20 +1,12 @@
-.. MDSplus Documentation documentation master file, created by
-   sphinx-quickstart on Tue Apr 29 15:12:44 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+MDSplus Documentation
+=====================
 
-Welcome to MDSplus Documentation's documentation!
-=================================================
+This is where the intro to the readthedocs documentation is going to go.
+
+Contents
+--------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    install
+    api

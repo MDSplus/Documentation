@@ -6,3 +6,7 @@ docs/_static/*
 docs/_templates/*
 
 doctrees/*
+
+.venv/*
+
+__pycache__
