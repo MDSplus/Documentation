@@ -9,4 +9,4 @@ Contents
 .. toctree::
 
     install
-    api
+    install/debian
