@@ -27,62 +27,62 @@ wget -O- http://www.mdsplus.org/dist/mdsplus.gpg.key | sudo tee /usr/share/keyri
 
 ## 2. Enable MDSplus Debian Repository
 
-To add an MDSplus repository to your system, run one of the following commands in Terminal, depending on your version of Ubuntu or Debian (these are all a single-line):
+To add an MDSplus repository to your system, run one of the following commands in Terminal, depending on your version of Ubuntu or Debian:
 ### Alpha releases
 
-#### Ubuntu 24.04, Alpha
+#### Ubuntu 24.04
 
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu24/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Ubuntu 22.04, Alpha
+#### Ubuntu 22.04
 
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu22/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Ubuntu 20.04, Alpha
+#### Ubuntu 20.04
 
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu20/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Debian Bookworm, Alpha
+#### Debian Bookworm
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bookworm/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Debian Bookworm, Alpha
+#### Debian Bookworm
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bullseye/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
 ### Stable releases
 
-#### Ubuntu 24.04, Stable
+#### Ubuntu 24.04
 
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu24/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Ubuntu 22.04, Stable
+#### Ubuntu 22.04
  
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu22/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Ubunto 20.04, Stable
+#### Ubunto 20.04
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu20/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Debian Bookworm, Stable
+#### Debian Bookworm
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bullseye/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Debian Bullseye, Stable
+#### Debian Bullseye
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bullseye/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
