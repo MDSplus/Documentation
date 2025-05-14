@@ -149,13 +149,13 @@ The following table shows the most recent MDSplus debian packages.
 
 | Branch | Distribution | Version | MDSplus Package URL |
 |-------|--------|---------|-------------|
-| Alpha | Ubuntu | 24.04 | http://www.mdsplus.org/dist/Ubuntu24/alpha/DEBS/ |
-|       |        | 22.04 | https://www.mdsplus.org/dist/Ubuntu22/alpha/DEBS/ |
-|       |        | 20.04 | https://www.mdsplus.org/dist/Ubuntu20/alpha/DEBS/ |
-|       | Debian | Bookworm | https://www.mdsplus.org/dist/DebianBookworm/alpha/DEBS/ |
-|       |        | Buster | https://www.mdsplus.org/dist/DebianBuster/alpha/DEBS/ |
-| Stable | Ubuntu | 24.04 | https://www.mdsplus.org/dist/Ubuntu24/stable/DEBS/ |
-|        |        | 22.04 | https://www.mdsplus.org/dist/Ubuntu22/stable/DEBS/ |
-|        |        | 20.04 | https://www.mdsplus.org/dist/Ubuntu20/stable/DEBS/ |
-|        | Debian | Bookworm | https://www.mdsplus.org/dist/DebianBookworm/stable/DEBS/ |
-|        |        | Buster | https://www.mdsplus.org/dist/DebianBuster/stable/DEBS/ |
+| Alpha | Ubuntu | 24.04 | [mdsplus.org/dist/Ubuntu24/alpha/DEBS/](http://www.mdsplus.org/dist/Ubuntu24/alpha/DEBS/) |
+|       |        | 22.04 | [mdsplus.org/dist/Ubuntu22/alpha/DEBS/](https://www.mdsplus.org/dist/Ubuntu22/alpha/DEBS/) |
+|       |        | 20.04 | [mdsplus.org/dist/Ubuntu20/alpha/DEBS/](https://www.mdsplus.org/dist/Ubuntu20/alpha/DEBS/) |
+|       | Debian | Bookworm | [mdsplus.org/dist/DebianBookworm/alpha/DEBS/](https://www.mdsplus.org/dist/DebianBookworm/alpha/DEBS/) |
+|       |        | Buster | [mdsplus.org/dist/DebianBuster/alpha/DEBS/](https://www.mdsplus.org/dist/DebianBuster/alpha/DEBS/) |
+| Stable | Ubuntu | 24.04 | [mdsplus.org/dist/Ubuntu24/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu24/stable/DEBS/) |
+|        |        | 22.04 | [mdsplus.org/dist/Ubuntu22/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu22/stable/DEBS/) |
+|        |        | 20.04 | [mdsplus.org/dist/Ubuntu20/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu20/stable/DEBS/) |
+|        | Debian | Bookworm | [mdsplus.org/dist/DebianBookworm/stable/DEBS/](https://www.mdsplus.org/dist/DebianBookworm/stable/DEBS/) |
+|        |        | Buster | [mdsplus.org/dist/DebianBuster/stable/DEBS/](https://www.mdsplus.org/dist/DebianBuster/stable/DEBS/) |
