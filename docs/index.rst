@@ -10,3 +10,4 @@ Contents
 
     install
     install/debian
+    install/redhat
