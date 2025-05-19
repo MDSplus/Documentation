@@ -53,7 +53,7 @@ sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] htt
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bookworm/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Debian Bookworm
+#### Debian Bullseye
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bullseye/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
@@ -72,14 +72,14 @@ sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] htt
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu22/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
-#### Ubunto 20.04
+#### Ubuntu 20.04
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu20/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
 #### Debian Bookworm
 ```sh
-sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bullseye/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
+sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/debian/bookworm/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
 #### Debian Bullseye
@@ -153,9 +153,9 @@ The following table shows the most recent MDSplus debian packages.
 |       |        | 22.04 | [mdsplus.org/dist/Ubuntu22/alpha/DEBS/](https://www.mdsplus.org/dist/Ubuntu22/alpha/DEBS/) |
 |       |        | 20.04 | [mdsplus.org/dist/Ubuntu20/alpha/DEBS/](https://www.mdsplus.org/dist/Ubuntu20/alpha/DEBS/) |
 |       | Debian | Bookworm | [mdsplus.org/dist/DebianBookworm/alpha/DEBS/](https://www.mdsplus.org/dist/DebianBookworm/alpha/DEBS/) |
-|       |        | Buster | [mdsplus.org/dist/DebianBuster/alpha/DEBS/](https://www.mdsplus.org/dist/DebianBuster/alpha/DEBS/) |
+|       |        | Bullseye | [mdsplus.org/dist/DebianBullseye/alpha/DEBS/](https://www.mdsplus.org/dist/DebianBullseye/alpha/DEBS/) |
 | Stable | Ubuntu | 24.04 | [mdsplus.org/dist/Ubuntu24/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu24/stable/DEBS/) |
-|        |        | 22.04 | [mdsplus.org/dist/Ubuntu22/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu22/stable/DEBS/) |
-|        |        | 20.04 | [mdsplus.org/dist/Ubuntu20/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu20/stable/DEBS/) |
-|        | Debian | Bookworm | [mdsplus.org/dist/DebianBookworm/stable/DEBS/](https://www.mdsplus.org/dist/DebianBookworm/stable/DEBS/) |
-|        |        | Buster | [mdsplus.org/dist/DebianBuster/stable/DEBS/](https://www.mdsplus.org/dist/DebianBuster/stable/DEBS/) |
+|       |        | 22.04 | [mdsplus.org/dist/Ubuntu22/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu22/stable/DEBS/) |
+|       |        | 20.04 | [mdsplus.org/dist/Ubuntu20/stable/DEBS/](https://www.mdsplus.org/dist/Ubuntu20/stable/DEBS/) |
+|       | Debian | Bookworm | [mdsplus.org/dist/DebianBookworm/stable/DEBS/](https://www.mdsplus.org/dist/DebianBookworm/stable/DEBS/) |
+|       |        | Bullseye | [mdsplus.org/dist/DebianBullseye/stable/DEBS/](https://www.mdsplus.org/dist/DebianBullseye/stable/DEBS/) |

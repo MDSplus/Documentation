@@ -12,3 +12,7 @@ _installation instructions go here_
 Instructions for Mac OS to come with new release
 
 Instructions for Windows to come with new release
+
+# Set Up a DAQ Server
+
+[Instructions here](daq/setup.md)
