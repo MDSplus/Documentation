@@ -11,3 +11,5 @@ Contents
     install
     install/debian
     install/redhat
+
+    daq/daq_setup
