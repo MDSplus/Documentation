@@ -4,7 +4,7 @@ MDSplus now provides an `apt` repository for Red Hat Linux distributions, which 
 
 | Release Level | Description |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| alpha         | Updates occur whenever a change to an MDSplus source module.<br>Reflects the HEAD of the Git Repository.                                               |
+| alpha         | Updates occur whenever a change is made to an MDSplus source module.<br>Reflects the HEAD of the Git repository.                                               |
 | stable        | Updates occur less frequently.<br>New features added only after significant testing by sites using the alpha packages.<br>Bug fixes applied as needed. |
 
 Instructions are provided below for each release level.
@@ -12,13 +12,13 @@ Instructions are provided below for each release level.
 
 ## 0. EPEL Repository
 
-MDSplus depends on a variety software packages, some of which are included with standard Red Hat Enterprise Linux distributions, but others which must be acquired from Extra Packages for Enterprise Linux (EPEL). Please configure your system to include the EPEL repository **before** trying to install MDSplus. You can find more information about EPEL and the RPMs for configuring your system to use it on the [EPEL Home Page](http://fedoraproject.org/wiki/EPEL).
+MDSplus depends on a variety of software packages, some of which are included with standard Red Hat Enterprise Linux distributions, but others which must be acquired from Extra Packages for Enterprise Linux (EPEL). Please configure your system to include the EPEL repository **before** trying to install MDSplus. You can find more information about EPEL and the RPMs for configuring your system to use it on the [EPEL Home Page](http://fedoraproject.org/wiki/EPEL).
 
 > NEW INSTRUCTIONS TK STEPHEN AND OR TIM
 
 ## 1. Import the Signing Key
 
-First, use the terminal command for `curl` or `wget` (below) to install the signing key in `/usr/share/keyrings/` and then tell `apt` to use that key when updating from the MDSplus repository.
+First, open a terminal (aka shell) window and run a `curl` or `wget` command  (below) to install the signing key in `/usr/share/keyrings/` and then tell `apt` to use that key when updating from the MDSplus repository.
 
 ```sh
 curl -fsSL http://www.mdsplus.org/dist/RPM-GPG-KEY-MDSplus | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus > /dev/null
@@ -27,7 +27,7 @@ curl -fsSL http://www.mdsplus.org/dist/RPM-GPG-KEY-MDSplus | sudo tee /etc/pki/r
 or
 
 ```sh
-wget -O- http://www.mdsplus.org/dist/RPM-GPG-KEY-MDSplus | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus > /dev/null
+wget -O http://www.mdsplus.org/dist/RPM-GPG-KEY-MDSplus | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus > /dev/null
 ```
 
 
@@ -109,9 +109,9 @@ MDSplus is split into several packages so that you can install just the parts yo
 
 ## 7. Manually Installing MDSplus package
 
-It is possible to manually install MDSplus debian packages instead of using a Debian repository, but you must account for all the dependencies yourself. It is recommended to use one of the repositories. To download packages, use the correct link below, depending on your operating system version.
+It is possible to manually install MDSplus RHEL packages instead of using a RHEL repository, but you must account for all the dependencies yourself. It is recommended to use one of the repositories. To download packages, use the correct link below, depending on your operating system version.
 
-The following table shows the most recent MDSplus debian packages.
+The following table shows the most recent MDSplus RHEL packages.
 
 | Branch | Distribution | Version | MDSplus Package URL |
 |-------|--------|---------|-------------|
@@ -119,3 +119,5 @@ The following table shows the most recent MDSplus debian packages.
 |       |        | 9 | [mdsplus.org/dist/el9/alpha/](https://www.mdsplus.org/dist/el9/alpha/) |
 | Stable | Enterprise Linux | 8 | [mdsplus.org/dist/el8/stable/](https://www.mdsplus.org/dist/el8/stable/) |
 |        |        | 9 | [mdsplus.org/dist/el9/stable/](https://www.mdsplus.org/dist/el9/stable) |
+
+> Per Mark Winkel: Perhaps "Enterprise Linux" in the table above should be replaced with "RHEL / CentOS"?  This is FYI (i.e., not for the document)... RHEL = Red Hat Enterprise Linux, which is a derivative of CentOS.  CentOS is now at its "end of life", so it has been replaced with Rocky Linux. Talk to Stephen to find out what should go in the Distribution column of this table.

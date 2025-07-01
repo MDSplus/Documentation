@@ -1,6 +1,5 @@
 # Installation on Debian (Ubuntu)
 
-
 MDSplus now provides an `apt` repository for Ubuntu and Debian Linux distributions, which will allow you to subscribe to automatic updates as they are released. You may also choose which features of MDSplus you want to install on your Linux system. There are currently two different release levels of MDSplus:
 
 | Release Level | Description                                                                                                                                            |
@@ -27,7 +26,18 @@ wget -O- http://www.mdsplus.org/dist/mdsplus.gpg.key | sudo tee /usr/share/keyri
 
 ## 2. Enable MDSplus Debian Repository
 
-To add an MDSplus repository to your system, run one of the following commands in Terminal, depending on your version of Ubuntu or Debian:
+To add an MDSplus repository to your system, run the appropriate in Terminal, depending on your version of Ubuntu or Debian (see below for full list):
+
+| Alpha           | Stable          |
+| --------------- | --------------- |
+| Ubuntu 24.04 ([AMD64](#ubuntu-2404), arm64)    | Ubuntu 24.04 ([amd64](#ubuntu-2404-1), arm64)    |
+| [Ubuntu 22.04](#ubuntu-2204)    | [Ubuntu 22.04](#ubuntu-2204-1)    |
+| [Ubuntu 20.04](#ubuntu-2004)    | [Ubuntu 20.04](#ubuntu-2004-1)    |
+| [Debian Bookworm](#debian-bookworm) | [Debian Bookworm](#debian-bookworm-1) |
+| [Debian Bullseye](#debian-bullseye) | [Debian Bullseye](#debian-bullseye-1) |
+
+> more to come re: AMD64/ARM/other architectures
+
 ### Alpha releases
 
 #### Ubuntu 24.04
