@@ -1,6 +1,6 @@
 # Environment Variables: Glossary
 
-This list of environment variables 
+Following is a list of environment variables that are used or referenced by MDSplus.
 
 ## Core
 ### MDS_PATH

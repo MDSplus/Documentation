@@ -90,6 +90,15 @@ To add an MDSplus repository to your system, run the appropriate in Terminal, de
 | Debian Bookworm | [AMD64](#debian-bookworm) | arm64 | [AMD64](#debian-bookworm-1)  | arm64 |
 | Debian Bullseye | [AMD64](#debian-bullseye) | arm64 | [AMD64](#debian-bullseye-1)  | arm64 |
 
+> Table option 4
+
+| OS              | Alpha                            | Stable                               | 
+|-----------------|----------------------------------|--------------------------------------|
+| Ubuntu 24.04    | [AMD64](#ubuntu-2404)     / arm64 | [AMD64](#ubuntu-2404-1)     / arm64 |
+| Ubuntu 22.04    | [AMD64](#ubuntu-2204)     / arm64 | [AMD64](#ubuntu-2204-1)     / arm64 |
+| Ubuntu 20.04    | [AMD64](#ubuntu-2004)     / arm64 | [AMD64](#ubuntu-2004-1)     / arm64 |
+| Debian Bookworm | [AMD64](#debian-bookworm) / arm64 | [AMD64](#debian-bookworm-1) / arm64 |
+| Debian Bullseye | [AMD64](#debian-bullseye) / arm64 | [AMD64](#debian-bullseye-1) / arm64 |
 
 
 
