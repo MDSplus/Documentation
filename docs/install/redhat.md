@@ -113,11 +113,9 @@ It is possible to manually install MDSplus RHEL packages instead of using a RHEL
 
 The following table shows the most recent MDSplus RHEL packages.
 
-| Branch | Distribution | Version | MDSplus Package URL |
-|-------|--------|---------|-------------|
-| Alpha | Enterprise Linux | 8 | [mdsplus.org/dist/el8/alpha/](https://www.mdsplus.org/dist/el8/alpha/) |
-|       |        | 9 | [mdsplus.org/dist/el9/alpha/](https://www.mdsplus.org/dist/el9/alpha/) |
-| Stable | Enterprise Linux | 8 | [mdsplus.org/dist/el8/stable/](https://www.mdsplus.org/dist/el8/stable/) |
-|        |        | 9 | [mdsplus.org/dist/el9/stable/](https://www.mdsplus.org/dist/el9/stable) |
-
-> Per Mark Winkel: Perhaps "Enterprise Linux" in the table above should be replaced with "RHEL / CentOS"?  This is FYI (i.e., not for the document)... RHEL = Red Hat Enterprise Linux, which is a derivative of CentOS.  CentOS is now at its "end of life", so it has been replaced with Rocky Linux. Talk to Stephen to find out what should go in the Distribution column of this table.
+| Branch | Version | MDSplus Package URL |
+|--------|--------|-------------|
+| Alpha  | 8      | [mdsplus.org/dist/el8/alpha/](https://www.mdsplus.org/dist/el8/alpha/) |
+|        | 9      | [mdsplus.org/dist/el9/alpha/](https://www.mdsplus.org/dist/el9/alpha/) |
+| Stable | 8      | [mdsplus.org/dist/el8/stable/](https://www.mdsplus.org/dist/el8/stable/) |
+|        | 9      | [mdsplus.org/dist/el9/stable/](https://www.mdsplus.org/dist/el9/stable) |

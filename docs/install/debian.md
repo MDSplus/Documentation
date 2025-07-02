@@ -26,89 +26,31 @@ wget -O- http://www.mdsplus.org/dist/mdsplus.gpg.key | sudo tee /usr/share/keyri
 
 ## 2. Enable MDSplus Debian Repository
 
-To add an MDSplus repository to your system, run the appropriate in Terminal, depending on your version of Ubuntu or Debian (see below for full list):
-
-> Table option 1:
-
-| OS | Flavor | Architecture|
-|----|--------|-------------|
-| Ubuntu 24.04 | Alpha | [AMD64](#ubuntu-2404) |
-|              |       | arm64 |
-|              | Stable | [AMD64](#ubuntu-2404-1) |
-|              |        | arm64 |
-| Ubuntu 22.04 | Alpha | [AMD64](#ubuntu-2204) |
-|              |       | arm64 |
-|              | Stable | [AMD64](#ubuntu-2204-1) |
-|              |        | arm64 |
-| Ubuntu 20.04 | Alpha | [AMD64](#ubuntu-2004) |
-|              |       | arm64 |
-|              | Stable | [AMD64](#ubuntu-2004-1) |
-|              |        | arm64 |
-| Debian Bookworm | Alpha | [AMD64](#debian-bookworm) |
-|                 |       | arm64 |
-|                 | Stable | [AMD64](#debian-bookworm-1) |
-|                 |        | arm64 |
-| Debian Bullseye | Alpha | [AMD64](#debian-bullseye) |
-|                 |       | arm64 |
-|                 | Stable | [AMD64](#debian-bullseye-1) |
-|                 |        | arm64 |
-
-
-> Table option 2
-
-| Flavor | OS | Architecture|
-|--------|----|-------------|
-| Alpha  | Ubuntu 24.04    | [AMD64](#ubuntu-2404) |
-|        |                 | arm64 |
-|        | Ubuntu 22.04    | [AMD64](#ubuntu-2204) |
-|        |                 | arm64 |
-|        | Ubuntu 20.04    | [AMD64](#ubuntu-2004) |
-|        |                 | arm64 |
-|        | Debian Bookworm | [AMD64](#debian-bookworm) |
-|        |                 | arm64 |
-|        | Debian Bullseye | [AMD64](#debian-bullseye) |
-|        |                 | arm64 |
-| Stable | Ubuntu 24.04    | [AMD64](#ubuntu-2404-1) |
-|        |                 | arm64 |
-|        | Ubuntu 22.04    | [AMD64](#ubuntu-2204-1) |
-|        |                 | arm64 |
-|        | Ubuntu 20.04    | [AMD64](#ubuntu-2004-1) |
-|        |                 | arm64 |
-|        | Debian Bookworm | [AMD64](#debian-bookworm-1) |
-|        |                 | arm64 |
-|        | Debian Bullseye | [AMD64](#debian-bullseye-1) |
-|        |                 | arm64 |
-
-
-> Table option 3
-
-| OS              | Alpha                     |       | Stable                       |       | 
-|-----------------|---------------------------|-------|------------------------------|-------|
-| Ubuntu 24.04    | [AMD64](#ubuntu-2404)     | arm64 | [AMD64](#ubuntu-2404-1)      | arm64 |
-| Ubuntu 22.04    | [AMD64](#ubuntu-2204)     | arm64 | [AMD64](#ubuntu-2204-1)      | arm64 |
-| Ubuntu 20.04    | [AMD64](#ubuntu-2004)     | arm64 | [AMD64](#ubuntu-2004-1)      | arm64 |
-| Debian Bookworm | [AMD64](#debian-bookworm) | arm64 | [AMD64](#debian-bookworm-1)  | arm64 |
-| Debian Bullseye | [AMD64](#debian-bullseye) | arm64 | [AMD64](#debian-bullseye-1)  | arm64 |
-
-> Table option 4
+To add an MDSplus repository to your system, run the appropriate in Terminal, depending on your version of Ubuntu or Debian (see below for full list; you may use the links in the table below to jump to the sub-section):
 
 | OS              | Alpha                            | Stable                               | 
 |-----------------|----------------------------------|--------------------------------------|
-| Ubuntu 24.04    | [AMD64](#ubuntu-2404)     / arm64 | [AMD64](#ubuntu-2404-1)     / arm64 |
-| Ubuntu 22.04    | [AMD64](#ubuntu-2204)     / arm64 | [AMD64](#ubuntu-2204-1)     / arm64 |
-| Ubuntu 20.04    | [AMD64](#ubuntu-2004)     / arm64 | [AMD64](#ubuntu-2004-1)     / arm64 |
-| Debian Bookworm | [AMD64](#debian-bookworm) / arm64 | [AMD64](#debian-bookworm-1) / arm64 |
-| Debian Bullseye | [AMD64](#debian-bullseye) / arm64 | [AMD64](#debian-bullseye-1) / arm64 |
+| Ubuntu 24.04    | [amd64](#ubuntu-2404-amd64) / [arm64](#ubuntu-2404-arm64) | [amd64](#ubuntu-2404-1)     |
+| Ubuntu 22.04    | [amd64](#ubuntu-2204) | [amd64](#ubuntu-2204-1)     |
+| Ubuntu 20.04    | [amd64](#ubuntu-2004) | [amd64](#ubuntu-2004-1)     |
+| Debian Bookworm | [amd64](#debian-bookworm) / [arm64](#ubuntu-2404-arm64) | [amd64](#debian-bookworm-1) |
+| Debian Bullseye | [amd64](#debian-bullseye) | [amd64](#debian-bullseye-1) |
 
 
 
 
 ### Alpha releases
 
-#### Ubuntu 24.04
+#### Ubuntu 24.04 (amd64)
 
 ```sh
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu24/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
+```
+
+#### Ubuntu 24.04 (arm64)
+
+```sh
+sudo sh -c "echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/mdsplus.asc] http://www.mdsplus.org/dist/Ubuntu24/repo MDSplus alpha' > /etc/apt/sources.list.d/mdsplus.list"
 ```
 
 #### Ubuntu 22.04
