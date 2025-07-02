@@ -28,15 +28,71 @@ wget -O- http://www.mdsplus.org/dist/mdsplus.gpg.key | sudo tee /usr/share/keyri
 
 To add an MDSplus repository to your system, run the appropriate in Terminal, depending on your version of Ubuntu or Debian (see below for full list):
 
-| Alpha           | Stable          |
-| --------------- | --------------- |
-| Ubuntu 24.04 ([AMD64](#ubuntu-2404), arm64)    | Ubuntu 24.04 ([amd64](#ubuntu-2404-1), arm64)    |
-| [Ubuntu 22.04](#ubuntu-2204)    | [Ubuntu 22.04](#ubuntu-2204-1)    |
-| [Ubuntu 20.04](#ubuntu-2004)    | [Ubuntu 20.04](#ubuntu-2004-1)    |
-| [Debian Bookworm](#debian-bookworm) | [Debian Bookworm](#debian-bookworm-1) |
-| [Debian Bullseye](#debian-bullseye) | [Debian Bullseye](#debian-bullseye-1) |
+> Table option 1:
 
-> more to come re: AMD64/ARM/other architectures
+| OS | Flavor | Architecture|
+|----|--------|-------------|
+| Ubuntu 24.04 | Alpha | [AMD64](#ubuntu-2404) |
+|              |       | arm64 |
+|              | Stable | [AMD64](#ubuntu-2404-1) |
+|              |        | arm64 |
+| Ubuntu 22.04 | Alpha | [AMD64](#ubuntu-2204) |
+|              |       | arm64 |
+|              | Stable | [AMD64](#ubuntu-2204-1) |
+|              |        | arm64 |
+| Ubuntu 20.04 | Alpha | [AMD64](#ubuntu-2004) |
+|              |       | arm64 |
+|              | Stable | [AMD64](#ubuntu-2004-1) |
+|              |        | arm64 |
+| Debian Bookworm | Alpha | [AMD64](#debian-bookworm) |
+|                 |       | arm64 |
+|                 | Stable | [AMD64](#debian-bookworm-1) |
+|                 |        | arm64 |
+| Debian Bullseye | Alpha | [AMD64](#debian-bullseye) |
+|                 |       | arm64 |
+|                 | Stable | [AMD64](#debian-bullseye-1) |
+|                 |        | arm64 |
+
+
+> Table option 2
+
+| Flavor | OS | Architecture|
+|--------|----|-------------|
+| Alpha  | Ubuntu 24.04    | [AMD64](#ubuntu-2404) |
+|        |                 | arm64 |
+|        | Ubuntu 22.04    | [AMD64](#ubuntu-2204) |
+|        |                 | arm64 |
+|        | Ubuntu 20.04    | [AMD64](#ubuntu-2004) |
+|        |                 | arm64 |
+|        | Debian Bookworm | [AMD64](#debian-bookworm) |
+|        |                 | arm64 |
+|        | Debian Bullseye | [AMD64](#debian-bullseye) |
+|        |                 | arm64 |
+| Stable | Ubuntu 24.04    | [AMD64](#ubuntu-2404-1) |
+|        |                 | arm64 |
+|        | Ubuntu 22.04    | [AMD64](#ubuntu-2204-1) |
+|        |                 | arm64 |
+|        | Ubuntu 20.04    | [AMD64](#ubuntu-2004-1) |
+|        |                 | arm64 |
+|        | Debian Bookworm | [AMD64](#debian-bookworm-1) |
+|        |                 | arm64 |
+|        | Debian Bullseye | [AMD64](#debian-bullseye-1) |
+|        |                 | arm64 |
+
+
+> Table option 3
+
+| OS              | Alpha                     |       | Stable                       |       | 
+|-----------------|---------------------------|-------|------------------------------|-------|
+| Ubuntu 24.04    | [AMD64](#ubuntu-2404)     | arm64 | [AMD64](#ubuntu-2404-1)      | arm64 |
+| Ubuntu 22.04    | [AMD64](#ubuntu-2204)     | arm64 | [AMD64](#ubuntu-2204-1)      | arm64 |
+| Ubuntu 20.04    | [AMD64](#ubuntu-2004)     | arm64 | [AMD64](#ubuntu-2004-1)      | arm64 |
+| Debian Bookworm | [AMD64](#debian-bookworm) | arm64 | [AMD64](#debian-bookworm-1)  | arm64 |
+| Debian Bullseye | [AMD64](#debian-bullseye) | arm64 | [AMD64](#debian-bullseye-1)  | arm64 |
+
+
+
+
 
 ### Alpha releases
 
