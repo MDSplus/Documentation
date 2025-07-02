@@ -26,6 +26,8 @@ This defines the default server/host to connect to when a host is not specified 
 ## TCP_WINDOW_SIZE
 If set, this will be used by `setsockopt()` to set both `SO_RCVBUF` and `SO_SNDBUF` in bytes, which are two Linux OS settings.
 
+# Other
+
 ## MDSIP_MAX_VERSION
 If set when running `mdsip`, this will be used when accepting connections to limit the MDSip protocol version. Note: this is separate from the MDSplus version.
 

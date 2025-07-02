@@ -13,3 +13,5 @@ Contents
     install/redhat
 
     daq/daq_setup
+
+    environmentvariables
