@@ -91,7 +91,7 @@ Used when spawning shell commands in the form of `$SHELL -c "command"`. Defaults
 
 ## HISTFILESIZE
 Used by `tdic` to limit the number of lines stored in the `$HOME/.tdic` history file. Refer to
-[www.gnu.org/software/bash/manual/bash.html#index-HISTFILESIZE](https://www.gnu.org/software/bash/manual/bash.html#index-HISTFILESIZE).
+[www.gnu.org/software/bash/manual/bash.html#index-HISTFILESIZE](https://www.gnu.org/software/bash/manual/bash.html#index-HISTFILESIZE). On Windows, the history file is called `%LocalAppData%\tdic`.
 
 ## MACHINE
 This will be returned by the TDI `machine()` function. Potentially indicates the fusion device the current environment is configured for.
