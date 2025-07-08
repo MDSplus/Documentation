@@ -14,4 +14,4 @@ Contents
 
     daq/daq_setup
 
-    environmentvariables
+    environment-variables
