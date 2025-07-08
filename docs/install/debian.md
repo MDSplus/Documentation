@@ -30,11 +30,11 @@ To add an MDSplus repository to your system, run the appropriate in Terminal, de
 
 | OS              | Alpha                            | Stable                               | 
 |-----------------|----------------------------------|--------------------------------------|
-| Ubuntu 24.04    | [amd64](#ubuntu-2404-amd64) / [arm64](#ubuntu-2404-amd64) | [amd64](#ubuntu-2404)     |
-| Ubuntu 22.04    | [amd64](#ubuntu-2204) | [amd64](#ubuntu-2204-1)     |
-| Ubuntu 20.04    | [amd64](#ubuntu-2004) | [amd64](#ubuntu-2004-1)     |
+| Ubuntu 24.04    | [amd64](#ubuntu-24-04-amd64) / [arm64](#ubuntu-24-04-arm64) | [amd64](#ubuntu-24-04)     |
+| Ubuntu 22.04    | [amd64](#ubuntu-22-04) | [amd64](#id1)     |
+| Ubuntu 20.04    | [amd64](#ubuntu-20-04) | [amd64](#id2)     |
 | Debian Bookworm | [amd64](#debian-bookworm-amd64) / [arm64](#debian-bookworm-arm64) | [amd64](#debian-bookworm) |
-| Debian Bullseye | [amd64](#debian-bullseye) | [amd64](#debian-bullseye-1) |
+| Debian Bullseye | [amd64](#debian-bullseye) | [amd64](#id3) |
 
 
 ### Alpha releases
