@@ -3,7 +3,7 @@
 Following is a list of environment variables that are used or referenced by MDSplus. These are in no particular order, but mostly grouped by relation to each other.
 
 ## MDS_PATH
-TDI Search Path. One or more paths separated by semicolons. TDI will search left-to-right for `.fun` or `.py` files matching the name of the function being searched for.
+TDI Search Path. One or more paths separated by semicolons. TDI will search each directory for `.fun` and then `.py` files matching the name of the function being searched for.
 
 ## MDSPLUS_DIR
 Path to MDSplus installation. This is used for setting a lot of other variables through `envsyms`.
@@ -18,7 +18,7 @@ The path to search for the tree files for a tree that does not have `${tree}_pat
 
 ## TreeHooks
 Used to enable a comma-separated list of [tree hooks](tree-hooks.md).
-> TODO: Actually write tree-hooks.md
+> TODO: Write page on tree-hooks.md
 
 ## mds_event_target
 If set, TCP events will be used instead of UDP events. This contains the event server to send the TCP events to.
