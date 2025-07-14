@@ -1,28 +1,29 @@
 MDSplus Documentation
 =====================
 
-This is where the intro to the readthedocs documentation is going to go.
-
-Contents
+Guide
 --------
 
 .. toctree::
     :maxdepth: 1
 
-    guide/index.md
+    guide/index
     guide/history
-    guide/install
-        guide/install/index.md
+    guide/install/index
         guide/install/debian
         guide/install/redhat
         guide/install/packages
-    guide/daq/daq_setup.md
+    guide/daq/daq_setup
     guide/devices
     guide/viewdata
 
+Reference
+--------
 
-    reference
-    reference/index.md
+.. toctree::
+    :maxdepth: 1
+
+    reference/index
     reference/environment-variables
     reference/matlab
     reference/mdstcl
