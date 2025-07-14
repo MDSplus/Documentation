@@ -7,18 +7,22 @@ Contents
 --------
 
 .. toctree::
+    :maxdepth: 1
 
-    guide
+    guide/index.md
     guide/history
     guide/install
-    guide/install/debian
-    guide/install/redhat
-       
-    guide/daq/daq_setup
-
+        guide/install/index.md
+        guide/install/debian
+        guide/install/redhat
+        guide/install/packages
+    guide/daq/daq_setup.md
     guide/devices
-    
+    guide/viewdata
+
+
     reference
+    reference/index.md
     reference/environment-variables
     reference/matlab
     reference/mdstcl
