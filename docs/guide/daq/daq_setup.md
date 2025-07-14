@@ -20,10 +20,11 @@ Begin by installing MDSplus on your server. Follow the instructions for your ope
 
 One major decision you will be making is whether and how to include subtrees in the design of your data trees. Ultimately, subtrees matter most when scaling up an experiment&mdash;as the experiment grows, you may want to restrict access of specific areas to certain groups. In a small experiment with no plans for expansion, there is no need to worry about this. However, if you are setting up an experiment with any growth potential you need to set up any subtrees from the beginning&mdash;it will not be easy to move a portion of your tree to a new subtree, as there are no/few tools to help you do so; additionally, it takes significant effort to go back and reorganize data trees later because you will have to retroactively make subtrees and carefully move the data into them.
 
-| Pros | Cons |
-|------|------|
-| Subtrees can be opened independently, which speeds up opening time if you only need specific sections. | Duplicates/multiplies storage needs. It also takes longer to open everything when you open the head node.  |
-| Subtrees allow for restricted access by tree (e.g. grant someone write-access to just their specific diagnostic) | &nbsp; |
+| Pros                                                                                                             | Cons                                                                                                      |
+|------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Subtrees can be opened independently, which speeds up opening time if you only need specific sections.           | Duplicates/multiplies storage needs. It also takes longer to open everything when you open the head node. |
+| Subtrees allow for restricted access by tree (e.g. grant someone write-access to just their specific diagnostic) | &nbsp;                                                                                                    |
+
 
 ```
 add node SUBTREE /usage=subtree
@@ -187,7 +188,7 @@ $ tree /path/to/trees
 
 ## Environment Variables
 
-For a full list of environment variables, see [the glossary](environment-variables.md).
+For a full list of environment variables, see [the glossary](reference/environment-variables).
 
 TO DO More to come Stephen/Tim
 Some always exist. Some are inherited from the OS. They're just kind of floating around in the "environment" and whoever needs them can grab them.
