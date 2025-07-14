@@ -8,7 +8,7 @@ TDI Search Path. One or more paths separated by semicolons. TDI will search each
 ## MDSPLUS_DIR
 Path to MDSplus installation. This is used for setting a lot of other variables through `envsyms`.
 
-## ${tree}_path
+## \<tree\>_path
 The path to search for the tree files for a given tree name (where `${tree}` is the name of your tree). If present, this will be used instead of `default_tree_path`. This variable can contain one or more paths separated by semicolons. Each path to search can be anything defined elsewhere in this documentation.
 
 These two separate variables (`$${tree}_path` and `default_tree_path`) may be useful if you are creating your own tree outside of a tree owned by your organization; the this allows you to quickly access both.
@@ -30,7 +30,7 @@ This defines the default server/host to connect to when a host is not specified 
 If set, this will be used by `setsockopt()` to set both `SO_RCVBUF` and `SO_SNDBUF` in bytes, which are two Linux OS settings.
 
 ## MDSIP_MAX_VERSION
-If set when running `mdsip`, this will be used when accepting connections to limit the MDSip protocol version. Note: this is separate from the MDSplus version.
+If set when running `mdsip`, this will be used when accepting connections to limit the MDSip protocol version. Note: this is separate from the MDSplus version. It is not recommended to set this to any value and this variable may be removed at a later date. 
 
 ## MDSIP_SERVICE_LOGDIR
 When using `mdsip_service.exe` to set up an MDSip server on Windows, this controls where the log files will be written to.
@@ -51,8 +51,7 @@ Setting this to a non-zero value will enable debug output from most MDSplus devi
 If set to `yes`, when adding a device to the tree, the python source code will be included in the tree as well. Method calls on this device node in the tree will not require the device source code to be installed.
 
 ## MDS_PYDEVICE_PATH
-This is a semicolon-separated list of paths to search for python MDSplus device source code when adding a device. 
-Each path will be searched recursively for device classes by importing all files that end with `.py` and do not begin with `_`. Only subclasses of `MDSplus.Device` will be considered when searching.
+This is a semicolon-separated list of paths to search for python MDSplus device source code when adding a device. Each path will be searched recursively for device classes by importing all files that end with `.py` and do not begin with `_`. Only subclasses of `MDSplus.Device` will be considered when searching.
 
 ## MDSPLUS_VERSION_CHECK
 If set to `0`, `off`, or `no` this will disable the version check when importing the MDSplus package in python. If enabled, the version check will warn if the version of MDSplus the python package was intended for is not being used.
@@ -118,8 +117,6 @@ int getmsg(int sts, char **facnam, char **msgnam, char **msgtext)
     return FAILURE;
 }
 ```
-
-
 ## IDL_PATH
 The default is `+$MDSPLUS_DIR/idl:<IDL_DEFAULT>:$IDL_PATH`.
 
@@ -128,3 +125,9 @@ The default is `$MDSPLUS_DIR/matlab:$MATLABPATH`.
 
 ## PYTHONPATH
 The default is `$PYTHONPATH:$MDSPLUS_DIR/pydevices`.
+
+## JavaMdsLib
+Used by the `mdsobjects` java library to find `libJavaMds.*` to be passed to `System.load()`. This library contains the JNI (Java Native Interface) bindings for MDSplus.
+
+## UIDPATH
+The default is `/usr/local/mdsplus/uid`.
