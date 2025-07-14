@@ -8,10 +8,19 @@ Contents
 
 .. toctree::
 
-    install
-    install/debian
-    install/redhat
+    guide
+    guide/history
+    guide/install
+    guide/install/debian
+    guide/install/redhat
+       
+    guide/daq/daq_setup
 
-    daq/daq_setup
-
-    environment-variables
+    guide/devices
+    
+    reference
+    reference/environment-variables
+    reference/matlab
+    reference/mdstcl
+    reference/metadata
+    reference/tree-hooks
