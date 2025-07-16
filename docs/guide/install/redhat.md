@@ -47,6 +47,7 @@ name=MDSplus
 baseurl=http://www.mdsplus.org/dist/el9/alpha/RPMS
 enabled=1
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus
 metadata_expire=300
 EOF
@@ -61,6 +62,7 @@ name=MDSplus
 baseurl=http://www.mdsplus.org/dist/el8/alpha/RPMS
 enabled=1
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus
 metadata_expire=300
 EOF
@@ -77,6 +79,7 @@ name=MDSplus
 baseurl=http://www.mdsplus.org/dist/el9/stable/RPMS
 enabled=1
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus
 metadata_expire=300
 EOF
@@ -90,6 +93,7 @@ name=MDSplus
 baseurl=http://www.mdsplus.org/dist/el8/stable/RPMS
 enabled=1
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-MDSplus
 metadata_expire=300
 EOF
