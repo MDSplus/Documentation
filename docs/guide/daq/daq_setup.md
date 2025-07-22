@@ -34,7 +34,7 @@ add node SUBTREE /usage=subtree
 ### Raw/Processed Data
 
 It is highly recommended that archived data consist of two trees:
-* The **raw data** tree should contain all data and device information captured during the experiment. When the shot gets archived, the raw data tree can be marked as `immutable` (`chattr + i`) to prevent it from being acidentally overwritten. 
+* The **raw data** tree should contain all data and device information captured during the experiment. When the shot gets archived, the raw data tree can be marked as immutable (`chattr + i`) to prevent it from being acidentally overwritten. 
 
 * The **processed data** tree can contain everything else&mdash;equations, calculated values (e.g., IP), data computed from an analysis script, alias nodes for different digitizer channels (e.g., nickname for a specific temperature probe). The processed data tree can grow as more people run analyses and add to the computed values.
 

@@ -9,3 +9,5 @@ Guide
     daq/daq_setup
     devices
     viewdata
+    python
+    matlab
