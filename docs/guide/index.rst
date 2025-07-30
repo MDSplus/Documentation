@@ -6,7 +6,7 @@ Guide
 
     history
     install/index
-    daq/daq_setup
+    daq/index
     devices
     viewdata
     python
