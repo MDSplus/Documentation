@@ -10,3 +10,5 @@ doctrees/*
 .venv
 
 __pycache__
+
+notes/
