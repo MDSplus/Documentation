@@ -9,7 +9,6 @@ A data acquisition (DAQ) server stores the data you generate from your experimen
 2. Shot numbers
 
 .. toctree::
-    :numbered:
     :titlesonly:
     :maxdepth: 1
 
