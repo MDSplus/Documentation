@@ -19,9 +19,9 @@ The instructions on this page assume that the following are true:
 * The driver has already been written for your device and has been added during the MDSplus installation process (e.g., in `pydevices/HtsDevices`). You will need the name of the driver and the classes that need to be called during Devices setup. ([link](environment-variables))
 
 
-# Setting up a Device using mdstcl
+## Setting up a Device using mdstcl
 
-## 1. Add Device to Tree
+### 1. Add Device to Tree
 
 * open a terminal window
 
