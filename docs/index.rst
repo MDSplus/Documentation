@@ -3,7 +3,7 @@ MDSplus Documentation
 
 .. toctree::
     :titlesonly:
-    :maxdepth: 1
+    :maxdepth: 2
 
     guide/index
     reference/index

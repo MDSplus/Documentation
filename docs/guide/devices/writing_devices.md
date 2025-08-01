@@ -411,7 +411,7 @@ class DIG_32_ST(MDSplus.Device):
 
 --
 
-# Other Stuff
+## Other Stuff
 
 * devices have a parts array which list out all the possible data you could want from a specific device (? will need clarification on this)
 * it will be up to each admin to set up and maintain their own devices
