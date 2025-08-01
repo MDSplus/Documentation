@@ -2,12 +2,13 @@ Guide
 =====================
 
 .. toctree::
+    :titlesonly:
     :maxdepth: 2
 
     history
     install/index
     daq/index
-    devices
+    devices/index
     viewdata
     python
     matlab
