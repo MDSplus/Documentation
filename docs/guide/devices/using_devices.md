@@ -1,5 +1,6 @@
-# MDSplus Devices
+# Using MDSplus Devices
 
+<!-- //this should be moved to be the intro text for the index page. Write a separate intro for usage -->
  The `MDSplus device` framework is what MDSplus uses to integrate an experiment's hardware into the software. In the simplest terms, a device is a collection of nodes in the data tree containing all of the necessary setup parameters, task descriptions, and raw data associated with each physical data acquisition module in an experiment. This collection of nodes can be used to interface with the hardware, both controlling the hardware and collecting data from it.
 
 
@@ -7,15 +8,15 @@
 
 The instructions on this page assume that the following are true:
 
-* MDSplus has been installed on experiment operator's computers
+* MDSplus has been installed on experiment operator's computers ([link](install))
 
-* MDSplus DAQ server has already been set up
+* MDSplus DAQ server has already been set up ([link](DAQ))
 
-* The data for collecting data from the experiment has already been set up
+* The tree for collecting data from the experiment has already been set up ([link](trees))
 
-* Environment variables that point to the tree have already set up
+* Environment variables that point to the tree have already set up ([link](guide/environment-variables))
 
-* The driver has already been written for your device and has been added during the MDSplus installation process (e.g., in `pydevices/HtsDevices`). You will need the name of the driver and the classes that need to be called during Devices setup.
+* The driver has already been written for your device and has been added during the MDSplus installation process (e.g., in `pydevices/HtsDevices`). You will need the name of the driver and the classes that need to be called during Devices setup. ([link](environment-variables))
 
 
 # Setting up a Device using mdstcl
