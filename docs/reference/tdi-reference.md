@@ -1,8 +1,8 @@
 # TDI Reference
 
-# Constants
+## Constants
 
-## `$2PI`
+### `$2PI`
 ```
 Builtin Name: $2PI
 TdiShr Function: Tdi2Pi
@@ -15,7 +15,7 @@ Description:
 CONSTANT: 2PI - equivalent to circumference of a circle divided by its radius (approx 6.2831853072)
 ```
 
-## `$A0`
+### `$A0`
 ```
 Builtin Name: $A0
 TdiShr Function: TdiA0
@@ -30,7 +30,7 @@ CONSTANT: "$A0" BOHR Radius == 52.9177E-12m, with a margin of error of 1168.02E-
 
 
 
-# Other Special Variables beginning with `$`
+## Other Special Variables beginning with `$`
 
 
 ## `$`
