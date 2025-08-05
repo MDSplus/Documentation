@@ -9,3 +9,4 @@ Reference
     mdstcl
     metadata
     tree-hooks
+    tdi-reference
