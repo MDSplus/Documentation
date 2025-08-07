@@ -6,9 +6,7 @@ We'll probably do a table of all the each category, with simlinks to each headin
 
 ## Constants
 
-### `$A0` (Opcode 1)
-
-The BOHR Radius Constant of 52.9177E-12m, with a margin of error of 1168.02E-21
+### `$A0` (Opcode  1)
 
 |||
 |-|-|
@@ -18,24 +16,64 @@ The BOHR Radius Constant of 52.9177E-12m, with a margin of error of 1168.02E-21
 | Java mdsplus-api Syntax | `CONST.dA0()` |
 
 
-### `$2PI` (Opcode number: 372)
+The BOHR Radius Constant of 52.9177E-12m, with a margin of error of 1168.02E-21
 
-Two times pi, or equivalent to circumference of a circle divided by its radius (approx 6.2831853072)
 
-|||
+
+
+### `$2PI` (Opcode 372)
+
 |-|-|
 |TDI Syntax | `$2PI`|
 |C Syntax   | `Tdi32Pi` |
 |Python Syntax| `MDSplus.d2pi`|
 
+Two times pi, or equivalent to circumference of a circle divided by its radius (approx 6.2831853072)
 
 
+### `$ALPHA` (Opcode 2)
 
+|-|-|
+| TDI syntax| `$ALPHA`|
+| C Syntax | `Tdi3Alpha`|
+| Python Syntax| `MDSplus.dalpha`|
+
+
+Fine-structure Constant: 7.29735308e-3 or 
+0.00729735, error of 143.276E-12
+
+### `$AMU` (Opcode 3)
+
+|-|-|
+|TDI syntax: `$AMU`|
+|C Syntax | `Tdi3Amu`|
+|Python Syntax | `MDSplus.damu`|
+
+Unified atomic mass unit: 1.6605402e-27
+or 1660.54E-30 kg, error of 43.0666E-36
+
+### `$ATM` (Opcode 405)
+
+|||
+|-|-|
+|TDI Syntax | `$ATM`|
+|C Syntax | `Tdi3Atm`|
+|Python Syntax| `MDSplus.datm`|
+
+Atmospheric pressure: 101325. Pa
+
+### 
 
 
 ## Functions
 
- ### `ADD` (Opcode 38)
+### `ADD` (Opcode 38)
+
+|||
+|-|-|
+|TDI Syntax| `A + B` or `ADD(A, B)`|
+|C Syntax| `Tdi3ADD(A, B)`|
+|Python Syntax| `MDSplus.ADD(A, B)`|
 
 Numeric Elemental. Add numbers.
 
@@ -47,15 +85,6 @@ Example: `[2,3,4] + 5.0` is `[7.0,8.0,9.0]`.
 
 >TODO: figure out whether it makes sense to have this in a more centralized place. This tells you what happens when you add two signals together, or add two numbers with different units (should be different with add/subtract vs multiply/divide, for example)
 
-|||
-|-|-|
-|TDI Syntax| `A + B` or `ADD(A, B)`|
-|C Syntax| `Tdi3ADD(A, B)`|
-|Python Syntax| `MDSplus.ADD(A, B)`|
-|Signals| Single signal or smaller data.|
-|Units| Single or common units, else bad.|
-|Form| Compatible form of A and B.|
-|Result|The element-by-element sum of objects A and B.|
 
 ### `BUILD_WITH_UNITS` (Opcode 88)
 
@@ -68,9 +97,12 @@ Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNA
 | TDI syntax | `BUILD_WITH_UNITS(arg0,arg1)` |
 | C Syntax | `Tdi3BuildWithUnits(arg0,arg1)` |
 | Python Syntax | `MDSplus.BUILD_WITH_UNITS(arg0,arg1)` TODO: Confirm |
+
+
+|**Arguments**||
+|-|-|
 | Min Arguments | 2 |
 | Max arguments | 2 |
-|**Arguments**||
 |DATA | any expression that DATA(this) will be valid. |
 |UNITS | character string. See the primary section on "Units".|
 |Result | Class-R descriptor. <BR> Use `BUILD_xxx` for immediate structure building. <BR> Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
@@ -79,10 +111,6 @@ Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNA
 
 ### `MAKE_WITH_ERROR` (Opcode 447)
 
-MDS Operation. Make a data with error structure.
-
-Example: `_A0 = Build_With_Error(52.9177E-12, 2400E-21)`
-
 |||
 |-|-|
 |TDI syntax | MAKE_WITH_ERROR(arg0,arg1)|
@@ -90,22 +118,22 @@ Example: `_A0 = Build_With_Error(52.9177E-12, 2400E-21)`
 |Python Syntax| `Mdsplus.TdiMakeWithError(arg0,arg1)` |
 |Max arguments | 2 |
 |Min Arguments | 2 |
+
 |**Arguments**||
+|-|-|
 |DATA |any expression that DATA(this) will be valid.|
 |ERROR |Error value.|
 |Result | Class-R descriptor.|
 ||Use `BUILD_xxx` for immediate structure building.|
 ||Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
 
+MDS Operation; makes a structure that holds data with error.
+
+Example: `_A0 = Build_With_Error(52.9177E-12, 2400E-21)`
+
 
 
 ### `IF` (Opcode 189)
-
-CC Statement.
-
-Do statement if expression true, else possibly do another.
-
-Example: `IF (_A) _B=2; ELSE _B=3;`.
 
 |||
 |-|-|
@@ -122,6 +150,13 @@ Example: `IF (_A) _B=2; ELSE _B=3;`.
 |ELSESTMT |statement, simple or `{brace enclosed}`.|
 |Result |None|
 
+CC Statement.
+
+Do statement if expression true, else possibly do another.
+
+Example: `IF (_A) _B=2; ELSE _B=3;`.
+
+
 ### `SET_RANGE` (Opcode 311)
 
 Transformation.
@@ -136,9 +171,12 @@ Examples:
 |TDI syntax | `SET_RANGE(arg0,arg1,argn,...)`|
 |C Syntax | TdiSetRange|
 |Python Syntax | False|
+
+|||
+|-|-|
+| **Arguments** | Optional: BOUND,....|
 |Min Arguments | 2|
 |Max arguments | 9|
-| **Arguments** | Optional: BOUND,....|
 || BOUND,... integer scalar or range, they are taken from ARRAY where omitted.|
 | ARRAY | any type scalar, vector, or array.|
 | Signals| Same as ARRAY.|
