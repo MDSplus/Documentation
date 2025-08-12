@@ -6,7 +6,7 @@ https://github.com/MDSplus/mdsplus/blob/alpha/xml/tcl_commands.xml
 
 Notes:
 * Commands are not case sensitive.
-* Sometimes you'll need to encase things in triple double quotation marks (`"""like this"""`). This is how you wrap TDI expressions. 
+* Sometimes you will need to encase things in triple double quotation marks (`"""like this"""`). This is how you wrap TDI expressions. 
 * Commands and flags can be abbreviated to a point of disambiguation. (So `show version` can be simply typed as `sho ver` to save time)
 
 Tree Command Language (TCL) is used for MDSplus tree examination and manipulation.  TCL can be used to examine the tree structure, store data to or get data from nodes, examine or change node properties, or clean or compress the datafile associated with a tree. These commands are listed when you type:
@@ -15,13 +15,13 @@ Tree Command Language (TCL) is used for MDSplus tree examination and manipulatio
 
 TCL can also be used for dispatching commands or actions to action servers
 or to directly execute actions or methods provided by devices described in
-the tree. For help on dispatching related commands type:
+the tree. For help on dispatching related commands, type:
 
     help dispatch commands
 
 With TCL using edit commands you can create a new tree structure or modify
 an existing one by adding, deleting or renaming nodes and adding tagnames
-to give direct addressing of nodes in the tree. For edit commands type:
+to give direct addressing of nodes in the tree. For edit commands, type:
 
     help edit commands
 
@@ -115,7 +115,7 @@ The following commands are available for dispatching or executing actions in an 
 > STYLE NOTE: all caps, underscore, no angle brackets <>
 
 ###  `devices [DEVICE_TYPE] [/full]`
-Obtains information about a python device support module.
+Obtains information about a python device support module. 
 * If the `DEVICE_TYPE` parameter is omitted, a list of all the available python devices will be displayed.
 * If the `DEVICE_TYPE` contains a wildcard character, such as an asterisk, the devices matching that wildcard will be listed.
 * The `/full` qualifier will show the full python help for the device class.
@@ -131,7 +131,7 @@ Adds a new node to an MDSplus tree which has been opened using the `edit` comman
 * **Note**: The `add node` command can only be used when a tree is opened for edit.
 
 ### `add tag NODE_PATH TAG_NAME`
-Adds a tagname to a node. A tagname can be thought of as a shortcut for referencing a node in a tree. Using a tagname saves you from entering the full path location of the node. For example, if a node has a tagname of "ip" you could reference that node by using `\ip` or `\treename:ip`.
+Adds a tagname to a node. A tagname can be thought of as a shortcut for referencing a node in a tree, saving you from entering the full path location of the node. For example, if a node has a tagname of "ip" you could reference that node by using `\ip` or `\treename:ip`.
 * The tagname must be unique for a given tree.
 * Tagnames can be up to 23 characters in length and must consist of an alphabetic character followed by up to 22 alphanumeric or underscore characters.
 * **Note**: The `add tag` command can only be used when you have opened the tree using the `edit` command.
@@ -140,7 +140,7 @@ Adds a tagname to a node. A tagname can be thought of as a shortcut for referenc
 Recovers wasted space in the tree's datafile.
 
 * As data is written to a tree, if the record is greater than 16 bytes in length, it is appended to the end of the tree's datafile. When the data in a node is modified, unless the size of the data is exactly the same length as was previously stored, the new data is appended at the end of the datafile. The previous data continues to occupy its original space in the datafile but will not be reused. The `clean` command can be used to recover this wasted space.
-* When the `clean` command is issued, the datafile is recreated by reading in the current data for each node and writing it to the new datafile thus discarding the orphaned data in the file.
+* When the `clean` command is issued, the datafile is recreated by reading in the current data for each node and writing it to the new datafile, thus discarding the orphaned data in the file.
 * The `clean` command is similar to the `compress` command except the `compress` command will also employ data compression on the data records, often drastically reducing the file size if the nodes were not set to be compressed on put.
 * Since both the `clean` and `compress` command create new datafiles, it is recommended that they only be used when there is unlikely to be any other write activity on the tree.
 * **Note**: The shot number may be expressed as a TDI expression. For example, `clean cmod/shot="current_shot(""cmod"")-1"`
@@ -150,7 +150,7 @@ Closes the current tree or all open trees.
 
 * Using the `close` command without any parameters or qualifiers will close the last tree opened with either a `set tree` command or an `edit` command.
 
-* Since TCL will keep a stack of previously opened trees; you can selectively close a particular tree by adding treename and shot number as parameters. Adding the `/all` qualifier closes all the trees. To determine which trees you currently have open, you can use the `show db` command.
+* Since TCL will keep a stack of previously opened trees; you can selectively close a particular tree by adding treename and shot number as parameters. To close all the trees, add the `/all` qualifier. To determine which trees you currently have open, use the `show db` command.
 
 * **Note**: You must use the `write` command on a tree opened using the `edit` command if you want to save any edits you might have done to that tree before using the `close` command to close it. If you attempt to close a tree with edit modifications you will get an error unless you force the close using the `/confirm` qualifier. If you close and modified tree with the `/confirm` qualifier, the tree will be closed and any edit modification will be discarded.
 
@@ -193,27 +193,28 @@ This command has been removed.
 ### `delete node NODE_PATH[,NODE_PATH...] /log /confirm /dryrun`
 * Deletes one or more nodes from an MDSplus tree which has been opened for edit using the `edit` command.
 * The `/log` qualifier can be used to display the nodes being deleted.
+* The `/confirm` qualifier must be included to delete a node which has descendants or is part of a device (conglomerate) representation in the tree because deletion of that node will result in multiple nodes being deleted.
 * If you attempt to delete a node which has descendants or is part of a device (conglomerate) representation in the tree, then the deletion of the node will result in multiple nodes being deleted. If this is your intention, then you must include the `/confirm` qualifier on the command.
-* The `/dryrun` command can be used to just display the nodes that would be deleted without actually deleting any nodes.
+* The `/dryrun` qualifier can be used to just display the nodes that would be deleted without actually deleting any nodes.
 
 
 ### `delete pulse SHOT_NUMBER`
 Deletes an MDSplus pulse file instance of the currently opened tree. The `delete pulse` command will delete the three files making up an MDSplus tree for the specified shot number.
 
-**Note**: If the currently opened tree includes subtrees, those subtrees will be deleted
-for that shot number as well.
+**Note**: If the currently opened tree includes subtrees, those subtrees will also be deleted for that shot number.
 
   For example:
+
   ```
   TCL> SET TREE cmod
   TCL> DELETE PULSE 42
   ```
-  This would delete the cmod pulse files for shot number 42 as well as any subtrees of
-the cmod tree with shot number 42.
+
+This would delete the cmod pulse files for shot number 42 as well as any subtrees of the cmod tree with shot number 42.
 
 ### `directory [NODE_PATH_WILD1[,NODE_PATH_WILD2,...]] [/full] [/usage=USAGE] [/usage=(USAGE1,USAGE2,...)]`
 
-The `directory` command is used to list one or more nodes in the currently opened tree. You can specify one or more node paths which may include wildcard characters. If no node paths are specified it defaults to listing the member and child nodes in the current location of the tree (See: `set default` command).
+The `directory` command is used to list one or more nodes in the currently opened tree. You can specify one or more node paths which may include wildcard characters. If no node paths are specified, it defaults to listing the member and child nodes in the current location of the tree (See: `set default` command).
 
 * If the `/full` qualifier is included, then detailed information about each node is shown.
 
@@ -224,10 +225,12 @@ List tagname definitions in the tree. A wildcard string parameter can be include
 
 If the `/path` qualifier is included, the full paths of the nodes pointed to by the tagname will also be displayed.
 
+See `add tag` for more information.
+
 
 ### `dispatch ACTION_NODE_PATH [/wait]`
-The `dispatch` command is used to dispatch an action node to an action server. If the `/wait` qualifier is included, the command
-will wait for the action execution to complete.
+The `dispatch` command is used to dispatch an action node to an action server. If the `/wait` qualifier is included, the command will wait for the action execution to complete.
+
 
 ### `dispatch/build [/monitor=ACTION_SERVER]`
 The `dispatch/build` command finds all the actions in a tree which are currently turned on and builds a sorted table of those actions.
@@ -239,14 +242,13 @@ The `dispatch/build` command finds all the actions in a tree which are currently
 ### `dispatch/check [/reset]`
 Returns a failure status if the failed essential flag is set successfully.
 
-When data acquisition phases are dispatched, a failure flag is set if
-any action marked as essential (see the `set node` command) fails during execution. The `dispatch/check` command checks on the current state of that failure flag. If the flag is set, the `dispatch/check` command will return a failure status, otherwise it will return a success status.
+When data acquisition phases are dispatched, a failure flag is set if any action marked as essential (see the `set node` command) fails during execution. The `dispatch/check` command checks on the current state of that failure flag. If the flag is set, the `dispatch/check` command will return a failure status, otherwise it will return a success status.
 
 If the `/reset` qualifier is used, the failure flag will be reset after the check is made so that subsequent `dispatch/check` commands will return a success status unless another essential action subsequently fails before the next `dispatch/check` command is issued.
 
 
 ### `dispatch/phase phase-name [/noaction] [/synch=N] [/log] [/monitor=MONITOR_SERVER]`
-* When this command runs, all actions assigned to a named phase are dispatched to action servers for execution.
+This command dispatches all actions assigned to a named phase to action servers for execution.
   * This command uses the action table created by a `dispatch/build`, therefore a `dispatch/build` command must be given before using the `dispatch/phase` command for any pulse file.
   * Actions are dispatched in order of the action's sequence number, or if the sequence is an expression containing other nodes, the action will be dispatched if all the actions in the expression have completed and the expression evaluates to a true value.
 
@@ -254,13 +256,9 @@ If the `/reset` qualifier is used, the failure flag will be reset after the chec
   * Without the `/synch` qualifier, all actions matching the phase specified are dispatched immediately to all the action servers in order of the sequence numbers. Each action server maintains a queue of actions and will execute those actions one after the other until all the actions in its queue have been executed.
   * With the `/synch` qualifier, the actions will be dispatched in groups of the synch value, thus synchronizing the actions across multiple servers. For example, a `/synch=10` specification would cause the DISPATCH/PHASE command to dispatch all the actions with sequence numbers 1 through 10 to be dispatched to their designated action servers in sequence order. No other actions will be dispatched to action servers until this first "batch" have all completed. Then sequence numbers 11-20 would then be dispatched. This ensures that an action with sequence number 15 would on one server would not be executed before one with sequence number 10 on another server. This is often critical during the initialization phase where certain types of modules such as triggering devices must be initialized before data acquisition devices that they trigger are armed.
 
-* The `/log` qualifier will output log messages of actions being dispatched,
-started, and completed. The `/noaction` qualifier can be used with the `/log` qualifier to log what would be dispatched, but no actions would actually be
-dispatched.
+* The `/log` qualifier will output log messages of actions being dispatched, started, and completed. The `/noaction` qualifier can be used with the `/log` qualifier to log what would be dispatched, but no actions would actually be dispatched.
 
-* The `/monitor` qualifier is used to specify an action monitor action
-server which is used to relay action activity to actmon processes
-which display the status of action execution.
+* The `/monitor` qualifier is used to specify an action monitor action server which is used to relay action activity to actmon processes which display the status of action execution.
 
 
 ### `dispatch/close[/server=(SERVER1,SERVER2...)]`
@@ -518,115 +516,71 @@ This command displays the current default node location in the opened tree.
 
 Example:
 
-```
+```sh
 TCL> SHOW DEFAULT
 \MAIN::TOP
 ```
 
 
 
-### SHOW SERVER
-* **Purpose**:  Display the current status of one or more action servers.
-* **Format**: SHOW SERVER server-spec[,server-spec] [/NOOUTPUT]
-* **Description**: The SHOW SERVER command can be used to query action servers to see what,
-if anything, they are currently working on. The /NOOUTPUT command can
-be useful to just detect if there is a problem accessing an action server.
+### `show server SERVER_SPEC[,SERVER_SPEC] [/nooutput]`
+Displays the current status of one or more action servers; you may use this command to query action servers to see what, if anything, they are currently working on. The `/nooutput` command can be useful to just detect if there is a problem accessing an action server.
 
-Wildcard characters can be used in the server name but only if the following
-conditions are met:
-1) all the servers are logging their output to a single log directory.
-2) the server logs are named the same as the string you would use to
-   communicate with that server (i.e. myhost-name:8100).
-3) there is an environment variable called "MDSIP_SERVER_LOGDIR" defined
-   pointing to that directory.
-4) Your process has access to that directory.
+Wildcard characters can be used in the server name but only if the following conditions are met:
+1. All the servers are logging their output to a single log directory.
+2. The server logs are named the same as the string you would use to communicate with that server (e.g., `myhost-name:8100`).
+3. There is an environment variable `MDSIP_SERVER_LOGDIR` defined pointing to that directory.
+4. Your process has access to that directory.
 
-When wildcards are used in the server name the log directory is searched for
-logfiles matching the wildcard specification and then the log file name is used
-for the server specication when connecting to that server.
+When wildcards are used in the server name, the log directory is searched for logfiles matching the wildcard specification and then the log file name is used for the server specification when connecting to that server.
 Example:
 
+```sh
 TCL> show server localhost:9000
 Checking server: localhost:9000
 Tue Feb 10 15:51:27 2015, fc21-vm:9000, logging disabled, Inactive
-
-    </help>
-   <routine name="TclDispatch_show_server"/>
-    <parameter name="p1" prompt="What" required="True" type="stop_type"/>
-    <parameter name="p2" label="server_name" prompt="Server" required="True" list="True"/>
-    <qualifier name="output" defaulted="True"/>
-    <qualifier name="full"/>
-  </syntax>
-
-  <syntax name="show_version">
-    <helpmissing />
-    <image name="Mdsdcl"/>
-    <routine name="mdsdcl_show_version"/>
-    <parameter name="p1" prompt="What" required="True" type="show_TYPE"/>
-  </syntax>
-
-  <syntax name="SHOW_GIT_INFO">
-    <help name="SHOW GIT">
-
-### SHOW GIT
-* **Purpose**:  Show the version information of this MDSplus git repository.
-* **Format**: SHOW GIT [/TAG] [/BRANCH] [/COMMIT] [/REMOTE] [/REMOTE_URL] [/SRCDIR]
-
-    </help>
-    <routine name="mdsdcl_show_git_info"/>
-    <parameter name="P1" required="True"/>    
-    <parameter name="P2" label="ATTRS" prompt="Attributes" required="False"/>
-    <qualifier name="TAG"/>
-    <qualifier name="BRANCH"/>
-    <qualifier name="COMMIT"/>
-    <qualifier name="REMOTE"/>
-    <qualifier name="REMOTE_URL"/>
-    <qualifier name="SRCDIR"/>
-  </syntax>
+```
 
 
-  <syntax name="show_versions">
-    <help name="SHOW VERSIONS">
+### `show git [/tag] [/branch] [/commit] [/remote] [/remote_url] [/srcdir]`
 
-### SHOW VERSIONS
-* **Purpose**:  Show whether or not data versioning is enabled for the current tree.
-* **Format**: SHOW VERSIONS
+> TODO: Find what these different parameters do
 
-* **Description**: The SHOW VERSIONS command is used to display the current data versioning
-settings for the current tree.
+Show the version information of this MDSplus git repository. These parameters are available:
+
+* `/tag`
+* `/branch`
+* `/remote`
+* `/commit`
+* `/srcdir`
+* `/remote_url`
+
+
+
+### `show versions`
+This command displays whether or not data versioning is enabled for the current tree.
 
 Example:
 
+```sh
 TCL> SET TREE main
 TCL> SHOW VERSIONS
   Versions are disabled in the model file and disabled in the shot file.
-    </help>
-    <routine name="TclShowVersions"/>
-    <parameter name="p1" prompt="What" required="True" type="show_TYPE"/>
-  </syntax>
+```
 
-  <syntax name="show_alternate_compression">
-    <help name="SHOW ALTERNATE_COMPRESSION">
-
-### SHOW ALTERNATE_COMPRESSION
-* **Purpose**:  Show whether or not data alternate compression methods are enabled
-for the current tree.
-* **Format**: SHOW ALTERNATE_COMPRESSION
-
-Description:
-
-The SHOW ALTERNATE_COMPRESSION command is used to display the current
-alternate compression settings for the current tree.
+### `show alternate_compression`
+Displays whether or not data alternate compression methods are enabled for the current tree.
 
 Example:
 
+```sh
 TCL> SET TREE main
 TCL> SHOW ALTERNATE_COMPRESSION
   Alternate Compression is disabled.
-    </help>
-    <routine name="TclShowAlternateCompression"/>
-    <parameter name="p1" prompt="What" required="True" type="show_TYPE"/>
-  </syntax>
+```
+
+
+> TODO: there's some html comment for a "Start_server" command, but there's no description> Stephen to verify that this command
 
   <!--
   <verb name="start">
@@ -644,115 +598,52 @@ TCL> SHOW ALTERNATE_COMPRESSION
     </type>
     -->
 
-  <verb name="stop">
-    <parameter name="p1" prompt="What" required="True" type="stop_type"/>
-  </verb>
 
-  <type name="stop_type">
-    <keyword name="SERVER" syntax="stop_server"/>"
-  </type>
+### `stop server SERVER_SPEC[,SERVER_SPEC]`
 
-  <syntax name="stop_server">
-    <help name="STOP SERVER">
+Stops or restarts one or more MDSplus action servers.
 
+Normally MDSplus action servers are configured to restart automatically so this command effectively will restart an action server. It is not uncommon to restart action servers at some interval such as once per day to recover fragmented virtual memory within the action server process. Other reasons for stopping an action server might be to reset I/O channels to data acquisition devices which might become non-responsive or device support code may introduce memory leaks which may require the process to be restarted to release virtual memory.
 
-### STOP SERVER
-* **Purpose**:  Stop/restart one or more MDSplus action servers.
-* **Format**: STOP SERVER server-spec[,server-spec]
-* **Description**: The STOP SERVER command can be used to stop one or more action servers.
-Normally MDSplus action servers are configured to restart automatically so
-this command effectively will restart an action server. It is not uncommon
-to restart action servers at some interval such as once per day to recover
-fragmented virtual memory within the action server process. Other reasons
-for stopping an action server might be to reset I/O channels to data acquisition
-devices which might become non-responsive or device support code may introduce
-memory leaks which may require the process to be restarted to release virtual
-memory.
-
-Unlike the SHOW SERVER command, Wildcard characters cannot be used in the
-server-spec string.
-
-    </help>
-    <routine name="TclDispatch_stop_server"/>
-    <parameter name="p1" prompt="What" required="True" type="stop_type"/>
-    <parameter name="p2" label="servnam" prompt="Server" required="True" list="True"/>
-  </syntax>
-
-  <verb name="verify">
-    <help name="VERIFY">
+Unlike the `show server` command, wildcard characters cannot be used in the
+`SERVER_SPEC` string.
 
 
-### VERIFY
-* **Purpose**:  Examine a tree structure to ensure it is valid and intact.
-* **Format**: VERIFY
-* **Description**: The VERIFY command can be used to check the integrety of the currently opened
-tree to ensure that the tree structure representation is valid and complete.
-The VERIFY command is a useful diagnostic tool if file system or disk corruption
-problems have been detected on the storage device where the tree files are
-stored. If damage to the tree (file name such as mytree_nnn.tree) is discovered,
-it is usually safe to copy the tree file from an adjacent shot since the tree
-file contains only the tree structure and not the data or characteristics of
-the nodes in the tree.
 
-The VERIFY command will display a count of the nodes in the tree. If there are
-subtree nodes included in the tree those nodes will be listed as "other" in the
-node counts.
+
+### `verify`
+
+Checks the integrity of the currently open tree to ensure that the tree structure representation is valid and complete. This command is a useful diagnostic tool if file system or disk corruption problems have been detected on the storage device where the tree files are stored. If damage to the tree (file name such as `mytree_nnn.tree`) is discovered, it is usually safe to copy the tree file from an adjacent shot since the tree file contains only the tree structure and not the data or characteristics of the nodes in the tree.
+
+The VERIFY command will display a count of the nodes in the tree. If there are subtree nodes included in the tree those nodes will be listed as "other" in the node counts.
 
 Example:
 
+```sh
 TCL> SET TREE mytree
 TCL> VERIFY
 Node summary:
   Allocated = 7/14
   Free      = 7/14
   Other     = 0/14
-
-    </help>
-    <routine name="TclVerifyTree"/>
-  </verb>
-
-  <verb name="WFEVENT">
-    <help name="WFEVENT">
+```
 
 
-### WFEVENT
-* **Purpose**:  Wait for an MDSplus event to be issued.
-* **Format**: WFEVENT event-name /TIMEOUT=seconds
-* **Description**: The WFEVENT command can be used to wait for an MDSplus event to be issued. MDSplus events
-are named occurrences that can be issued by other processes on the same or different host
-computers. The WFEVENT command will not complete until the MDSplus event is generated.
-The /TIMEOUT qualifier can be specified to cause the wait to time out if no event is generated
-within the specified number of seconds.
-    </help>
-    <routine name="TclWfevent"/>
-    <parameter name="p1" label="event" prompt="Event" required="True"/>
-    <qualifier name="TIMEOUT" required="True" defaulted="True" default="0"/>
-  </verb>
+### `wfevent EVENT_NAME /timeout=SECONDS`
 
-  <verb name="write">
-    <help name="WRITE">
+This can be used to Wait For an MDSplus event to be issued. MDSplus events are named occurrences that can be issued by other processes on the same or different host computers. The `wfevent` command will not complete until the MDSplus event is generated. The `/timeout` qualifier can be specified to cause the wait to time out if no event is generated within the specified number of seconds.
 
-### WRITE
-* **Purpose**:  Write out a tree structure preserving changes made via
-         editing commands.
-* **Format**: WRITE [treename] [/SHOT=shot-number]
 
-* **Description**: The WRITE command is used to write out a new tree to preserve any
-changes using editing commands such as those listed in:
-HELP EDIT COMMANDS.
+### `write [TREENAME] [/SHOT=SHOT_NUMBER]`
 
-If the treename parameter or /SHOT qualifier is omitted the tree
-and shot specified with the EDIT command is assumed. If a tree
-is modified by edit commands and a WRITE command is not issued,
-those changes will be discarded.
-    </help>
-    <routine name="TclWrite"/>
-    <parameter name="p1" label="FILE"/>
-    <qualifier name="shotid" defaulted="True" nonnegatable="True" default="-1" type="number"/>
-  </verb>
+This command must be used when tree is open for edit (using the `edit` command) in order to write the tree structure to the `.tree` file, preserving changes made via editing commands (such as those listed in `HELP EDIT COMMANDS`). Closing a tree that is open for edit, without calling the `write` command will discard any changes made to the tree's structure. 
 
-  <verb name="ls" type="rest_of_line">
-    <routine name="TclLs"/>
-  </verb>
-  
-</module>
+If the treename parameter or `/shot` qualifier is omitted, the tree and shot specified with the `edit` command is assumed. 
+
+Note: This command has nothing to do with writing data into nodes (which should be done from normal mode).
+
+---
+The `write` command is used to write out a new tree to preserve any changes using editing commands such as those listed in: `HELP EDIT COMMANDS`
+
+
+If the treename parameter or `/shot` qualifier is omitted, the tree and shot specified with the `edit` command is assumed. If a tree is modified by edit commands and a `write` command is not issued, those changes will be discarded.
