@@ -129,7 +129,6 @@ Aborts the action currently being executed by an MDSplus action server. Actions 
 Adds a new node to an MDSplus tree which has been opened using the `edit` command.
 * The `NODE_PATH` parameter specifies the name of the new node to be added. It can be an absolute node path or a relative node path. If the path name includes parent nodes, those parent nodes must already exist or the command will fail. Node names must begin with an alphabetic character followed by zero or more alphanumeric or underscore characters. The node name must be 12 characters or less in length.
 
-> note from Mark W: This is true for the current versions of MDSplus. However, for the upcoming MDSplus v8.0 release, this will change to 63 characters.   We should probably create a GitHub issue to remind us to update the TCL documentation (and the text returned by TCL's "help" commands) for v8.0.
 
 * The `/usage` qualifier specifies a usage type of the node. This must be one of: `action`, `any`, `axis`, `compound_data`, `device`, `dispatch`, `numeric`, `signal`, `structure`, `subtree`, `text`, or `window`. If not specified, a member node `(:name)` will default to usage `any`, and a child node `(.name)` will default to usage `structure`.
 * If adding a device (e.g., data acquisition device) use the `/model` qualifier to specify the type of supported device you are adding.
@@ -142,8 +141,6 @@ Adds a tagname to a node. A tagname can be thought of as a shortcut for referenc
 * The tagname must be unique for a given tree.
 * Tagnames can be up to 23 characters in length and must consist of an alphabetic character followed by up to 22 alphanumeric or underscore characters.
 * **Note**: The `add tag` command can only be used when you have opened the tree using the `edit` command.
-
-> Note from Mark W: This character limit also applies to the forthcoming MDSplus v8.0 release. (include in documentation as per note on `add node`)
 
 
 ### `clean TREE_NAME [/shot=SHOT_NUMBER]`
@@ -176,7 +173,7 @@ Recovers wasted space and compresses the tree's datafile.
 * Since both the `clean` and `compress` command create new datafiles, it is recommended that they only be used when there is unlikely to be any other write activity on the tree.
 * **Note**: The shot number may be expressed as a TDI expression. For example, `clean cmod/shot="CURRENT_SHOT(""cmod"")-1"`
 
-> note from Mark W: Question for the developers . . . Has this scenario been tested?   What happens if a tree is being compressed at the same time another user begins a write operation (or vice versa).   Is there a chance that the tree will become corrupted or lose data?
+
 
 ### `create pulse SHOT_NUMBER [/include=(SUBTREE1,SUBTREE2,...)] [/exclude=(SUBTREE1,SUBTREE2,...)] [/conditional] [/nomain]`
 Copies the currently open tree (usually the model, shot -1) into a pulse file.
@@ -190,8 +187,6 @@ The `create pulse` command will copy the currently opened tree and all its subtr
   * If the `/exclude` qualifier is specified, all but the subtrees specified will be included.
 * If the `/nomain` qualifier is included, the top-most tree will not be included in the new pulse files.
 * **Note**: The shot number may be specified as a TDI expression such as `"current_shot(""cmod"")+1"`.
-
-> Note from Mark W to to developers: The "include in pulse" flag's setting does not apply hierarchically.   If a parent tree has the flag turned off, it does not disable the associated subtree(s).   See GitHub issue #2898.
 
 
 ### `decompile NODE_PATH`
@@ -246,7 +241,7 @@ The `directory` command is used to list one or more nodes in the currently opene
 
 * Use the `/usage` qualifier if you want to list only nodes of a certain usage. Usage names include `action`, `any`, `axis`, `compound_data`, `device`, `dispatch`, `numeric`, `signal`, `structure`, `subtree`, `text`, or `window`.
 
-### `directory/tag [TAG_NAME_WILD] [/PATH]`
+### `directory /tag [TAG_NAME_WILD] [/PATH]`
 List tagname definitions in the tree. A wildcard string parameter can be included to list only the tags matching the wildcard string (e.g.,: `directory/tag MYT*G`).
 
 If the `/path` qualifier is included, the full paths of the nodes pointed to by the tagname will also be displayed.
@@ -254,21 +249,18 @@ If the `/path` qualifier is included, the full paths of the nodes pointed to by 
 See `add tag` for more information.
 
 
-> note from Mark W: Interesting that to obtain help, one must type "help directory/tag", but when using it one can add spaces, "directory /tag TAG_NAME_WILD".  For example, "directory /tag ip".Surely, all other "help command/qualifier" commands behave the same way. Also note that "directory /tag ip" and "directory \ip" return related, but different information.
-
-
 ### `dispatch ACTION_NODE_PATH [/wait]`
 The `dispatch` command is used to dispatch an action node to an action server. If the `/wait` qualifier is included, the command will wait for the action execution to complete.
 
 
-### `dispatch/build [/monitor=ACTION_SERVER]`
+### `dispatch /build [/monitor=ACTION_SERVER]`
 The `dispatch/build` command finds all the actions in a tree which are currently turned on and builds a sorted table of those actions.
 * Actions are grouped by phase and ordered by sequence numbers. Actions which are configured to be dispatched based on dependency expressions are also identified. 
 * The `dispatch/phase` command utilizes this table when deciding which actions and in which order they should be dispatched to action servers.
 * The `/monitor` qualifier is used to send messages to an action monitor server which are in turn transmitted to `actmon` processes, which display the current status of data acquisition actions being performed.
 
 
-### `dispatch/check [/reset]`
+### `dispatch /check [/reset]`
 Returns a failure status if the failed essential flag is set successfully.
 
 When data acquisition phases are dispatched, a failure flag is set if any action marked as essential (see the `set node` command) fails during execution. The `dispatch/check` command checks on the current state of that failure flag. If the flag is set, the `dispatch/check` command will return a failure status, otherwise it will return a success status.
@@ -276,15 +268,15 @@ When data acquisition phases are dispatched, a failure flag is set if any action
 If the `/reset` qualifier is used, the failure flag will be reset after the check is made so that subsequent `dispatch/check` commands will return a success status unless another essential action subsequently fails before the next `dispatch/check` command is issued.
 
 
-### `dispatch/close[/server=(SERVER1,SERVER2...)]`
+### `dispatch /close[/server=(SERVER1,SERVER2...)]`
 The `dispatch/close` command can be used to instruct an MDSplus action server to close all MDSplus trees that the server currently has open.
 
 * If the `/server` qualifier is not included to specify any action servers, then the current dispatch table (see also: `dispatch/build` and `dispatch/phase` commands) is inspected to construct a list of servers that had actions dispatched to them to send close instructions to.
 
-* The `dispatch/close` command is typically used at the end of a data acquisition cycle to instruct the action server to close any open trees.
+* The `dispatch /close` command is typically used at the end of a data acquisition cycle to instruct the action server to close any open trees.
 
 
-### `dispatch/command/server=SERVER_NAME[/wait][/table=COMMAND_TABLE] COMMAND_TO_EXECUTE`
+### `dispatch /command /server=SERVER_NAME[/wait][/table=COMMAND_TABLE] COMMAND_TO_EXECUTE`
 Dispatches an MDSTCL command to a server for execution by the server process.
 
 * The command will be executed asynchronously unless the `/wait` qualifier is included in the command.
@@ -296,7 +288,7 @@ Dispatches an MDSTCL command to a server for execution by the server process.
 > TODO: MDSDCL briefly defined:   (It is derived from the VAX/VMS DCL language; DCL = DIGITAL Control Language.) https://en.wikipedia.org/wiki/DIGITAL_Command_Language  Note that the MDSplus TCL commands are implemented via MSDCL" 
 
 
-### `dispatch/phase PHASE_NAME [/noaction] [/synch=N] [/log] [/monitor=MONITOR_SERVER]`
+### `dispatch /phase PHASE_NAME [/noaction] [/synch=N] [/log] [/monitor=MONITOR_SERVER]`
 This command dispatches all actions assigned to a named phase to action servers for execution.
   * This command uses the action table created by a `dispatch/build`, therefore a `dispatch/build` command must be given before using the `dispatch/phase` command for any pulse file.
   * Actions are dispatched in order of the action's sequence number, or if the sequence is an expression containing other nodes, the action will be dispatched if all the actions in the expression have completed and the expression evaluates to a true value.
@@ -454,8 +446,6 @@ Examples:
 See also: `show current`
 
 
-> Note from Mark W: The "current" shot number is stored in a file, "shotid.sys", which is located in the <tree_path> directory.   This approach works well when each type of tree has its own <tree_path> directory. However, the "shotid.sys" approach doesn't work well with the "default_tree_path".   For example, suppose experiment A uses the same <default_tree_path> and experiment B.   Then, A's shots will clobber the current shot number for B and vice versa. This document should not mention all of the detail described above, but perhaps should mention the "shotid.sys" file.
-
 
 ### `set default NODE_PATH`
 Set your current location in an open tree. The `set default` command is similar to a `cd` command in a file system. The default location in the tree hierarchy affects things like the `directory` command as well as all commands that take a node-path as an argument. Node paths specified as relative path strings are resolved by finding the node relative to the current default location in the tree. 
@@ -513,7 +503,6 @@ The `set versions` command is used to enable or disable data versioning in an MD
 **Note**: Data versioning is not supported for segmented data records.
 
 
-> note from Mark W: Question for developers . . . Do any customers use versioned trees?   Do we have any automated tests of versioned trees?
 
 ### `set view DATE_TIME_SPECIFIER`
 This command is used to set the time context for examining the contents of a MDSplus tree. If data versioning is enabled on a tree, then a history of data entries for each node is kept, each being timestamped. When you specify a "view" date and time the commands such as DIRECTORY, DECOMPILE and SHOW DATA will present a description of the data the same as if you issued those commands at that particular time. 

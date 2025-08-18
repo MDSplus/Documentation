@@ -1,6 +1,6 @@
 # Environment Variables: Glossary
 
-Following is a list of environment variables that are used or referenced by MDSplus. These are in no particular order, but mostly grouped by relation to each other.
+Following is a list of environment variables that are used or referenced by MDSplus. These are not sorted in a particular order, but are mostly grouped by relation to each other.
 
 #### MDS_PATH
 TDI Search Path. One or more paths separated by semicolons. TDI will search each directory for `.fun` and then `.py` files matching the name of the function being searched for.
