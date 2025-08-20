@@ -62,7 +62,9 @@ People setting up their trees will be setting the bitfields through Traverser or
 
 ## NCI
 
-* Flags: will have other things in it (Stephen to look up)
+TODO: Crosslink to TDI `getnci`
+
+* Flags: will have other things in it (TODO Stephen to look up)
 
 * `time_inserted` when data was inserted as a VMS timestamp (we'll get into that later)
 
