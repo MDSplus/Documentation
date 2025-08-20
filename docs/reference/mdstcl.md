@@ -1,7 +1,9 @@
 # TCL Commands
 
-For use with `mdstcl` TCL (MDSplus Tree Command Language). This information also resides in the help text for the program (simply type in `help`); reproduced here for convenience and edited for clarity.
-https://github.com/MDSplus/mdsplus/blob/alpha/xml/tcl_commands.xml
+For use with `mdstcl` (MDSplus Tree Command Language). This information also resides in the program's built-in help text (simply type `help` in the `TCL>` prompt); reproduced here for convenience and edited for clarity.
+
+(for internal reference: 
+https://github.com/MDSplus/mdsplus/blob/alpha/xml/tcl_commands.xml )
 
 Notes:
 * Commands are not case sensitive.
