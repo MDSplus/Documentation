@@ -33,13 +33,13 @@ The following commands are available for viewing or manipulating data and attrib
 | `directory`      | List the nodes in a tree.                               |
 | `directory /tag`  | List the tagnames in a tree.                           |
 | `put`            | Store data in a node.                                   |
-| [`set alternate_compression`](#set-alternate-compression-on-off) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| enable or disable support for alternate compression methods |
+| [`set alternate_compression`](#set-alternate-compression-on-off) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| enable or disable support for alternate compression methods |
 | `set attribute`  | Set an extended attribute for a node.                   |
 | `set current`    | Set the current shot number for a tree.                 |
 | `set default`    | Change the current location in a tree.                  |
 | `set node`       | Modify node characteristics in an MDSplus tree.         |
 | `set tree`       | Open an MDSplus tree.                                   |
-| `set view`       | Specify a point in time for examining the tree. This command only applies to trees with versioning enabled. |
+| `set view`       | Specify a point in time for examining the tree.<BR>This command only applies to trees with versioning enabled. |
 | `show attribute` | Show an extended attribute for a node.                  |
 | `show current`   | Show the current shot for a tree.                       |
 | `show data`      | Show the data structure stored in a node.               |
