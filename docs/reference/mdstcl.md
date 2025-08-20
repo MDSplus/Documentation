@@ -33,7 +33,7 @@ The following commands are available for viewing or manipulating data and attrib
 | `directory`      | List the nodes in a tree.                               |
 | `directory /tag`  | List the tagnames in a tree.                           |
 | `put`            | Store data in a node.                                   |
-| [`set alternate_compression`](#set-alternate-compression-on-off) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| enable or disable support for alternate compression methods |
+| [`set alternate_compression`](#set-alternate-compression-on-off) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| enable or disable support for alternate compression methods |
 | `set attribute`  | Set an extended attribute for a node.                   |
 | `set current`    | Set the current shot number for a tree.                 |
 | `set default`    | Change the current location in a tree.                  |
