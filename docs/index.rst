@@ -12,5 +12,18 @@ Welcome to MDSplus, the most widely used system for data management in magnetic 
     Reference <reference/index>
 
 
+    .. Guide
+    ..     daq/trees
+    ..     daq/shot_numbers
+    ..     daq/tree_path_variables
+    ..     daq/access
+    ..     daq/experiment
+    ..     daq/faq
+    ..     devices/using_devices
+    ..     devices/writing_devices
+
+    .. Reference
+    ..     reference/index
+
 
 

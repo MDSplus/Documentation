@@ -1,8 +1,8 @@
 # TCL Commands
 
-For use with `mdstcl` (MDSplus Tree Command Language). This information also resides in the program's built-in help text (simply type `help` in the `TCL>` prompt); reproduced here for convenience and edited for clarity.
+For use with `mdstcl` (MDSplus Tree Command Language). This information also resides in the program's built-in help text (simply type `help` into the `TCL>` prompt); reproduced here for convenience and edited for clarity.
 
-(for internal reference: 
+(for internal reference here is the built-in help text: 
 https://github.com/MDSplus/mdsplus/blob/alpha/xml/tcl_commands.xml )
 
 Notes:
@@ -24,7 +24,7 @@ The following commands are available for viewing or manipulating data and attrib
 
 | Command | Description |
 |---------|-------------|
-| [`clean`](#clean-tree_name-shotshot_number)          | Clean the datafile of a tree reclaiming unused space.   |
+| [`clean`](#clean-tree-name-shot-shot-number)          | Clean the datafile of a tree reclaiming unused space.   |
 | `close`          | Close one or more trees currently open by this process. |
 | `compress`       | Compress a datafile by compressing data records.        |
 | `create pulse`   | Create a new pulse file.                                |
@@ -33,7 +33,7 @@ The following commands are available for viewing or manipulating data and attrib
 | `directory`      | List the nodes in a tree.                               |
 | `directory /tag`  | List the tagnames in a tree.                           |
 | `put`            | Store data in a node.                                   |
-| [`set alternate_compression`](#set-alternate_compression-onoff) | enable or disable support for alternate compression methods |
+| [`set alternate_compression`](#set-alternate-compression-on-off) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| enable or disable support for alternate compression methods |
 | `set attribute`  | Set an extended attribute for a node.                   |
 | `set current`    | Set the current shot number for a tree.                 |
 | `set default`    | Change the current location in a tree.                  |
@@ -81,7 +81,7 @@ The following commands are available for dispatching or executing actions in an 
 
 | Command            | Description                                                        |
 |--------------------|--------------------------------------------------------------------|
-| [`abort server`](#abort-server-server1server2server3) | Abort the action currently executing in an action server.         |
+| [`abort server`](#abort-server-server1-server2-server3) | Abort the action currently executing in an action server.         |
 | `dispatch`         | Dispatch an action node to an action server.                       |
 | `dispatch /build`   | Build a dispatch table in preparation for dispatch action phases. |
 | `dispatch /check`   | Determine if all essential actions completed successfully.        |
@@ -89,7 +89,7 @@ The following commands are available for dispatching or executing actions in an 
 | `dispatch /command` | Dispatch commands to an action server.                            |
 | `dispatch /phase`   | Dispatch the actions associated with an experiment phase.         |
 | `do`               | Execute an action in a tree.                                       |
-| `do/method`        | Execute a method provided by a device in a tree.                   |
+| `do /method`        | Execute a method provided by a device in a tree.                   |
 | `set server`       | Change the logging mode for an action server.                      |
 | `show server`      | Show the current status of an action server.                       |
 | `stop server`      | Stop an action server.                                             |
@@ -173,7 +173,7 @@ Recovers wasted space and compresses the tree's datafile.
 * When the `compress` command is issued, the datafile is recreated by reading in the current data for each node and writing it to the new datafile, thus discarding the orphaned data in the file.
 * The `compress` command is similar to the `clean` command except the `compress` command will also employ data compression on the data records, often drastically reducing the file size if the nodes were not set to be compressed on put.
 * Since both the `clean` and `compress` command create new datafiles, it is recommended that they only be used when there is unlikely to be any other write activity on the tree.
-* **Note**: The shot number may be expressed as a TDI expression. For example, `clean cmod/shot="CURRENT_SHOT(""cmod"")-1"`
+* **Note**: The shot number may be expressed as a TDI expression. For example, `clean cmod /shot="CURRENT_SHOT(""cmod"")-1"`
 
 
 
@@ -194,7 +194,7 @@ The `create pulse` command will copy the currently opened tree and all its subtr
 ### `decompile NODE_PATH`
 Display the contents of a node in the tree. If the data converted to a string exceeds approximately 30,000 characters, the string representation of large arrays will be truncated.
 
-### `define server/tree=(TREE_NAME1[,TREE_NAME2...]) SERVER_NAME`
+### `define server /tree=(TREE_NAME1[,TREE_NAME2...]) SERVER_NAME`
 This command has been removed.
 <!-- * **Purpose**:  The `define server` command specifies an MDSplus server to be responsible for creating pulse files for particular tree(s).
 
@@ -219,8 +219,8 @@ Deletes an MDSplus pulse file instance of the currently opened tree. The `delete
   For example:
 
   ```
-  TCL> SET TREE cmod
-  TCL> DELETE PULSE 42
+  TCL> set tree cmod
+  TCL> delete pulse 42
   ```
 
 This would delete the cmod pulse files for shot number 42 as well as any subtrees of the cmod tree with shot number 42.
@@ -256,24 +256,24 @@ The `dispatch` command is used to dispatch an action node to an action server. I
 
 
 ### `dispatch /build [/monitor=ACTION_SERVER]`
-The `dispatch/build` command finds all the actions in a tree which are currently turned on and builds a sorted table of those actions.
+The `dispatch /build` command finds all the actions in a tree which are currently turned on and builds a sorted table of those actions.
 * Actions are grouped by phase and ordered by sequence numbers. Actions which are configured to be dispatched based on dependency expressions are also identified. 
-* The `dispatch/phase` command utilizes this table when deciding which actions and in which order they should be dispatched to action servers.
+* The `dispatch /phase` command utilizes this table when deciding which actions and in which order they should be dispatched to action servers.
 * The `/monitor` qualifier is used to send messages to an action monitor server which are in turn transmitted to `actmon` processes, which display the current status of data acquisition actions being performed.
 
 
 ### `dispatch /check [/reset]`
 Returns a failure status if the failed essential flag is set successfully.
 
-When data acquisition phases are dispatched, a failure flag is set if any action marked as essential (see the `set node` command) fails during execution. The `dispatch/check` command checks on the current state of that failure flag. If the flag is set, the `dispatch/check` command will return a failure status, otherwise it will return a success status.
+When data acquisition phases are dispatched, a failure flag is set if any action marked as essential (see the `set node` command) fails during execution. The `dispatch /check` command checks on the current state of that failure flag. If the flag is set, the `dispatch /check` command will return a failure status, otherwise it will return a success status.
 
-If the `/reset` qualifier is used, the failure flag will be reset after the check is made so that subsequent `dispatch/check` commands will return a success status unless another essential action subsequently fails before the next `dispatch/check` command is issued.
+If the `/reset` qualifier is used, the failure flag will be reset after the check is made. Subsequent `dispatch /check` commands will return a success status, unless another essential action subsequently fails before the next `dispatch /check` command is issued.
 
 
 ### `dispatch /close[/server=(SERVER1,SERVER2...)]`
-The `dispatch/close` command can be used to instruct an MDSplus action server to close all MDSplus trees that the server currently has open.
+The `dispatch /close` command can be used to instruct an MDSplus action server to close all MDSplus trees that the server currently has open.
 
-* If the `/server` qualifier is not included to specify any action servers, then the current dispatch table (see also: `dispatch/build` and `dispatch/phase` commands) is inspected to construct a list of servers that had actions dispatched to them to send close instructions to.
+* If the `/server` qualifier is not included to specify any action servers, then the current dispatch table (see also: `dispatch /build` and `dispatch /phase` commands) is inspected to construct a list of servers that had actions dispatched to them to send close instructions to.
 
 * The `dispatch /close` command is typically used at the end of a data acquisition cycle to instruct the action server to close any open trees.
 
@@ -292,12 +292,12 @@ Dispatches an MDSTCL command to a server for execution by the server process.
 
 ### `dispatch /phase PHASE_NAME [/noaction] [/synch=N] [/log] [/monitor=MONITOR_SERVER]`
 This command dispatches all actions assigned to a named phase to action servers for execution.
-  * This command uses the action table created by a `dispatch/build`, therefore a `dispatch/build` command must be given before using the `dispatch/phase` command for any pulse file.
+  * This command uses the action table created by a `dispatch /build`, therefore a `dispatch /build` command must be given before using the `dispatch /phase` command for any pulse file.
   * Actions are dispatched in order of the action's sequence number, or if the sequence is an expression containing other nodes, the action will be dispatched if all the actions in the expression have completed and the expression evaluates to a true value.
 
 * The `/synch` qualifier can be used to synchronize all action servers based on the sequence numbers of the actions.
   * Without the `/synch` qualifier, all actions matching the phase specified are dispatched immediately to all the action servers in order of the sequence numbers. Each action server maintains a queue of actions and will execute those actions one after the other until all the actions in its queue have been executed.
-  * With the `/synch` qualifier, the actions will be dispatched in groups of the synch value, thus synchronizing the actions across multiple servers. For example, a `/synch=10` specification would cause the DISPATCH/PHASE command to dispatch all the actions with sequence numbers 1 through 10 to be dispatched to their designated action servers in sequence order. No other actions will be dispatched to action servers until this first "batch" has completed. Then sequence numbers 11-20 would then be dispatched. This ensures that an action with sequence number 15 on one server would not be executed before one with sequence number 10 on another server. This is often critical during the initialization phase where certain types of modules such as triggering devices must be initialized before data acquisition devices are armed.
+  * With the `/synch` qualifier, the actions will be dispatched in groups of the synch value, thus synchronizing the actions across multiple servers. For example, a `/synch=10` specification would cause the `dispatch /phase` command to dispatch all the actions with sequence numbers 1 through 10 to be dispatched to their designated action servers in sequence order. No other actions will be dispatched to action servers until this first "batch" has completed. Then sequence numbers 11-20 would then be dispatched. This ensures that an action with sequence number 15 on one server would not be executed before one with sequence number 10 on another server. This is often critical during the initialization phase where certain types of modules such as triggering devices must be initialized before data acquisition devices are armed.
 
 * The `/log` qualifier will output log messages of actions being dispatched, started, and completed. The `/noaction` qualifier can be used with the `/log` qualifier to log what would be dispatched, but no actions would actually be dispatched.
 
@@ -315,13 +315,13 @@ The `do /method` command is used to perform a method supported by the device, pe
 * The `/arg` qualifier lets you supply one or more arguments to the method. The arguments must be in the form of a TDI expression. If you need to pass a string argument you would do a command such as: 
 
   ```sh
-  TCL> do/method MYDEVICE init /arg="""MYSTRING"""
+  TCL> do /method MYDEVICE init /arg="""MYSTRING"""
   ```
 
   Multiple arguments can be passed using the syntax:
 
   ```sh
-  TCL> do/method MYDEVICE init /arg=(1,"""MYSTRING""",42)
+  TCL> do /method MYDEVICE init /arg=(1,"""MYSTRING""",42)
   ```
 
 * The `/override` qualifier is used to override the current on/off status of the device in the tree. If the device nodes are turned off and the `/override` qualifier is not present, then no action will be performed.
@@ -367,16 +367,16 @@ TCL> put MY_NODE ""
 TCL> put MY_NODE ""this is a string""
 
 # Store an integer:
-TCL> put/extend MY_NODE
+TCL> put /extend MY_NODE
 PUT> 42
 PUT>
 
 # Store an integer with units:
-TCL> put/extend MY_NODE  
+TCL> put /extend MY_NODE  
 PUT> build_with_units(42,"volts")
 PUT>
 
-TCL> put/extend/lf MY_NODE
+TCL> put /extend /lf MY_NODE
 PUT> "This is a test
 PUT> with line feeds in the text"
 ```
@@ -410,7 +410,7 @@ Examples:
 ```sh
 # set two attributes, one with an int, one with an expression
 TCL> set attribute MYNODE /name=special 42
-TCL> set attribute MYNODE /NAME=myattr/EXTENDED
+TCL> set attribute MYNODE /NAME=myattr /EXTENDED
 build_with_units(42,"volts")
 TCL> 
 
@@ -437,9 +437,9 @@ The current shot number is stored in a file called `shotid.sys` which is located
 Examples:
 
 ```sh
-  TCL> SET CURRENT CMOD 1000
-  TCL> SET CURRENT CMOD "current_shot('cmod')+2"
-  TCL> SHOW CURRENT CMOD
+  TCL> set current cmod 1000
+  TCL> set current cmod "current_shot('cmod')+2"
+  TCL> show current cmod
   Current shot is 1002
 ```
 
@@ -471,19 +471,19 @@ The `set node` command is used to change the characteristics of one or more node
 | `[NO]SHOT_WRITE`        | enable writing to this node in a pulse file |
 | `[NO]MODEL_WRITE`       | enable writing to this node in shot -1 |
 | `[NO]INCLUDED`          | include this subtree in 'conditional' create pulse |
-| `[NO]ESSENTIAL`         | make this node 'essential' for `dispatch/check` |
+| `[NO]ESSENTIAL`         | make this node 'essential' for `dispatch /check` |
 | `LOG`                   | log node changes |
 | `STATUS=n`              | Write a status value to a node (usually action nodes). |
 | `COMPRESSION_METHOD={standard \| gzip}` | set the compression method for this node. |
 
 **Notes:**
 * All nodes in an MDSplus tree have a set of attributes; some are set automatically when data is stored, some are set when the nodes are first added to a tree, and some are modifiable by this command.
-* The options indicated with a `[NO]` prefix indicates that the option can be negated. For example, using the command `set node gub/write_once` will set a flag in the node's characteristics that indicates that data can only be written once after which the data cannot be overwritten. Using the command `set node gub/nowrite_once` clears the "write once" flag, thus enabling the node to be overwritten with new data. 
+* The options indicated with a `[NO]` prefix indicates that the option can be negated. For example, using the command `set node gub /write_once` will set a flag in the node's characteristics that indicates that data can only be written once after which the data cannot be overwritten. Using the command `set node gub /nowrite_once` clears the "write once" flag, thus enabling the node to be overwritten with new data. 
 * The above commands are best for running a TCL script. For manually configuring a model tree, many users prefer to do so with jTraverser2.
 
 
 ### `set readonly [/off]`
-This command is used to make a tree readonly: data cannot be written to the tree, nor can node characteristics be changed. Changing the readonly flag on a tree must be done while in `edit` mode and a `write` command must be performed to save the readonly property of a tree. Use the `/off` qualifier to disable the readonly setting to make the tree writable again. 
+This command is used to make a tree read-only: data cannot be written to the tree, nor can node characteristics be changed. Changing the `readonly` flag on a tree must be done while in `edit` mode and a `write` command must be performed to save the `readonly` property of a tree. Use the `/off` qualifier to disable the `readonly` setting to make the tree writable again. 
 
 
 ### `set server/log=(log | statistics | none)`
@@ -496,7 +496,7 @@ Change the logging mode for an action server.
 ### `set tree TREE_NAME[,SUBTREE1[,SUBTREE2,]] [/shot=SHOT_NUMBER] [/readonly]`
 The `set tree` command is used to open an MDSplus tree. If subtree names are included in the TREE_NAME parameter then only those trees will be opened if they are available.
 * The `/shot` qualifier can be used to specify a particular shot number to open. The shot number can be a TDI expression. If omitted, the "model" tree or shot -1 is opened.  The parameter `/shot=0` should open the "current" tree.
-* If the `/readonly` qualifier is included then the tree is opened in a readonly mode and no changes can be made to the nodes or their data.
+* If the `/readonly` qualifier is included then the tree is opened in a read-only mode and no changes can be made to the nodes or their data.
 
 
 ### `set versions [/[no]model] [/[no]shot]`
@@ -507,7 +507,7 @@ The `set versions` command is used to enable or disable data versioning in an MD
 
 
 ### `set view DATE_TIME_SPECIFIER`
-This command is used to set the time context for examining the contents of a MDSplus tree. If data versioning is enabled on a tree, then a history of data entries for each node is kept, each being timestamped. When you specify a "view" date and time the commands such as DIRECTORY, DECOMPILE and SHOW DATA will present a description of the data the same as if you issued those commands at that particular time. 
+This command is used to set the time context for examining the contents of a MDSplus tree. If data versioning is enabled on a tree, then a history of data entries for each node is kept, each being timestamped. When you specify a "view" date and time the commands such as `directory`, `decompile`, and `show data` will present a description of the data the same as if you issued those commands at that particular time. 
 
 The DATE_TIME_SPECIFIER must be in the format `dd-mon-yyyy hh:mm:ss`, where:
 
@@ -517,26 +517,29 @@ The DATE_TIME_SPECIFIER must be in the format `dd-mon-yyyy hh:mm:ss`, where:
   * `hh`    - the hour of the day, integer 0-23.
   * `mm`    - the minute, integer 0-59.
   * `ss`    - the seconds, integer 0-59
-  * or special keyword `NOW`, meaning the current time.
+  * or special keyword `now`, meaning the current time.
+  * example: `set view 25-jan-2025 15:03:45`
+  * example: `set view now`
 
 
 ### `setevent EVENTNAME`
-This command can be used to issue an MDSplus event. MDSplus events are named happenings that other processes can wait for by name. See the WFEVENT command. This TCL command does not currently support sending a data message with the event.
+This command can be used to issue an MDSplus event. Other processes can wait for MDSplus events by name. This TCL command does not currently support sending a data message with the event.
 
+See also: `wfevent`.
 
 ### `show alternate_compression`
 Displays whether or not data alternate compression methods are enabled for the current tree.
 
 Example:
 
-```sh
-TCL> SET TREE main
-TCL> SHOW ALTERNATE_COMPRESSION
+```tcl
+TCL> set tree main
+TCL> show alternate_compression
   Alternate Compression is disabled.
 ```
 
 
-### `show attribute/name=ATTRIBUTE_NAME`
+### `show attribute /name=ATTRIBUTE_NAME`
 The `show attribute` command is used to display the contents of a node's named attribute.
 
 See also: `set attribute`
@@ -553,12 +556,12 @@ The `show data` command will display the data stored in a node in a tree. Unlike
 ### `show db`
 Display the current tree and default node opened in the current process.
 
-The SHOW DB can be used to display what the current tree context is: it displays the tree and shot, open mode, and the current default node in the tree.
+The command `show db` can be used to display what the current tree context is: it displays the tree and shot, open mode, and the current default node in the tree.
 
 Example:
 
 ```sh
-TCL> SHOW DB
+TCL> show db
 000  MAIN                              shot: -1 [\MAIN::TOP]
 ```
 
@@ -567,8 +570,8 @@ This command displays the current default node location in the opened tree.
 
 Example:
 
-```sh
-TCL> SHOW DEFAULT
+```tcl
+TCL> show default
 \MAIN::TOP
 ```
 
@@ -612,8 +615,8 @@ This command displays whether or not data versioning is enabled for the current 
 Example:
 
 ```sh
-TCL> SET TREE main
-TCL> SHOW VERSIONS
+TCL> set tree main
+TCL> show versions
   Versions are disabled in the model file and disabled in the shot file.
 ```
 
@@ -642,25 +645,27 @@ TCL> SHOW VERSIONS
 
 Stops or restarts one or more MDSplus action servers.
 
-Normally MDSplus action servers are configured to restart automatically so this command effectively will restart an action server. It is not uncommon to restart action servers at some interval such as once per day to recover fragmented virtual memory within the action server process. Other reasons for stopping an action server might be to reset I/O channels to data acquisition devices which might become non-responsive or device support code may introduce memory leaks which may require the process to be restarted to release virtual memory.
+Normally MDSplus action servers are configured to restart automatically, so this command is used to restart action servers. Common reasons for stopping/restarting an action server:
+* Restart action servers at some regular interval, such as once per day, to recover fragmented virtual memory within the action server process
+* Reset I/O channels to data acquisition devices which might become non-responsive.
+* Device support code (aka an MDSplus device) may introduce memory leaks which may require the process to be restarted to release virtual memory.
 
-Unlike the `show server` command, wildcard characters cannot be used in the
-`SERVER_SPEC` string.
+Unlike the `show server` command, wildcard characters cannot be used in the `SERVER_SPEC` string.
 
 
 
 
 ### `verify`
 
-Checks the integrity of the currently open tree to ensure that the tree structure representation is valid and complete. This command is a useful diagnostic tool if file system or disk corruption problems have been detected on the storage device where the tree files are stored. If damage to the tree (file name such as `mytree_nnn.tree`) is discovered, it is usually safe to copy the tree file from an adjacent shot since the tree file contains only the tree structure and not the data or characteristics of the nodes in the tree.
+Checks the integrity of the currently open tree to ensure that the tree structure representation is valid and complete. This command is a useful diagnostic tool if file system or disk corruption problems have been detected on the storage device where the tree files are stored. If damage to the tree (file name such as `mytree_nnn.tree`) is discovered, it is usually safe to copy the `.tree` file from an adjacent shot since the `.tree` file contains only the tree structure and not the data or characteristics of the nodes in the tree.
 
-The VERIFY command will display a count of the nodes in the tree. If there are subtree nodes included in the tree those nodes will be listed as "other" in the node counts.
+The `verify` command will display a count of the nodes in the tree. If there are subtree nodes included in the tree those nodes will be listed as "other" in the node counts.
 
 Example:
 
-```sh
-TCL> SET TREE mytree
-TCL> VERIFY
+```tcl
+TCL> set tree mytree
+TCL> verify
 Node summary:
   Allocated = 7/14
   Free      = 7/14
@@ -670,14 +675,16 @@ Node summary:
 
 ### `wfevent EVENT_NAME /timeout=SECONDS`
 
-This can be used to Wait For an MDSplus event to be issued. MDSplus events are named occurrences that can be issued by other processes on the same or different host computers. The `wfevent` command will not complete until the MDSplus event is generated. The `/timeout` qualifier can be specified to cause the wait to time out if no event is generated within the specified number of seconds.
+This command can be used to wait For an MDSplus event to be issued by other processes on the same or different host computers. The `wfevent` command will not complete until the MDSplus event is generated. The `/timeout` qualifier can be specified to cause the wait to time out if no event is generated within the specified number of seconds.
 
-> There is a separate utility, "wfevent", that can optionally show the 12-bytes of data sent with an event.
+See also: `setevent`
+
+> There is a separate utility, "wfevent", that can optionally show the 12-bytes of data sent with an event. TODO: Dev team to discuss
 
 
 ### `write [TREENAME] [/SHOT=SHOT_NUMBER]`
 
-This command commits changes made to the tree's structure (initiated by using the `edit` command). Changes include but are not limited to the commands listed under `help edit commands`. Specifically, `write` command saves a tree's triplet of files: `*.tree`, `*.characteristics`, and `*.datafile`. Closing a tree that was open for edit without using the `write` command will discard any changes made to the tree's structure. 
+This command commits changes made to the tree's structure (initiated by using the `edit` command). Changes include, but are not limited to, the commands listed under `help edit commands`. Specifically, `write` command saves a tree's triplet of files: `.tree`, `.characteristics`, and `.datafile`. Closing a tree that was open for edit without using the `write` command will discard any changes made to the tree's structure. 
 
 If the treename parameter or `/shot` qualifier is omitted, the tree and shot specified with the initial `edit` command is assumed. 
 
