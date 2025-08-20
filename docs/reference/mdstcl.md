@@ -59,8 +59,8 @@ The following commands are available for editing the structure of an MDSplus tre
 
 | Command                 | Description                                                 |
 |-------------------------|-------------------------------------------------------------|
-| [`add node`](#add-node) | Add a node to an MDSplus tree.                              |
-| `add tag`               | Assign a tagname to a node in the tree.                     |
+| [`add node`](#add-node-node-path-usage-usage-model-device-type) | Add a node to an MDSplus tree.                              |
+| [`add tag`](#add-tag-node-path-tag-name)  | Assign a tagname to a node in the tree.                     |
 | `delete node`           | Delete a node in an MDSplus tree.                           |
 | `edit`                  | Open a tree or create a new tree for subsequent editing.    |
 | `remove tag`            | Remove a tagname.                                           |
@@ -463,7 +463,7 @@ The `set node` command is used to change the characteristics of one or more node
 |--------|-------------|
 | `ON`                    | turn node "on" |
 | `OFF`                   | turn node "off" |
-| `[NO]SUBTREE`           | make node a subtree reference (or not) available only during `edit` |
+| `[NO]SUBTREE`           | make node a subtree reference (or not)<BR> available only during `edit` |
 | `[NO]WRITE_ONCE`        | make node write once (or not) |
 | `[NO]COMPRESS_ON_PUT`   | turn on or off automatic compression |
 | `[NO]COMPRESS_SEGMENTS` | turn on or off automatic segment compression |
