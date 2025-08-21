@@ -82,7 +82,7 @@ The following commands are available for dispatching or executing actions in an 
 | Command            | Description                                                        |
 |--------------------|--------------------------------------------------------------------|
 | [`abort server`](#abort-server-server1-server2-server3) | Abort the action currently executing in an action server. |
-| [`dispatch`] | Dispatch an action node to an action server. |
+| [`dispatch`](#dispatch-action-node-path-wait) | Dispatch an action node to an action server. |
 | [`dispatch /build`](#dispatch-build-monitor-action-server) | Build a dispatch table in preparation for dispatch action phases. |
 | [`dispatch /check`](#dispatch-check-reset) | Determine if all essential actions completed successfully. |
 | [`dispatch /close`](#dispatch-close-server-server1-server2) | Tell all action servers in use to close all trees. |
