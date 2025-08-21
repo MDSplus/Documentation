@@ -24,30 +24,30 @@ The following commands are available for viewing or manipulating data and attrib
 
 | Command | Description |
 |---------|-------------|
-| [`clean`](#clean-tree-name-shot-shot-number)          | Clean the datafile of a tree reclaiming unused space.   |
-| `close`          | Close one or more trees currently open by this process. |
-| `compress`       | Compress a datafile by compressing data records.        |
-| `create pulse`   | Create a new pulse file.                                |
-| `decompile`      | Decompile the data stored in a node.                    |
-| `delete pulse`   | Delete a pulse file.                                    |
-| `directory`      | List the nodes in a tree.                               |
-| `directory /tag`  | List the tagnames in a tree.                           |
-| `put`            | Store data in a node.                                   |
+| [`clean`](#clean-tree-name-shot-shot-number)  | Clean the datafile of a tree reclaiming unused space.   |
+| [`close`](#close-tree-name-shot-shot-number-all-confirm) | Close one or more trees currently open by this process. |
+| [`compress`](#compress-tree-name-shot-shot-number)       | Compress a datafile by compressing data records.        |
+| [`create pulse`](#create-pulse-shot-number-include-subtree1-subtree2-exclude-subtree1-subtree2-conditional-nomain) | Create a new pulse file. |
+| [`decompile`](#decompile-node-path) | Decompile the data stored in a node.   |
+| [`delete pulse`](#delete-pulse-shot-number)   | Delete a pulse file.   |
+| [`directory`](#directory-node-path-wild1-node-path-wild2-full-usage-usage-usage-usage1-usage2) | List the nodes in a tree.   |
+| [`directory /tag`](#directory-tag-tag-name-wild-path)  | List the tagnames in a tree.  |
+| [`put`](#put-node-path-expression-extended-lf-eof-xxx)  | Store data in a node.  |
 | [`set alternate_compression`](#set-alternate-compression-on-off) | enable or disable support for alternate compression methods |
-| `set attribute`  | Set an extended attribute for a node.                   |
-| `set current`    | Set the current shot number for a tree.                 |
-| `set default`    | Change the current location in a tree.                  |
-| `set node`       | Modify node characteristics in an MDSplus tree.         |
-| `set tree`       | Open an MDSplus tree.                                   |
-| `set view`       | Specify a point in time for examining the tree.<BR>This command only applies to trees with versioning enabled. |
-| `show attribute` | Show an extended attribute for a node.                  |
-| `show current`   | Show the current shot for a tree.                       |
-| `show data`      | Show the data structure stored in a node.               |
-| `show db`        | Show the tree currently opened.                         |
-| `show default`   | Show the current location in a tree.                    |
-| `show git`       | Show the version information of your MDSplus git repository. |
-| `show versions`  | Show whether or not versioning is enabled in the tree.  |
-| `verify`         | Verify the tree structure of an MDSplus tree.           |
+| [`set attribute`](#set-attribute-node-path-name-attribute-name-value-extended) | Set an extended attribute for a node. |
+| [`set current`](#set-current-treename-shot-number-expression-increment)    | Set the current shot number for a tree.  |
+| [`set default`](#set-default-node-path)    | Change the current location in a tree.   |
+| [`set node`](#set-node-node-path-wild-option-option)       | Modify node characteristics in an MDSplus tree.  |
+| [`set tree`](#set-tree-tree-name-subtree1-subtree2-shot-shot-number-readonly) | Open an MDSplus tree. |
+| [`set view`](#set-view-date-time-specifier) | Specify a point in time for examining the tree.<BR>This command only applies to trees with versioning enabled. |
+| [`show attribute`](#show-attribute-name-attribute-name) | Show an extended attribute for a node. |
+| [`show current`](#show-current-treename)  | Show the current shot for a tree. |
+| [`show data`](#show-data-node-path1-node-path2)   | Show the data structure stored in a node.   |
+| [`show db`](#show-db)        | Show the tree currently opened.  |
+| [`show default`](#show-default)  | Show the current location in a tree. |
+| [`show git`](#show-git-tag-branch-commit-remote-remote-url-srcdir) | Show the version information of your MDSplus git repository. |
+| [`show versions`](#show-server-server-spec-server-spec-nooutput)  | Show whether or not versioning is enabled in the tree.  |
+| [`verify`](#verify) | Verify the tree structure of an MDSplus tree.   |
     
 ## Edit Commands
 
@@ -59,15 +59,15 @@ The following commands are available for editing the structure of an MDSplus tre
 
 | Command                 | Description                                                 |
 |-------------------------|-------------------------------------------------------------|
-| [`add node`](#add-node-node-path-usage-usage-model-device-type) | Add a node to an MDSplus tree.                              |
-| [`add tag`](#add-tag-node-path-tag-name)  | Assign a tagname to a node in the tree.                     |
-| `delete node`           | Delete a node in an MDSplus tree.                           |
-| `edit`                  | Open a tree or create a new tree for subsequent editing.    |
-| `remove tag`            | Remove a tagname.                                           |
-| `rename`                | Rename a node in a tree.                                    |
-| `set readonly`          | Mark tree as readonly. No changes to data or NCI permitted. |
-| `set versions`          | Enable data version support in a tree.                      |
-| `write`                 | Write out a modified tree committing edit changes.          |
+| [`add node`](#add-node-node-path-usage-usage-model-device-type) | Add a node to an MDSplus tree. |
+| [`add tag`](#add-tag-node-path-tag-name)  | Assign a tagname to a node in the tree.  |
+| [`delete node`](#delete-node-node-path-node-path-log-confirm-dryrun)  | Delete a node in an MDSplus tree.  |
+| [`edit`](#edit-tree-name-shot-shot-number-new)  | Open a tree or create a new tree for subsequent editing. |
+| [`remove tag`](#remove-tag-tagname)    | Remove a tagname.   |
+| [`rename`](#rename-old-node-path-new-node-path-log)     | Rename a node in a tree.   |
+| [`set readonly`](#set-readonly-off) | Mark tree as readonly. No changes to data or NCI permitted. |
+| [`set versions`](#set-versions-no-model-no-shot)  | Enable data version support in a tree. |
+| [`write`](#write-treename-shot-shot-number)  | Write out a modified tree committing edit changes.  |
 
 
 Type `help COMMAND_NAME` for more information on the command. You may also type `help tree commands` or `help dispatch commands` for info on those categories of commands.
@@ -81,18 +81,18 @@ The following commands are available for dispatching or executing actions in an 
 
 | Command            | Description                                                        |
 |--------------------|--------------------------------------------------------------------|
-| [`abort server`](#abort-server-server1-server2-server3) | Abort the action currently executing in an action server.         |
-| `dispatch`         | Dispatch an action node to an action server.                       |
-| `dispatch /build`   | Build a dispatch table in preparation for dispatch action phases. |
-| `dispatch /check`   | Determine if all essential actions completed successfully.        |
-| `dispatch /close`   | Tell all action servers in use to close all trees.                |
-| `dispatch /command` | Dispatch commands to an action server.                            |
-| `dispatch /phase`   | Dispatch the actions associated with an experiment phase.         |
-| `do`               | Execute an action in a tree.                                       |
-| `do /method`        | Execute a method provided by a device in a tree.                   |
-| `set server`       | Change the logging mode for an action server.                      |
-| `show server`      | Show the current status of an action server.                       |
-| `stop server`      | Stop an action server.                                             |
+| [`abort server`](#abort-server-server1-server2-server3) | Abort the action currently executing in an action server. |
+| [`dispatch`] | Dispatch an action node to an action server. |
+| [`dispatch /build`](#dispatch-build-monitor-action-server) | Build a dispatch table in preparation for dispatch action phases. |
+| [`dispatch /check`](#dispatch-check-reset) | Determine if all essential actions completed successfully. |
+| [`dispatch /close`](#dispatch-close-server-server1-server2) | Tell all action servers in use to close all trees. |
+| [`dispatch /command`](#dispatch-command-server-server-name-wait-table-command-table-command-to-execute) | Dispatch commands to an action server. |
+| [`dispatch /phase`](#dispatch-phase-phase-name-noaction-synch-n-log-monitor-monitor-server) | Dispatch the actions associated with an experiment phase. |
+| [`do`](#do-action-node-path) | Execute an action in a tree. |
+| [`do /method`](#do-method-device-node-path-method-name-arg-expression-if-expression-override)  | Execute a method provided by a device in a tree.  |
+| [`set server`](#set-server-log-log-statistics-none)  | Change the logging mode for an action server. |
+| [`show server`](#show-server-server-spec-server-spec-nooutput) | Show the current status of an action server. |
+| [`stop server`](#stop-server-server-spec-server-spec) | Stop an action server. |
 
 ## Events Commands
 
@@ -103,8 +103,8 @@ TCL can also issue and wait for MDSplus events. See:
 
 | Command            | Description                                                       |
 |--------------------|-------------------------------------------------------------------|
-| `setevent`         | Issue an MDSplus event                                           |
-| `wfevent`          | Wait for an MDSplus event to be issued.                           |
+| [`setevent`](#setevent-eventname) | Issue an MDSplus event. |
+| [`wfevent`](#wfevent-event-name-timeout-seconds)  | Wait for an MDSplus event to be issued. |
 
 
 
@@ -116,7 +116,7 @@ TCL can display device information. See:
 
 | Command            | Description                                                       |
 |--------------------|-------------------------------------------------------------------|
-| `devices`          | Obtain information about a Python device support module.          |
+| [`devices`](#devices-device-type-full)  | Obtain information about a Python device support module. |
 
 
 
@@ -532,7 +532,7 @@ Displays whether or not data alternate compression methods are enabled for the c
 
 Example:
 
-```tcl
+```
 TCL> set tree main
 TCL> show alternate_compression
   Alternate Compression is disabled.
@@ -560,7 +560,7 @@ The command `show db` can be used to display what the current tree context is: i
 
 Example:
 
-```sh
+```
 TCL> show db
 000  MAIN                              shot: -1 [\MAIN::TOP]
 ```
@@ -570,7 +570,7 @@ This command displays the current default node location in the opened tree.
 
 Example:
 
-```tcl
+```
 TCL> show default
 \MAIN::TOP
 ```
@@ -663,7 +663,7 @@ The `verify` command will display a count of the nodes in the tree. If there are
 
 Example:
 
-```tcl
+```
 TCL> set tree mytree
 TCL> verify
 Node summary:
