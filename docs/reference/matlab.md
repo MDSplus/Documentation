@@ -11,7 +11,7 @@ Connects to a remote MDSplus data server. This will make a thin client connectio
 |SERVER_NAME | your host/server name goes here |
 |Type | Matlab string |
 |Usage |  `mdsconnect('name_of_mdsplus_server')`|
-
+| Returns| Status |
 
 ```m
 %%% TODO: discuss with group a sanitized example server name "my_archive_server1" or an ip address like "123.456.78.9" or something
@@ -19,7 +19,6 @@ Connects to a remote MDSplus data server. This will make a thin client connectio
 ans =
      1
 ```
-
 
 ## `mdsclose()`
 Closes currently active tree.
@@ -29,7 +28,7 @@ Closes currently active tree.
 |Name | - |
 |Type | - |
 |Usage | `mdsclose()` |
-
+|Returns| Status |
 
 ## `mdsdisconnect()`
 Disconnect from  a remote mdsplus data server.
@@ -37,57 +36,27 @@ Disconnect from  a remote mdsplus data server.
 %      described routines to their local behaviors
 | Parameters ||
 |-|-|
-| Name | - |
-| Type | - |
-| Usage | `mdsdisconnect()` |
+| Name    | - |
+| Type    | - |
+| Usage   | `mdsdisconnect()` |
+| Returns | Status |
 
 
-## `mdsInfo(varargin)`
-Used internally by other functions to retrieve configuration information.
+## `mdsInfo(USE_PYTHON=false)`
+This is an internal function and is not recommended for general usage. This function can be called to activate the MDSplus Python bridge, but the best way to do that is with `mdsUsePython` (see also: `mdsUsePython` [TODO: Link]), therefore `mdsInfo` is an unnecessary step prior to calling other functions such as `mdsopen`, `mdsconnect`, etc. 
 
-|Parameters| |
-|-|-|
-|Name | varargin "variable argument in" (it's a matlab thing...you can pass multiple3 arguments in... |
-|     | TODO: Fernando will do more research on this) |
-|Type | - |
-|Usage| see below |
-
-> TODO: more to come from Fernando
-
-```m
->> i=mdsInfo(0)
-i =
-  struct with fields:
-           isConnected: 1
-            connection: [1x1 MDSplus.Connection]
-         connectedHost: 'alcdata-archives'
-             usePython: 0
-    isPythonConnection: 0
-```
-
-```m
->> info = mdsInfo();
->> info.
-connectedHost       connection          isConnected         ispy2               isPythonConnection  usePython
-```
 
 ## `mdsopen(EXPRESSION, SHOT)`
-Opens a connection to a remote mdsplus data server. 
-
-TODO: figure out if this is too much info:
-This routine will invoke a treeopen(expt, shot). 
-`expt` may contain information about a remote server 'server::expt'
-
-TODO: ask Fernando to explain this to me again.
+Opens a tree or, if specified, a connection to a remote MDSplus data server and a tree. 
 
 |Parameters | |
 |-|-|
-|EXPRESSION | can be a treename (MATLAB string) |
-|           | can also be a server if separated by double colons (for example: `server::expt`) |
+|EXPRESSION | can be a tree name (MATLAB string) |
+|           | deprecated and might be removed: can also be a server followed by a tree name if separated by double colons (for example: `SERVER_NAME::TREE`) |
 |SHOT       | shot number (Int)                 |
 |Usage      | `mdsopen('cmod', 1090909009)` |
-|           | also see below for other usage cases  |
-
+|           | `mdsopen('alcdata-archives::cmod', 1090909009)`  |
+|Returns    | Shot number, Status |
 
 ```m
 >> mdsopen('cmod', 1090909009)
@@ -107,10 +76,10 @@ Puts data into an MDSplus tree node. This routine uses the java or python interf
 
 | Parameters ||
 |-|-|
-| Node       |Matlab string|
-| expression |Matlab string|
-| varargin   |Matlab string|
-||TODO: Fernando to do more testing. (does it work? only if the Python bridge is used...maybe)|
+| NODE       | Matlab string|
+| EXPRESSION | Matlab string|
+| VARARGIN   | Matlab string|
+| Returns    | Status |
 |Usage|see below|
 
 
@@ -154,6 +123,7 @@ Run TCL command or open a TCL prompt. This function provides Matlab with the sam
 |Parameters| Type |
 |-|-|
 |COMMAND   | String |
+|Returns   | (nothing returned) |
 |Usage     | see below|
 
 ```m
@@ -171,12 +141,13 @@ Total of 2 nodes.
 ```
 
 ## `mdsvalue(expression, varargin)`
-Call to evaluate MDSplus expressions, i.e. TDI commands.
+Call to evaluate MDSplus expressions, i.e., TDI commands.
 
 | Parameters| Type |
 |-|-|
 | expression | MATLAB string |
 | varargin | MATLAB string |
+| Returns | Result, Status |
 |Usage | `mdsvalue('TDI_EXPRESSION')` |
 
 ```m
@@ -195,18 +166,19 @@ sample =
 >> mdsput(':ACQ2106_122:ADDRESS', sample)
 ```
 
-## `mdsUsePython (true/false)`
-This function allows switching between using the Java bridge and the Python bridge. The default (`false`) is Java. 
+## `mdsUsePython(USE_PYTHON=true)`
+This function allows switching between using the Java bridge and the Python bridge. When aThe default (`false`) is Java. 
 
 | Parameters ||
 |-|-|
 | Arguments | true (1), false (0) |
-| Type      | Matlab boolean|
+| Type      | Matlab boolean      |
+| Returns   | (nothing returned)  |
 | Usage     | `mdsUsePython(true)` or `mdsUsePython(1)` for Python|
 |           | `mdsUsePython(false)` or `mdsUsePython(0)` for Java |
 
 ```m
->> mdsUsePython(1)
+>> mdsUsePython()
 >> i=mdsInfo()
 i =
   struct with fields:
@@ -218,6 +190,6 @@ i =
                  ispy2: 0
 >>
 ```
-
+See also the: https://www.mathworks.com/support/requirements/python-compatibility.html
 
 

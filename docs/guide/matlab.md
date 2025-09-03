@@ -57,14 +57,20 @@ If your organization runs MATLAB from a computing cluster, which will likely hav
 * To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. 
 
 
-### Open Tree, Read Data
+### Open Tree
 ```m
 % Connect to a server, in this case 123.456.7.89
 mdsconnect('123.456.7.89')
 
+ans = 
+    1
+
 % Open "mytree" to shot 42
 mdsopen('mytree', 42)
+```
 
+### Read Data
+```m
 % Assign the value from node with tag name "data_node" into a MATLAB workspace variable named "data_read"
 data_read = mdsvalue('\data_node')
 
