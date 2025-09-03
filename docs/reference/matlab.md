@@ -52,7 +52,7 @@ Opens a tree or, if specified, a connection to a remote MDSplus data server and 
 |Parameters | |
 |-|-|
 |EXPRESSION | can be a tree name (MATLAB string) |
-|           | deprecated and might be removed: can also be a server followed by a tree name if separated by double colons (for example: `SERVER_NAME::TREE`) |
+|           | deprecated and might be removed: can also be a server followed by a tree name if separated by double colons (for example: `SERVER_NAME::TREE`) TODO: Mark Y. to clean this up |
 |SHOT       | shot number (Int)                 |
 |Usage      | `mdsopen('cmod', 1090909009)` |
 |           | `mdsopen('alcdata-archives::cmod', 1090909009)`  |
@@ -115,8 +115,8 @@ ans =
 ```
 
 
-## `mdstcl(COMMAND)`
-Run TCL command or open a TCL prompt. This function provides Matlab with the same MDSTCL interface as IDL. (See also: [MDSTCL](mdstcl.md))
+## `mdstcl(/COMMAND)`
+Run TCL command or open a TCL prompt. This function provides Matlab with the same MDSTCL interface as IDL. (See also: [MDSTCL](mdstcl.md) TODO: make and check link)
 * If a TCL command is passed to this routine, it will execute, output the response, if any, to the terminal, and return to the MATLAB prompt. 
 * If this routine is called without a TCL command, then it will go into a loop of prompting for, executing TCL commands, and outputting the responses, until `exit` is entered.
 
@@ -124,7 +124,8 @@ Run TCL command or open a TCL prompt. This function provides Matlab with the sam
 |-|-|
 |COMMAND   | String |
 |Returns   | (nothing returned) |
-|Usage     | see below|
+|Usage     | see below |
+
 
 ```m
 >> mdstcl('set tree cmod')
@@ -132,12 +133,9 @@ Run TCL command or open a TCL prompt. This function provides Matlab with the sam
 \ELECTRONS::TOP
  :ENG_ENCODER  :TSTART
 Total of 2 nodes.
->> mdstcl('set tree daqtest')
->> mdstcl('put test """e-tacq"""')
->> mdstcl('deco test')
-"e-tacq"
->>
->>
+
+>> mdstcl()
+TCL> >>
 ```
 
 ## `mdsvalue(expression, varargin)`
