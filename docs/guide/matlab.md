@@ -1,4 +1,4 @@
-# Using MATLAB with MDSplus
+# MATLAB with MDSplus
 
 MDSplus has a MATLAB API, allowing you to read, analyze, and write data to and from MDSplus trees using MATLAB.
 
@@ -95,7 +95,7 @@ mdsput('\data_node', data_read)
 
 
 
-> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the “Setup” section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. TODO: Delete this note before this page gets published
+> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the "Setup" section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. TODO: Delete this note before this page gets published
 
 
 ## 2b. Python Bridge
@@ -142,30 +142,4 @@ Reference articles from the MATLAB Help Center:
 * More on the [`addpath` command](https://www.mathworks.com/help/matlab/ref/addpath.html)
 * Use the `path command` ([reference article here](https://www.mathworks.com/help/matlab/ref/path.html)) for troubleshooting issues
 
-
-
-### Reference: MATLAB API
-Here are the MDSplus related commands that you can use in your MATLAB scripts.
-
-* `mdsclose.m`
-* `mdsconnect.m`
-* `mdsdisconnect.m`
-* `mdsFromMatlab.m`
-* `mdsgetmsg.m`
-* `mdsInfo.m`
-* `mdsopen.m`
-* `MDSplusAPI.m`
-* `mdsput.m`
-* `mdstcl.m`
-* `mdstest.m`
-* `mdsToMatlab.m`
-* `mdsUsePython.m`
-* `mdsvalue.m`
-
-Most files are for "Connection" (aka thin-client). Some are "helper" routines.  For example, users generally won't use `mdsInfo.m` directly, but it is used by most of the other files.
-
-It is unclear to me if `MDSplusAPI.m` is used or not.   It contains comments indicating that it can do both Connection and Tree (thick-client, distributed-client, local).
-`Mdstest.m` is used to confirm that MATLAB is configured correctly to use MDSplus.  Run a few times during configuration and then never run again.
-`mdsUsePython.m` switches between the bridges.
-Not shown are the contents of the `$MDSPLUS_DIR/matlab/private` and `$MDSPLUS_DIR/matlab/testing` directories.   Users do not directly call those routines.
 
