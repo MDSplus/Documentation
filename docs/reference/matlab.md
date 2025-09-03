@@ -165,7 +165,7 @@ sample =
 ```
 
 ## `mdsUsePython(USE_PYTHON=true)`
-This function allows switching between using the Java bridge and the Python bridge. When aThe default (`false`) is Java. 
+This function allows switching between using the Java bridge and the Python bridge. The default (`false`) is Java. 
 
 | Parameters ||
 |-|-|
@@ -188,6 +188,6 @@ i =
                  ispy2: 0
 >>
 ```
-See also the: https://www.mathworks.com/support/requirements/python-compatibility.html
+Please see the list of versions of [Python compatible with MATLAB](https://www.mathworks.com/support/requirements/python-compatibility.html).
 
 
