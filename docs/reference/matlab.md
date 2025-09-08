@@ -1,6 +1,6 @@
 # MATLAB API Reference
 
-Below are the main commands you can use in your MATLAB scripts to get and put information into MDSplus. See the the main MATLAB guide (TODO: link here) for more information on how to set up MATLAB to work with MDSplus.
+Below are the main commands you can use in your MATLAB scripts to interact with MDSplus, i.e., use MATLAB to retrieve from and put data into MDSplus trees. See the main [MATLAB guide](matlab.md) for more information on how to set up MATLAB to work with MDSplus.
 
 ## `mdsconnect(SERVER_NAME)`
 
@@ -23,12 +23,12 @@ ans =
 ## `mdsclose()`
 Closes currently active tree.
 
-| Parameters ||
+| Parameters | |
 |------------|-|
-|Name | - |
-|Type | - |
-|Usage | `mdsclose()` |
-|Returns| Status |
+|Name        | - |
+|Type        | - |
+|Usage       | `mdsclose()` |
+|Returns     | Status |
 
 ## `mdsdisconnect()`
 Disconnect from  a remote mdsplus data server.

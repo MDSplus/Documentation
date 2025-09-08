@@ -51,12 +51,53 @@ Setting the Java class path can be done many ways: see all options in [this tabl
 
 
 ### Set up Java Class Path: Computing Clusters
-If your organization runs MATLAB from a computing cluster, which will likely have multiple versions of MATLAB, Python, Java, and MDSplus installed. If so, please follow these instructions instead.
+If your organization runs MATLAB from a computing cluster, it will likely have multiple versions of MATLAB, Python, Java, and MDSplus installed. If so, please follow these instructions instead.
 * Place configuration files in your user home directory. For example, on Linux `javaclasspath.txt` and `javalibrarypath.txt` can be placed in `~/.matlab/R2024b` (where "R2024b" is a version of MATLAB).
 * To override configuration created by your the system administrator, you may need to use the `<before>` attribute as the first line of the `javaclasspath.txt` file; this ensures that the directories you specify will be searched first (and likely skipping the directories that the system administrator specified).
 * To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. 
 
+### Other things
+* [Requirements](https://www.mathworks.com/support/requirements/openjdk.html)
+* [General Info](https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html)
 
+
+> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the "Setup" section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. TODO: Delete this note before this page gets published
+
+---
+
+The Java bridge is the default. To use the Python bridge, the MATLAB script must start with:
+```
+mdsUsePython(true)
+```
+
+To disable the Python bridge and revert to the Java bridge, use:
+```
+mdsUsePython(false)
+```
+
+## 2b. Python Bridge
+
+The Java bridge is the default. To use the Python bridge, the MATLAB script must start with:
+```
+mdsUsePython(true)
+```
+
+To disable the Python bridge and revert to the Java bridge, use:
+```
+mdsUsePython(false)
+```
+
+## 2c. mdsthin Bridge
+
+More to come.
+
+It must be called with:
+```
+mdsUsePython(true, true)
+```
+
+
+## 3. Add MDSlus commands to Your MATLAB Script
 ### Open Tree
 ```m
 % Connect to a server, in this case 123.456.7.89
@@ -90,53 +131,6 @@ mdsdisconnect
 % Write the value of the Matlab workspace variable named "data_read" to the node with the tag name "data_node"
 mdsput('\data_node', data_read)
  ```
-
-
-
-### Other things
-* [Requirements](https://www.mathworks.com/support/requirements/openjdk.html)
-* [General Info](https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html)
-
-
-
-
-
-> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the "Setup" section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. TODO: Delete this note before this page gets published
-
-
-## 2b. Python Bridge
-
-The Java bridge is the default. To use the Python bridge, the MATLAB script must start with:
-```
-mdsUsePython(true)
-```
-
-To disable the Python bridge and revert to the Java bridge, use:
-```
-mdsUsePython(false)
-```
-
-### Open Tree
-```m
-%Code Snippet goes here
-```
-
-### Read Data
-
-```m
-%Code Snippet goes here
-```
-
-
-## mdsthin Bridge
-
-More to come.
-
-It must be called with:
-```
-mdsUsePython(true, true)
-```
-
 
 
 
