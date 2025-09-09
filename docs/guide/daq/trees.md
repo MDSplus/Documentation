@@ -1,20 +1,21 @@
+# Tree Design & Configuration
 
-# Configure Your Trees
+MDSplus stores data as trees. Before you begin your experiment, you should take the time to design your trees to take in the raw data your experiment will generate, plus room for the processed data that your team will create as they analyze the raw data. [TODO: Ask Stephen to clarify how easy/difficult it is to alter some fundamental]
 
 * Designing your trees
   * raw/processed
 * Storing your trees
   * new/archive
 
-## Designing Your Trees: Subtrees
+## Subtrees
 
-One major decision you will be making is whether and how to include subtrees in the design of your data trees. Ultimately, subtrees matter most when scaling up an experiment&mdash;as the experiment grows, you may want to restrict access of specific areas to certain groups. In a small experiment with no plans for expansion, there is no need to worry about this. However, if you are setting up an experiment with any growth potential you need to set up any subtrees from the beginning&mdash;it will not be easy to move a portion of your tree to a new subtree, as there are no/few tools to help you do so; additionally, it takes significant effort to go back and reorganize data trees later because you will have to retroactively make subtrees and carefully move the data into them.
+One major decision you will need to make is whether and how to include subtrees in the design of your data trees. Ultimately, subtrees matter most when scaling up an experiment: as the experiment grows, you may want to restrict access of specific areas to certain groups. In a small experiment with no plans for expansion, there is no need to worry about this. However, if you are setting up an experiment with any growth potential you need to set up any subtrees from the beginning&mdash;it will not be easy to move a portion of your tree to a new subtree, as there are no/few tools to help you do so; additionally, it takes significant effort to go back and reorganize data trees later because you will have to retroactively make subtrees and carefully move the data into them.
 
-Pros
+Subtree Pros
 * Subtrees can be opened independently, which speeds up opening time if you only need specific sections.
 * Subtrees allow for restricted access by tree (e.g. grant someone write-access to just their specific diagnostic)
 
-Cons
+Subtree Cons
 * Duplicates/multiplies storage needs. It also takes longer to open everything when you open the head node.
 
 ```
