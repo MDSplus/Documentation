@@ -18,7 +18,7 @@ import MDSplus
 ```
 
 ## Types
-> We'll come back to this. it's all of the mdsplus types: signal, dispatch, conglom. examples of how to use the omre useful ones, and then a link to reference of all the others
+> TODO: We'll come back to this. it's all of the mdsplus types: signal, dispatch, conglom. examples of how to use the more useful ones, and then a link to reference of all the others
 
 ## Connection
 
@@ -74,7 +74,7 @@ And that's basically it. You can do stuff with the data however you normally do 
 
 ### Writing Data
 
-`data` can be any MDSplus.* type or numpy type
+`data` can be any `MDSplus.*` type or `numpy` type
 
 ```py
 import numpy

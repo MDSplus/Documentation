@@ -9,7 +9,7 @@ Notes:
 * Commands are not case sensitive.
 * Some commands (e.g., TDI expressions) need to be encased in triple double quotation marks (`"""like this"""`). 
 * Commands and flags can be abbreviated to a point of disambiguation. (For example, `show version` can be simply typed as `sho ver`).
-* Additional qualifiers or arguments that begin with a slash (e.g., `directory /tag` or `clean cmod /shot...`) can be preceeded by a space.
+* Additional qualifiers or arguments that begin with a slash (e.g., `directory /tag` or `clean cmod /shot...`) can be preceeded by a space. However, when using the built-in help, there must be no space before parameters (e.g., `help directory/tag`).
 * Users who prefer a graphical user interface (over TCL's command line) can accomplish many of the same things using the jTraverser2 tool (link to GUI tools here).
 
 
@@ -344,6 +344,8 @@ structural changes you might have made to the tree.
 
 > Note from MarkW for developers . . . What happens if after a tree has been written, it is changed to read-only using operating system commands.     In that scenario, the TCL "edit /new" should fail.   Does it do so gracefully and provide a meaningful error message?
 
+### `link`
+This command has been removed.
 
 ### `put NODE_PATH (EXPRESSION | [/extended] [/lf] [/eof=XXX])`
 The PUT command is used to store data into a node in an MDSplus tree.
@@ -393,6 +395,10 @@ Removes a tagname from a node. The tree must be opened by the `edit` command. Th
 Renames a node in an MDSplus tree. Before the `rename` command can be used, the tree must be opened with the `edit` command. If the NEW_NODE_PATH specified contains parent nodes, those parent nodes must already exist or the rename command will fail. The changes must be preserved by issuing a `write` command before closing the tree with the `close` command.
 
 The `/log` qualifier can be used to display log messages indicating the rename operation.
+
+
+### `rundown tree`
+This command has been removed.
 
 
 ### `set alternate_compression [on|off]`
@@ -509,7 +515,7 @@ The `set versions` command is used to enable or disable data versioning in an MD
 ### `set view DATE_TIME_SPECIFIER`
 This command is used to set the time context for examining the contents of a MDSplus tree. If data versioning is enabled on a tree, then a history of data entries for each node is kept, each being timestamped. When you specify a "view" date and time the commands such as `directory`, `decompile`, and `show data` will present a description of the data the same as if you issued those commands at that particular time. 
 
-The DATE_TIME_SPECIFIER must be in the format `dd-mon-yyyy hh:mm:ss`, where:
+The `DATE_TIME_SPECIFIER` must be in the format `dd-mon-yyyy hh:mm:ss`, where:
 
   * `dd`    - the day of the month, an integer such as 29.
   * `mon`   - the first three characters of the month (in English), such as JAN.
@@ -517,9 +523,9 @@ The DATE_TIME_SPECIFIER must be in the format `dd-mon-yyyy hh:mm:ss`, where:
   * `hh`    - the hour of the day, integer 0-23.
   * `mm`    - the minute, integer 0-59.
   * `ss`    - the seconds, integer 0-59
-  * or special keyword `now`, meaning the current time.
-  * example: `set view 25-jan-2025 15:03:45`
-  * example: `set view now`
+    * example: `set view 21-jan-2025 15:03:45`
+  * or special keyword `now`, meaning the current time.<BR>
+    * example: `set view now`
 
 
 ### `setevent EVENTNAME`
@@ -620,25 +626,8 @@ TCL> show versions
   Versions are disabled in the model file and disabled in the shot file.
 ```
 
-
-> TODO: there's some html comment for a "Start_server" command, but there's no description
->  Stephen to verify that this command still exists. Per Mark W: Git's "blame" feature shows that TomF commented out the "start_server" command (in the xml/tcl_commands.xml file) about 11 years ago. Thus, it is safe to say that the start_server command no longer exists. Furthmore, "start_server" is no longer needed because action servers are usually configured to automatically restart upon receiving the "stop server" command.
-
-  <!--
-  <verb name="start">
-    <parameter name="p1" prompt="What" required="True" type="start_TYPE"/>
-  </verb>
-
-  <syntax name="start_server">
-    <routine name="TclDispatch_start_server"/>
-    <parameter name="p1" prompt="What" required="True" type="start_type"/>
-    <parameter name="p2" label="server" prompt="Server" required="True" list="True"/>
-  </syntax>
-
-  <type name="start_TYPE">
-    <keyword name="SERVER" syntax="start_server"/>"
-    </type>
-    -->
+### `start server`
+This command has been removed. See `stop server`.
 
 
 ### `stop server SERVER_SPEC[,SERVER_SPEC]`
@@ -651,8 +640,6 @@ Normally MDSplus action servers are configured to restart automatically, so this
 * Device support code (aka an MDSplus device) may introduce memory leaks which may require the process to be restarted to release virtual memory.
 
 Unlike the `show server` command, wildcard characters cannot be used in the `SERVER_SPEC` string.
-
-
 
 
 ### `verify`
