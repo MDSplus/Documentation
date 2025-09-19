@@ -9,8 +9,8 @@ To access the individual digits, we first format it into a 10-digit, zero-padded
 
 Then you can address the digits using the following scheme. 
 
-|term|definition| example |
-|----|----------|---------|
+|term| definition| example |
+|----|-----------|---------|
 |`~a`| `shot[9]` | 021073112**3** |
 |`~b`| `shot[8]` | 02107311**2**3 |
 |`~c`| `shot[7]` | 0210731**1**23 |
@@ -22,7 +22,7 @@ Then you can address the digits using the following scheme.
 |`~i`| `shot[1]` | 0**2**10731123 |
 |`~j`| `shot[0]` | **0**210731123 |
 |`~t`| tree name | `cmod` |
-|`~n`|TODO for Stephen| Please and Thank You|
+|`~n`| customized folder mapping using TDI | When you include `~n`, the function `<TREE>_tree_filename<SHOT>` will be called to determine the folder to search for the tree files (with `TREE` and `SHOT` being variables) |
 
 You would then define your tree path using some combination of the above. Here are some examples:
 

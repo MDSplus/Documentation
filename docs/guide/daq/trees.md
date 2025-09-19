@@ -1,11 +1,14 @@
 # Tree Design & Configuration
 
-MDSplus stores data as trees. Before you begin your experiment, you should take the time to design your trees to take in the raw data your experiment will generate, plus room for the processed data that your team will create as they analyze the raw data. [TODO: Ask Stephen if we could make a list of what's easy to change and what's hard to change later on]
+MDSplus stores data as trees. Before you begin your experiment, you should take the time to design your trees to take in the raw data your experiment will generate, plus room for the processed data that your team will create as they analyze the raw data. Some things are easier to change than others once they have been set in place.
 
-* Designing your trees
-  * raw/processed
-* Storing your trees
-  * new/archive
+Difficult to change later:
+* tree names (e.g., the name of your experiment)
+* numbering scheme for shots (see page on [shot numbers](shot_numbers.md))
+
+Easy to change later:
+* node names
+
 
 ## Subtrees
 
