@@ -206,8 +206,7 @@ This command has been removed.
 ### `delete node NODE_PATH[,NODE_PATH...] /log /confirm /dryrun`
 * Deletes one or more nodes from an MDSplus tree which has been opened for edit using the `edit` command.
 * The `/log` qualifier can be used to display the nodes being deleted.
-* The `/confirm` qualifier must be included to delete a node which has descendants or is part of a device (conglomerate) representation in the tree because deletion of that node will result in multiple nodes being deleted.
-    * (ORIGINAL WORDING; TODO: confirm that updated is correct) If you attempt to delete a node which has descendants or is part of a device (conglomerate) representation in the tree, then the deletion of the node will result in multiple nodes being deleted. If this is your intention, then you must include the `/confirm` qualifier on the command.
+* If you attempt to delete a node which has descendants or is part of a device (conglomerate) representation in the tree, then the deletion of the node will result in multiple nodes being deleted. If this is your intention, then you must include the `/confirm` qualifier on the command.
 * The `/dryrun` qualifier can be used to just display the nodes that would be deleted without actually deleting any nodes.
 
 

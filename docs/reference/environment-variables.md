@@ -65,7 +65,7 @@ Can accept any of the following:
 * full path (e.g., `/usr/lib64/libpython3.10.so`)
 
 #### MDSPLUS_DEFAULT_RESAMPLE_MODE
-Selects the resample mode to be used by default when calling (`Make`?)`PutSegmentResampled` or `SetTimeContext`. The default is `Average`.
+Selects the resample mode to be used by default when reading segmented records from nodes that do not have the `ResampleMode` XNCI present. The default is `Average`.
 
 The options are:
 * `Average`
@@ -74,7 +74,6 @@ The options are:
 * `Closest`
 * `Previous`
 
->TODO: Stephen will figure out what functions use this
 
 #### PRINTER
 The default printer to use when printing a scope with `dwscope`. Defaults to `To file`.
@@ -99,8 +98,6 @@ This will be returned by the TDI `machine()` function. Potentially indicates the
 A single path to search for libraries which contain additional error messages.
 Library files matching `$MDSMSG_PATH/*Msg.*` and containing a symbol named `getmsg` will be used.
 The default is `$MDSPLUS_DIR/lib`.
-
->TODO: Stephen to improve this example
 
 Example:
 `libMyStatusMsg.so`

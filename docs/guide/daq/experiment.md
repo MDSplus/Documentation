@@ -1,5 +1,7 @@
 
 # Configure experiment
+![DAQdiagram_v2.svg](DAQdiagram_v2.svg)
+
 [diagram of data flow from digitizers to the daq server]
 
 * actions/dispatching
@@ -19,7 +21,7 @@ Some examples of why you would want this:
 * Running codes (analysis, post process, etc., basically the science, and also submitting jobs such as to a supercomputing cluster)
 * To provide access to trees without worry of running out of sockets, effectively giving priority access (an `mdsip` service will begin on startup, and other services can then go through `:8000` which is a "technically" finite resource)
 
-Here's an example service file. The way you should do this is with `systemd` (there's also an old way to do this called `initd`, but we wont' talk about it). The idea is that you create a service file and what it does is describes to the system how to run (`Service` section in below example) and maintain a service (`Restart=always` in example below), plus when to run it (`install` section in the below example). 
+Here's an example service file. The way you should do this is with `systemd` (there's also an old way to do this called `initd`, but we won't talk about it). The idea is that you create a service file and what it does is describes to the system how to run (`Service` section in below example) and maintain a service (`Restart=always` in example below), plus when to run it (`install` section in the below example). 
 
 > TODO: Decide if we want to talk about `/etc/services` (named ports)  
   alcdaq6:mdsip_analysis //example named port, which is confusing  
@@ -54,3 +56,6 @@ Here are some example services and port numbers. The numbers are arbitrary, but 
 ```
 
 > TODO: Requires=path-to-trees.mount or whatever it's called
+
+
+

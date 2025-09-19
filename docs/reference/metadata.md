@@ -76,7 +76,7 @@ TODO: Crosslink to TDI `getnci`
 
 * `compression_method` a single character used to show what compression method would be used to compress the data. but we only support a single method (MdsCmprs). it's already the best.
 
-* `status` -- ??? TODO STEPHEN
+* `status` result of executing a node as part of an action by the dispatcher; not used unless the node is an action.
 
 * "The rest of it" is data location. It's internal and shouldn't be touched. No human will be touching most of this anyway. 
 
@@ -154,8 +154,6 @@ look at `<ncidef.h>`
 * `getnci()` these are the questions we can ask
 * `setnci()` lets you set the NCIs
 * `nci_t` the full list of NCI questions. we'll want to document all 44 of them!
-
-side note: `#include <blah.h>` when it comepiles, it just copies and pastes the whole thing into the code you wrote
 
 You can ask these questions about every node, but some answers are computed on-the-fly
 e.g. NciFULLPATH, which computes the path to the node when asked
