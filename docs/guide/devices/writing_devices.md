@@ -320,7 +320,8 @@ class DIG_32_ST(MDSplus.Device):
 
     The setup for a streaming device often happens right before data acquisition.
 
-    For a streaming device, this is built into the enxt section (TODO confirm with Stephen)
+    For a streaming device, this is built into the next section
+    (TODO confirm with Stephen/Fernando)
 
 3. Write Main Loop Function (Continuous/streaming data capture, all while experiment is running)
 
