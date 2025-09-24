@@ -6,9 +6,10 @@ A data acquisition (DAQ) server stores the data you generate from your experimen
 
 `mdsip` is the MDSplus service.
 
-    step 0. Install MDSplus
+    step 0. `Install MDSplus`_
+    .. _install MDSplus:any:<../install>
 
-    step 1. configure `access`_: ``mdsip.hosts``
+    step 1. Configure `access`_: ``mdsip.hosts``
     .. _access: configure-access
 
     step 2. configure `environment variables`_ (``setup.sh`` and ``envsyms``)
