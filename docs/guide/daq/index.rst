@@ -9,24 +9,24 @@ A data acquisition (DAQ) server stores the data you generate from your experimen
     step 0. Install MDSplus
 
     step 1. configure `access`_: ``mdsip.hosts``
-    .. :ref:`configure-access`
+    .. _access: configure-access
 
     step 2. configure `environment variables`_ (``setup.sh`` and ``envsyms``)
-    .. :ref:`setup-environment`
+    .. _environment variables: setup-environment
 
     step 3. other considerations:
     
         * design your `trees`_
-        .. _trees:
+        .. _trees: trees
 
         * set up `tree path variables`_
-        .. _tree path variables:
+        .. _tree path variables:tree_path_variables
 
         * design your `shot numbers`_
-        .. _shot numbers:
+        .. _shot numbers: shot_numbers
 
-        * design your `experiment`_
-        .. _experiment:
+        * design your `experiment`_ (mdsip services, dispatch table)
+        .. _experiment: experiment
 
 
 .. toctree::
@@ -45,3 +45,4 @@ A data acquisition (DAQ) server stores the data you generate from your experimen
     
 
 
+.. TODO: fix the links
