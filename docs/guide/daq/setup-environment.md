@@ -1,6 +1,6 @@
 # Setting Up Environment Variables
 
-In order to use MDSplus, you must have the correct environment. Due to the amount and complexity of environment variables that MDSplus relies on, it contains a custom structure for managing those variables. There are setup scripts that must be correctly sourced; those setup scripts in turn call an `envsym` file to set those variables; this `envsyms` file and the configuration files that it calls are written in a custom configuration file language similar to shell script. All of these are described in further detail below.
+In order to use MDSplus, you must have the correct environment configured. Due to the amount and complexity of environment variables that MDSplus relies on, it contains a custom structure for managing those variables. There are setup scripts that must be correctly sourced; those setup scripts in turn call an `envsym` file to set those variables; this `envsyms` file and the configuration files that it calls are written in a custom configuration file language similar to shell script. All of these are described in further detail below.
 
 
 ## Setup Scripts

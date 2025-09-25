@@ -43,7 +43,7 @@ Disconnect from  a remote mdsplus data server.
 
 
 ## `mdsInfo(USE_PYTHON=false)`
-This is an internal function and is not recommended for general usage. This function can be called to activate the MDSplus Python bridge, but the best way to do that is with `mdsUsePython` (see also: `mdsUsePython` [TODO: Link]), therefore `mdsInfo` is an unnecessary step prior to calling other functions such as `mdsopen`, `mdsconnect`, etc. 
+This is an internal function and is not recommended for general usage. This function can be called to activate the MDSplus Python bridge, but the best way to do that is with `mdsUsePython` (see also: [`mdsUsePython`](#mdsusepythonuse_pythontrue)), therefore `mdsInfo` is an unnecessary step prior to calling other functions such as `mdsopen`, `mdsconnect`, etc. 
 
 
 ## `mdsopen(EXPRESSION, SHOT)`

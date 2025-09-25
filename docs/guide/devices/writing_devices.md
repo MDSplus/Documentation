@@ -1,18 +1,9 @@
 # Writing/Creating a Device
 
 ## Introduction
-Before you can use a device with MDSplus, you must write it. It may be helpful to think of this as a device driver, but this process goes beyond that since it will be partially dictated by the way you want your data tree to be structured. Unfortunately, users cannot simply reuse legacy devices from our archive because the code is so tightly coupled to the hardware. Examples will be provided below to help guide you through the steps for your own equipment.
+Before you can use a device with MDSplus, you must write/create one. It may be helpful to think of this as a device driver, but this process goes beyond that since it will be partially dictated by the way you want your data tree to be structured. Unfortunately, users cannot simply reuse legacy devices from our archive because the code is so tightly coupled to the hardware. Examples will be provided below to help guide you through the steps for your own equipment.
 
-Note that you do not need to write a device if you simply want to import data after the experiment is over: 
-
-* Importing Data
-    * Data transfer into MDSplus happens post-shot (not live)
-    * Assumes that you have some other way of storing data during the experiment. Either your experiment is expected to generate a manageable amount of data for the memory buffers built in to your various hardware, or you have some other arrangement for temporary storage in the meantime.
-    * After the experiment is over, you can use a python script (or whatever) to import your CSV/video file/whatever into MDSplus
-    * For example: instead of a live camera feed during the experiment, you would take the video file after the fact and import that into MDSplus
-    
-* Writing a Device
-    * Goal: capture data live during experiment
+Note that you do not need to create a device if your experimental setup allows for bringing data into MDSplus after the experiment has finished. This approach assumes that you have a way to store data during the experiment, for example, if your hardware's built-in memory buffer or other temporary storage is sufficient. After the experiment is completed, you may use a script (written in any of the supported languages) to import the data into an MDSplus node. The purpose of creating a MDSplus device is to capture data directly into MDSplus while the experiment is running.
 
 ### Examples
 * N-Chan Digitizer and a Camera
@@ -35,12 +26,12 @@ Note that you do not need to write a device if you simply want to import data af
     * Configure settings
     * Arm? (prepare it for firing)
 
-3. Choose 3A (streaming) or 3B (store)
+3. Choose 3A (streaming) or 3B (transient/store)
     * 3A. Write Main Loop Function (Continuous/streaming data capture, while experiment is running)
         * take data from hardware
         * write data to MDS plus
         * loop back to top
-        * "buffering": Pre/post/window
+        * "buffering"
 
     * 3B. Write Store Function (transient or post-shot data capture). 
         * Some hardware can buffer data inside of it. This is important in case the device's data exceeds the rate that we can capture it.

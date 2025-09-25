@@ -2,16 +2,20 @@
 
 TDI stands for Tree Data Interface.
 
-TDI is a calculator. There are 400+ built-in functions. Users may also write their own functions to suit their needs (see below). 
+At its core, the TDI language is a calculator that allows you to analyze data in your MDSplus trees. There are now 400+ built-in functions; in addition to constants and standard calculator operators, there are _____________ that let you pull . Users may also write their own functions to suit their needs (see below). 
+
+
+The fact that it's a calculator might not sound like a big deal, but this was written from scratch back when this sort of thing was rare, and as it turns out, you would actually be hard-pressed to write a better one today, even with all of the computer science advancement in the last four decades.
+
 
 TDI is mostly not case sensitive. There are exceptions.
-
-
-the reference will be simply function and what it does
+The TDI reference page will be simply list every function and what it does.
 
 TODO: reference thin client
 
 ## VSCode extension
+
+You can add this extension to your VSCode so that TDI code is highlighted in different colors to improve legibility.
 
 https://marketplace.visualstudio.com/items?itemName=MDSplus.mdsplus-tdi-language-support
 
@@ -95,15 +99,18 @@ _x++
 
 # buuuuuut...
 
+# so this returns what _x is then increments _x
 _y = _x++
 # _y = 11
 # _x = 12
-# so this returns what _x is then increments _x
 
+# and this increments _x then returns the result
 _y = ++_x
 # _y = 13
 # _y = 13
-# and this increments _x then returns the result
+
+# backtick
+TODO: ask Stephen if this belongs here
 
 ```
 
@@ -114,7 +121,7 @@ _y = ++_x
 ## Variables
 
 * Variables must be prefixed with an underscore
-* Variables must be lowercase (TODO: Stephen to confirm)
+* Variables not case sensitive
 
 ```tdi
 # You can set it to numbers!
