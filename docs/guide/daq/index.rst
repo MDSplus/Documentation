@@ -9,7 +9,15 @@ Here are the general steps, with contents links below.
 
 
     
-    Step 1. Install MDSplus :doc:`../install`.
+    Step 1 . Install MDSplus :doc:`../install/index`.
+    
+    Step 1a. Install MDSplus :doc:`../install/index`.
+    
+    Step 1b. Install MDSplus :doc:`/guide/install/index`.
+    
+    Step 1c. Install MDSplus :doc:`/docs/guide/install/index`.
+    
+    Step 1d. Install MDSplus :doc:`/guide/install`.
 
     Step 2. These steps are closely intertwined and are listed in no particular order. Multiple passes may be needed to complete these portions of the setup process.
     

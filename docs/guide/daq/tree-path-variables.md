@@ -1,4 +1,3 @@
-
 # Tree Path Variables
 
 To store and retrieve shot files from multiple directories, without searching them sequentially, you may want to define variable tree paths. These allow you to programatically determine parts of the directory structure where you store your shots. This is mostly done with either the tree name or individual digits of the shot number. 
