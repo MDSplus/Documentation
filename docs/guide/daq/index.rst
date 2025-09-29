@@ -8,19 +8,21 @@ Here are the general steps, with contents links below.
 
 
 
-    Step 1. `Install MDSplus`_
-    .. _Install MDSplus: ../install
+    
+    Step 1. Install MDSplus :doc:`/guide/install`.
 
     Step 2. These steps are closely intertwined and are listed in no particular order. Multiple passes may be needed to complete these portions of the setup process.
     
-    * Configure `access`_: (``mdsip.hosts``, tree access, on-demand-mdsip, static-mdsip)
-    .. _access: ./access
+    * Configure :doc:`access` : (``mdsip.hosts``, tree access, on-demand-mdsip, static-mdsip)
+
 
     * configure `environment variables`_ (``setup.sh`` and ``envsyms``)
     .. _environment variables: ./setup-environment
 
     * set up `tree path variables`_
+
     .. _tree path variables: ./tree_path_variables
+
 
 
 Other Considerations
