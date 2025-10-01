@@ -3,7 +3,7 @@
 ## Introduction
 Before you can use a device with MDSplus, you must write/create one. It may be helpful to think of this as a device driver, but this process goes beyond that since it will be partially dictated by the way you want your data tree to be structured. Unfortunately, users cannot simply reuse legacy devices from our archive because the code is so tightly coupled to the hardware. Examples will be provided below to help guide you through the steps for your own equipment.
 
-Note that you do not need to create a device if your experimental setup allows for bringing data into MDSplus after the experiment has finished. This approach assumes that you have a way to store data during the experiment, for example, if your hardware's built-in memory buffer or other temporary storage is sufficient. After the experiment is completed, you may use a script (written in any of the supported languages) to import the data into an MDSplus node. The purpose of creating a MDSplus device is to capture data directly into MDSplus while the experiment is running.
+Note that you do not need to create a device if your experimental setup allows for bringing data into MDSplus after the experiment has finished, which assumes that you have a way to store data during the experiment, for example, if your hardware's built-in memory buffer or other temporary storage is sufficient. After the experiment is completed, you may use a script (written in any of the supported languages) to import the data into an MDSplus node. The purpose of creating a MDSplus device is to capture data directly into MDSplus while the experiment is running.
 
 ### Examples
 * N-Chan Digitizer and a Camera
