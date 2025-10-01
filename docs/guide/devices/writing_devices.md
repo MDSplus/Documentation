@@ -11,8 +11,55 @@ Note that you do not need to create a device if your experimental setup allows f
 
 ## General steps
 1. Design your node list
-    * Configuration nodes, with defaults (basically a python list with dictionaries)
+    * Configuration nodes, with defaults
+
+        * Configuration nodes are, for an MDSplus device written in Python, essentially a list of dictionaries. Each dictionary contains:
+            * the path (relative path from the Device node) to the node.
+            * the type: if the node is "text", "numeric", "signal", "structure", etc. See the TCL Commands page [TODO: link] > `add node` entry > `/usage` qualifier for more information on types.
+            * a default value
+            * options: in this case it will be one of the flags that shows the usage of the node
+            * extended options: like ‘tooltip’ that allows for a summary of what the values that the node accepts.
+
+            Example: 
+
+            ```py
+            {   'path': ':FREQUENCY',
+                'type': 'numeric',
+                'value': 20000,
+                'options': ('no_write_shot',),
+                'ext_options': {
+                    'tooltip': 'Sample frequency in Hertz.',
+                    },
+                },
+            ```
+
     * Data nodes
+
+        * TODO: Explanation for data nodes. What needs to be done?
+
+        * In the case of a digitizer, data nodes will be numeric nodes that contains the data from the digitizers, so if there were 32 channels, there will be 32 nodes, and they usually look like this as an example:
+
+            ```py
+            # The data captured for each channel, stored in individual nodes
+            for i in range(32):
+                parts.append({
+                    'path': f':INPUTS:INPUT_{i + 1:02d}', # INPUT_01, INPUT_02, ...
+                    'type': 'signal',
+                    'options': ('no_write_model', 'write_once'),
+                })
+            ```
+
+        * The data for the input nodes are usually MDSplus Signal data type
+
+        * the "`i`" loops through all the channels
+
+
+
+
+
+
+
+
     * Options for nodes (TODO: explanations for these (picked up from source code))
 
         |Usage Flags||
@@ -33,10 +80,7 @@ Note that you do not need to create a device if your experimental setup allows f
         | `setup_information` | has setup operations "was this data present in the model" |
         | `state`             | "Use on property instead. on/off state of this node. False=on,True=off."  |
         |`versions`           |  "does the data contain versions"|
-        |`write_once`|  "is no write once"|`
-
-
-
+        |`write_once`         |  "is no write once"|`
 
     * Examples:
         * Example, Digitizer: {address, length, frequency, input_xx}
