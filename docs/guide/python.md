@@ -1,8 +1,6 @@
 # Python
 
-Intro text goes here. If you want to use python, this page is for you. There are basically only 2 ways to interact with MDSplus with Python: Connections or Trees. [link to the thin/thick concepts page]
-If you are unsure, use the Connection() route.
-
+Intro text goes here. If you want to use python, this page is for you. There are basically only 2 ways to interact with MDSplus with Python: Connections or Trees. [link to the thin/thick concepts page] If you are unsure, go the Connection() route.
 
 > TODO: Arguments to .get()
 
@@ -184,7 +182,8 @@ Mostly used with Devices [link to devices page].
 # can't (really) do this in thin client, too complicated for thin client
 
 # segment length = # of samples per segment
-# seglen is sort of a function of time, (sample rate / segment length) = # of seconds between calls to makeSegment(). so like a sample rate of 1kHz / seglen of 1000 = 1 write per sec. tuned as parameters to your device. Many little writes are more expensive than fewer larger writes. TODO: more from Stephen (eg, difference between makeSegment() and putSegment()). Each one of these has like 4 arguments that need to get passed. Please and thank you.
+# seglen is sort of a function of time, (sample rate / segment length) = # of seconds between calls to makeSegment(). so like a sample rate of 1kHz / seglen of 1000 = 1 write per sec. tuned as parameters to your device. Many little writes are more expensive than fewer larger writes.
+# TODO: more from Stephen (eg, difference between makeSegment() and putSegment()). Each one of these has like 4 arguments that need to get passed. Please and thank you.
 
 t.NODE_NAME.putRow()
 

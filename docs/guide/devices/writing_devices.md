@@ -11,13 +11,26 @@ Note that you do not need to create a device if your experimental setup allows f
 
 ## General steps
 1. Design your node list
-    * Configuration nodes, with defaults
+    * Configuration nodes, with defaults (basically a python list with dictionaries)
     * Data nodes
-    * Options for nodes
-        * no_write_model
-        * no_write_shot
-        * write_once
-        * etc.
+    * Options for nodes (TODO: Fernando will define)
+        * `state`
+        * `parent_state`
+        * `essential`
+        * `cached`
+        * `versions`
+        * `segmented`
+        * `setup_information`
+        * `write_once`
+        * `compressible`
+        * `do_not_compress`
+        * `compress_on_put`: input node will be compressed when _____
+        * `no_write_model`
+        * `no_write_shot`: node can't be written when the shot happens (write protection)
+        * `path_reference`
+        * `nid_reference`
+        * `include_in_pulse`
+        * `compress_segments`
     * Examples:
         * Example, Digitizer: {address, length, frequency, input_xx}
         * Example, Camera: {address, width, height, length, frames}
@@ -51,9 +64,12 @@ whatever Stephen and Fernando can remember
 
 ### Modifying
 Remove and Re-add
+
 ### Threading
 ... TODO
+
 ### Running with MDSTCL
+
 ### Running the device with the Shot Cycle
 
 ## Examples
@@ -73,7 +89,7 @@ import MDSplus
 class DIG_32_TR(MDSplus.Device):
 ```
 
-1. Design your node list. (node names need to be 11 characters or less)
+1. Design your node list. Node names need to be 11 characters or fewer.
 
     ```py
     parts = [

@@ -1,6 +1,6 @@
 # On-Demand `mdsip` Services
 
-For this purpose you must choose either systemd or xinetd, you cannot do both.
+For this purpose you must choose either **systemd** or **xinetd**, but you cannot do both.
 
 ## systemd
 TODO: next time Stephen and Fernando are available together

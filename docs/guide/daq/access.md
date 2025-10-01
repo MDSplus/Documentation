@@ -1,5 +1,7 @@
 # Configure Access
 
+
+
 ## `mdsip.hosts`
 
 `mdsip` is the name of the MDSplus service. The `mdsip.hosts` file  defines how to map users for incoming connections. It can also be used to control access for specific user groups. (TODO: More to come...apparently it only sort of but not really does this). NOTE: if you want some authorization, use SSH, which is described elsewhere [TODO: link].
