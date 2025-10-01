@@ -1,5 +1,4 @@
-
-# Configure experiment
+# Experiment Configuration/Data Acquisition Cycle
 ![DAQdiagram_v2.svg](DAQdiagram_v2.svg)
 
 [diagram of data flow from digitizers to the daq server]
@@ -59,3 +58,35 @@ Here are some example services and port numbers. The numbers are arbitrary, but 
 
 
 
+## Dispatch Table
+TODO: More to come
+
+The dispatcher serves as the state machine of MDSplus. Use the function `phase_table()` to list the states in your experiment.
+* it comes with defaults
+* TODO: get more from Stephen/Fernando
+
+There are basically two ways to think of state machines:
+1. run this code when you enter this state
+
+    simpler, cheaper, easier, but limited
+
+2. run this code when you transition between two states
+
+    e.g., `abort to init` is very different from `success to init`, so there are decision trees that have to be written that cover every possible transition you expect.
+    
+It's actually not possible to switch between types. Dispatcher was programmed as a #1, but there are various TCL scripts to make it behave like a #2 one. Eventually the current dispatcher will be rewritten completely to be a #2 type. CMOD had a type 2 built on top of it to handle the various contingencies, but this is inefficient. If you were designing an experiment today, it's a good idea to set up a state machine.
+
+**Building a dispatch table**
+
+A dispatch table makes things run in a specific order. The algorithm can be described as such:
+
+1. find all the action nodes in order (top to bottom)
+
+2. filter out the ones not in the current phase
+
+3. order them by priority (1 to 100. default is 50. If everything is set to 50, it goes by order of NID or Node ID or internal number. If the model doesn't change at all, all shots will go in the same order. If we make a new dispatcher, many of these characteristics would carry over)
+
+4. save that table. this is called the dispatch table. The dispatch table is built fresh for every new shot since parameters may change from one shot to the next depending on the experiment. This is not automatic, there's a command that needs to be run.
+
+
+> How does the dispatcher know what the current phase is? Is it listening for a specific "Event" that happens?
