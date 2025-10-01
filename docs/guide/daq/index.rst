@@ -18,7 +18,7 @@ Here are the general steps, with contents links below.
 
     * :doc:`setup-environment` (``setup.sh`` and ``envsyms``)
 
-    * set up :doc:`tree_path_variables`
+    * set up :doc:`tree-path-variables`
 
 
 
@@ -39,9 +39,9 @@ Other Considerations
     on-demand-mdsip
     static-mdsip
     setup-environment
-    shot_numbers
+    shot-numbers
     trees
-    tree_path_variables
+    tree-path-variables
     experiment
     faq
     

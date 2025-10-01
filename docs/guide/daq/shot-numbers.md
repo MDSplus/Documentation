@@ -1,4 +1,4 @@
-# Shot numbers
+# Shot Number Design
 
 You will need to "design" your shot numbers. Take time to carefully think through this topic because whatever scheme you decide upon will be used for all shots of your experiment and it is incredibly difficult to change once you have begun saving shots. It can be useful to encode the date into your shot number for easy reference, however this is not required. Examples:
 

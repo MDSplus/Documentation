@@ -13,24 +13,31 @@ Note that you do not need to create a device if your experimental setup allows f
 1. Design your node list
     * Configuration nodes, with defaults (basically a python list with dictionaries)
     * Data nodes
-    * Options for nodes (TODO: Fernando will define)
-        * `state`
-        * `parent_state`
-        * `essential`
-        * `cached`
-        * `versions`
-        * `segmented`
-        * `setup_information`
-        * `write_once`
-        * `compressible`
-        * `do_not_compress`
-        * `compress_on_put`: input node will be compressed when _____
-        * `no_write_model`
-        * `no_write_shot`: node can't be written when the shot happens (write protection)
-        * `path_reference`
-        * `nid_reference`
-        * `include_in_pulse`
-        * `compress_segments`
+    * Options for nodes (TODO: explanations for these (picked up from source code))
+
+        |Usage Flags||
+        |-|-|
+        | `cached`            | True if data is cached|
+        | `compress_on_put`   | use compression when data stored in node |
+        |`compress_segments`  | "should segments be compressed"|
+        | `compressible`      | "is the data stored in this node compressible"|
+        | `do_not_compress`   | no compression allowed "is this node set to disable any compression of data stored in it" |
+        | `essential`         | node is essential "essential action defined in this node" |
+        | `include_in_pulse`  | "include subtree in pulse"|
+        | `nid_reference`     | node data contains nid references |
+        | `no_write_model`    | write to model disabled; "is storing data in this node disabled if model tree" |
+        | `no_write_shot`     | write to shot disabled; is storing data in this node disabled if not model tree" |
+        | `parent_state`      | parent on or off "is parent disabled" |
+        | `path_reference`    | node data contains path references |
+        |`segmented`          | "is data segmented"|
+        | `setup_information` | has setup operations "was this data present in the model" |
+        | `state`             | "Use on property instead. on/off state of this node. False=on,True=off."  |
+        |`versions`           |  "does the data contain versions"|
+        |`write_once`|  "is no write once"|`
+
+
+
+
     * Examples:
         * Example, Digitizer: {address, length, frequency, input_xx}
         * Example, Camera: {address, width, height, length, frames}
