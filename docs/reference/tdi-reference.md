@@ -1135,6 +1135,77 @@ SPECIAL: "$VALUE" Raw field in a signal or value field in a param or subscript d
 
 ## A
 
+### `abort` (Opcode 31)
+|||
+|-|-|
+|TDI Syntax | `ABORT(arg0,arg1,argn,...)` |
+|C Syntax | `Tdi3Abort` |
+|Python Syntax| `MDSplus.ABORT` |
+|Java mdsplus-api Syntax| `CONST.ifitexistsitgoeshere()`|
+
+Miscellaneous.
+
+Abort an expression by causing an error.
+Arguments Any, ignored.
+
+Result.. None, error status.
+
+Example. IF_ERROR(A,B,ABORT()) aborts if both members are bad.
+
+
+### `abs` (Opcode 32)
+|||
+|-|-|
+|TDI Syntax | `abs(arg0)` |
+|C Syntax | `Tdi3Abs` |
+|Python Syntax| `abs(arg0)` |
+|Java mdsplus-api Syntax| `CONST.ifitexistsitgoeshere()`|
+
+F90 Numeric Elemental.
+
+Absolute value.
+
+Argument. A must be numeric.
+
+Signals. Same as A.
+
+Units... Same as A.
+
+Form.... Same as A except if A is complex, the result is real.
+
+Result.. Unsigned integers are unchanged, negative integers and reals are negated, complex numbers get square roots of the sum of the squares of real and imaginary parts. The complex number parts are scaled to avoid overflow.
+
+Example. ABS(CMPLX(3.0,4.0)) is 5.0.
+
+See also. ABS1 and ABSSQ for complex number to avoid a square root.
+ARG for the complex angle.
+
+### `abs1` (Opcode 33)
+|||
+|-|-|
+|TDI Syntax | `ABS1(arg0)` |
+|C Syntax | `Tdi3Abs1` |
+|Python Syntax| `ABS1(arg0)` |
+|Java mdsplus-api Syntax| `CONST.ifitexistsitgoeshere()`|
+
+Numeric Elemental.
+
+Absolute value with L1 norm.
+
+Argument. A must be numeric.
+
+Signals. Same as A.
+
+Units... Same as A.
+
+Form.... Same as A except if A is complex, the result is real.
+Result.. Unsigned integers are unchanged, negative integers
+and reals are negated, complex numbers become the sums
+of the absolute values of the real and imaginary parts.
+Example. ABS1(CMPLX(3.0,-4.0)) is 7.0.
+
+
+
 
 
 
