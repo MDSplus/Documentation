@@ -5,39 +5,39 @@ Before you can use a device with MDSplus, you must write/create one. It may be h
 
 Note that you do not need to create a device if your experimental setup allows for bringing data into MDSplus after the experiment has finished, which assumes that you have a way to store data during the experiment, for example, if your hardware's built-in memory buffer or other temporary storage is sufficient. After the experiment is completed, you may use a script (written in any of the supported languages) to import the data into an MDSplus node. The purpose of creating a MDSplus device is to capture data directly into MDSplus while the experiment is running.
 
-### Examples
-* N-Chan Digitizer and a Camera
-* Signal/Pulse Generators/Analog Output (AO)/Digital Output (DO)
 
 ## General steps
-1. Design your node list
-    * Configuration nodes, with defaults
+1. Design your node list, also known as `parts` array. Your nodes should mirror your hardware. For example, the configuration your digitizer may have nodes for frequency, each input channel, etc., whereas a camera may have nodes for width, height, length, frames, etc. [TODO: link to the examples further below]
 
-        * Configuration nodes are, for an MDSplus device written in Python, essentially a list of dictionaries. Each dictionary contains:
-            * the path (relative path from the Device node) to the node.
-            * the type: if the node is "text", "numeric", "signal", "structure", etc. See the TCL Commands page [TODO: link] > `add node` entry > `/usage` qualifier for more information on types.
-            * a default value
-            * options: in this case it will be one of the flags that shows the usage of the node
-            * extended options: like ‘tooltip’ that allows for a summary of what the values that the node accepts.
+    * **Configuration nodes** hold the configuration of your hardware. Configuration nodes take the form of an array of dictionaries. Each dictionary's key/value element contains:
 
-            Example: 
+         * **path**: (relative path from the Device node) to the node. This cannot be a name; it must be preceeded with a colon (`:`) or a dot(`.`). If you are unsure which one to use, use dot for structure nodes and colon for everything else.  Case insensitive
+         * **type**: can be "text", "numeric", "signal", "structure", etc. If you are unsure of the type, put `any`. See the [TODO: link to reference>node-usages.md] for more information on types. Case insensitive
+         * **value**: a default value can be given. Mutually exclusive with `valueExpr` (see below).
+         * **valueExpr**: mutually exclusive with `value`, can be used to specify a python expression that will be `eval`'d to give the node its default value. Has access to the following variables: `tree`, `path`, `head`. 
+         * **options**: flag that shows the usage of the node. For the full list plus explanations, see [TODO: link to metadata.md > NCI list]  Case insensitive. Here are some useful ones: 
+            * `no_write_model`
+            * `no_write_shot`
+            * `write_once`
 
-            ```py
-            {   'path': ':FREQUENCY',
-                'type': 'numeric',
-                'value': 20000,
-                'options': ('no_write_shot',),
-                'ext_options': {
-                    'tooltip': 'Sample frequency in Hertz.',
-                    },
-                },
-            ```
+         * **ext_options**: ("extended options") [TODO: Crosslink to metadata.md > XNCI].
+         
+         Example: [todo: revised example, more parts array trimmings]
+         ```py
+         {   'path': ':FREQUENCY',
+             'type': 'numeric',
+             'value': 20000,
+             'options': ('no_write_shot',),
+         },
+         ```
+        * Example configuration nodes. See full examples further below on page [TODO: link to the long examples further below]
 
-    * Data nodes
 
-        * TODO: Explanation for data nodes. What needs to be done?
+    * **Data nodes**, also known as input nodes, hold the data coming from your hardware during the data acquisition phase of your experiment (e.g., sensors, cameras, digitizers, etc.).
 
-        * In the case of a digitizer, data nodes will be numeric nodes that contains the data from the digitizers, so if there were 32 channels, there will be 32 nodes, and they usually look like this as an example:
+        * For example, a 32-channel digitizer will have 32 data nodes of the type `signal`. These channels will be created with a `for` loop, similar to the example below.
+
+            Example:
 
             ```py
             # The data captured for each channel, stored in individual nodes
@@ -49,60 +49,29 @@ Note that you do not need to create a device if your experimental setup allows f
                 })
             ```
 
-        * The data for the input nodes are usually MDSplus Signal data type
+    * TODO: explanation/come back to this
+        * "usages" are basically types
+        * "options" are NCIs
+        * "ext_options" are XNCIs
+    
+2. **Write your setup function**. When writing the setup function, consider the following operations.
+    * **Connect** to device by interfacing with the API of the manufacturer-supplied library.
+    * **Configure** settings: read from the configuration nodes (see above) to set the operating parameters of the hardware through the manufacturer-supplied API. 
+    * **Arm**: prepare the system to get triggered for data acquisition.
 
-        * the "`i`" loops through all the channels
-
-
-
-
-
-
-
-
-    * Options for nodes (TODO: explanations for these (picked up from source code))
-
-        |Usage Flags||
-        |-|-|
-        | `cached`            | True if data is cached|
-        | `compress_on_put`   | use compression when data stored in node |
-        |`compress_segments`  | "should segments be compressed"|
-        | `compressible`      | "is the data stored in this node compressible"|
-        | `do_not_compress`   | no compression allowed "is this node set to disable any compression of data stored in it" |
-        | `essential`         | node is essential "essential action defined in this node" |
-        | `include_in_pulse`  | "include subtree in pulse"|
-        | `nid_reference`     | node data contains nid references |
-        | `no_write_model`    | write to model disabled; "is storing data in this node disabled if model tree" |
-        | `no_write_shot`     | write to shot disabled; is storing data in this node disabled if not model tree" |
-        | `parent_state`      | parent on or off "is parent disabled" |
-        | `path_reference`    | node data contains path references |
-        |`segmented`          | "is data segmented"|
-        | `setup_information` | has setup operations "was this data present in the model" |
-        | `state`             | "Use on property instead. on/off state of this node. False=on,True=off."  |
-        |`versions`           |  "does the data contain versions"|
-        |`write_once`         |  "is no write once"|`
-
-    * Examples:
-        * Example, Digitizer: {address, length, frequency, input_xx}
-        * Example, Camera: {address, width, height, length, frames}
-2. Write setup function
-    * Connect to device
-    * Configure settings
-    * Arm? (prepare it for firing)
-
-3. Choose 3A (streaming) or 3B (transient/store)
-    * 3A. Write Main Loop Function (Continuous/streaming data capture, while experiment is running)
+3. Choose the type of data acquisition: streaming (3A) or transient (3B).
+    * 3A. For Streaming/continuous data capture: Write Main Loop Function
         * take data from hardware
-        * write data to MDS plus
+        * write data to MDSplus
         * loop back to top
         * "buffering"
 
-    * 3B. Write Store Function (transient or post-shot data capture). 
+    * 3B. For transient/post-shot data capture: Write Store Function 
         * Some hardware can buffer data inside of it. This is important in case the device's data exceeds the rate that we can capture it.
         * post-shot or STORE phase: basically do the same as 3A, but only need to do once for all the data captured during.
         * pre/post/window
 
-4. Tuning: adjusting until everything works well. "After all you're trying to make hardware do something" which is inherently difficult.
+4. Fine-tuning: adjust until everything works well. "After all you're trying to make hardware do something which is inherently difficult."
 
 5. Usage. Explain that you can use your device manually or via dispatch functions. With examples (TODO: examples from Stephen, Fernando).
 
@@ -111,7 +80,7 @@ more to come
 
 tips and tricks for debugging as you're writing
 
-whatever Stephen and Fernando can remember
+TODO: whatever Stephen and Fernando can remember
 
 ### Modifying
 Remove and Re-add
@@ -140,7 +109,7 @@ import MDSplus
 class DIG_32_TR(MDSplus.Device):
 ```
 
-1. Design your node list. Node names need to be 11 characters or fewer.
+1. Design your node list.
 
     ```py
     parts = [
@@ -305,7 +274,8 @@ import MDSplus
 class DIG_32_ST(MDSplus.Device):
 ```
 
-1. Design your node list. (node names need to be 11 characters or less)
+1. Design your node list.
+
     ```py
     parts = [
         # For any notes about this specific device, e.g. location, usage, problems
@@ -467,6 +437,7 @@ class DIG_32_ST(MDSplus.Device):
 
 ### Camera
 
+TODO Stephen/Fernando
 
 --
 
