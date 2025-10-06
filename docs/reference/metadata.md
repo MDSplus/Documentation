@@ -64,7 +64,29 @@ People setting up their trees will be setting the bitfields through Traverser or
 
 TODO: Crosslink to TDI `getnci`
 
-* Flags: will have other things in it (TODO Stephen to look up)
+* Flags: will have other things in it (TODO more to come from Stephen/Fernando)
+
+    |Usage Flag       | Description|
+    |-|-|
+    | `cached`          | On/Off data is cached. False=on,True=off.|
+    |`compress_on_put`  | Compress data when stored in this node|
+    |`compress_segments`| Compress segmented data.|
+    |`compressible`     | Data can be compressed|
+    |`do_not_compress`  | Data not to be compressed in this node|
+    |`essential`        | Essential action defined in this node.|
+    |`include_in_pulse` | Include subtree in pulse file|
+    |`nid_reference`    | Data contains node id references|
+    |`nowrite_shot`     | Do not allow writing into shot tree|
+    |`nowrite_model`    | Do not allow writing into model tree|
+    |`parent_state`     | On/Off state of parent node. False=on,True=off.|
+    |`path_reference`   | Data contains path references|
+    |`segmented`        | "is data segmented"|
+    |`setup_information`| Data is setup information|
+    |`spare`            | not used|
+    |`versions`         |  "does the data contain versions"|
+    |`state`            | On/Off state of this node. False=on,True=off.|
+    |`write_once`       | Node is written once and then locked.|
+
 
 * `time_inserted` when data was inserted as a VMS timestamp (we'll get into that later)
 
@@ -159,6 +181,11 @@ You can ask these questions about every node, but some answers are computed on-t
 e.g. NciFULLPATH, which computes the path to the node when asked
 
 Getting the value of a flag is a two step process, first you ask for `NciGET_FLAGS` (all 32 bits) and then you decide which `ncim_t` bit(s) (aka Binary digIT)  you care about and then you see whether it's a zero or one (this is called "testing the bit"). 
+
+
+
+
+
 
 ## DBI
 
