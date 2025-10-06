@@ -1,4 +1,4 @@
-# Installation on Debian (Ubuntu)
+# Debian (Ubuntu) Installation
 
 MDSplus now provides an `apt` repository for Ubuntu and Debian Linux distributions, which will allow you to subscribe to automatic updates as they are released. You may also choose which features of MDSplus you want to install on your Linux system. There are currently two different release levels of MDSplus:
 
