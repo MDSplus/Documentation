@@ -6,7 +6,7 @@ Install MDSplus
 
     debian
     redhat
-    .. windows
+    windows
     .. macosx
 
 For a list of packages available in each repository, see [packages].
