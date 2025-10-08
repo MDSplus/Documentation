@@ -9,6 +9,8 @@ Difficult to change later:
 Easy to change later:
 * node names
 
+Note: Node names need to be 11 characters or fewer. [TODO: come back to this]
+
 
 ## Subtrees
 
