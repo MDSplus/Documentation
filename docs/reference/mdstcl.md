@@ -132,7 +132,7 @@ Adds a new node to an MDSplus tree which has been opened using the `edit` comman
 * The `NODE_PATH` parameter specifies the name of the new node to be added. It can be an absolute node path or a relative node path. If the path name includes parent nodes, those parent nodes must already exist or the command will fail. Node names must begin with an alphabetic character followed by zero or more alphanumeric or underscore characters. The node name must be 12 characters or less in length.
 
 
-* The `/usage` qualifier specifies a usage type of the node. This must be one of: `action`, `any`, `axis`, `compound_data`, `device`, `dispatch`, `numeric`, `signal`, `structure`, `subtree`, `text`, or `window`. If not specified, a member node `(:name)` will default to usage `any`, and a child node `(.name)` will default to usage `structure`.
+* The `/usage` qualifier specifies a usage type of the node. This must be one of: `action`, `any`, `axis`, `compound_data`, `device`, `dispatch`, `numeric`, `signal`, `structure`, `subtree`, `text`, or `window`. If not specified, a member node `(:name)` will default to usage `any`, and a child node `(.name)` will default to usage `structure`. [TODO: explain each type]
 * If adding a device (e.g., data acquisition device) use the `/model` qualifier to specify the type of supported device you are adding.
 * **Note**: The `add node` command can only be used when a tree is opened for edit.
 

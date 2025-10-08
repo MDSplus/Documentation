@@ -68,7 +68,7 @@ TODO: Crosslink to TDI `getnci`
 
     |Usage Flag       | Description|
     |-|-|
-    | `cached`          | On/Off data is cached. False=on,True=off.|
+    | `cached`          | Cached data. False=on, True=off.|
     |`compress_on_put`  | Compress data when stored in this node|
     |`compress_segments`| Compress segmented data.|
     |`compressible`     | Data can be compressed|
@@ -78,13 +78,13 @@ TODO: Crosslink to TDI `getnci`
     |`nid_reference`    | Data contains node id references|
     |`nowrite_shot`     | Do not allow writing into shot tree|
     |`nowrite_model`    | Do not allow writing into model tree|
-    |`parent_state`     | On/Off state of parent node. False=on,True=off.|
+    |`parent_state`     | Parent node state. False=on, True=off.|
     |`path_reference`   | Data contains path references|
     |`segmented`        | "is data segmented"|
     |`setup_information`| Data is setup information|
     |`spare`            | not used|
-    |`versions`         |  "does the data contain versions"|
-    |`state`            | On/Off state of this node. False=on,True=off.|
+    |`versions`         | "does the data contain versions"|
+    |`state`            | Node state. False=on, True=off.|
     |`write_once`       | Node is written once and then locked.|
 
 
