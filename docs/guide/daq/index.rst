@@ -10,9 +10,9 @@ Here are the general steps, with contents links below.
     
     Step 1b. :doc:`/guide/install/index`.
 
-    Step 1c. :doc:`Install MDSplus</guide/install/index>`.
+    Step 1c. :doc:`Install MDSplus using instructions on this page</guide/install/index>`.
     
-    (TODO: discuss whether we want 1a. relative or 1b. absolute paths...the syntax for both of these work, for future reference!)
+    (TODO: discuss whether we want relative paths (1a) or absolute paths (1b)--the syntax for both of these work fine. 1c shows link text not auto-pulled from page heading)
 
     Step 2. These steps are closely intertwined and are listed in no particular order. Multiple passes may be needed to complete these portions of the setup process.
     
