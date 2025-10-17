@@ -9,4 +9,4 @@ Install MDSplus
     windows
     .. macosx
 
-For a list of packages available in each repository, see [packages].
+For a list of packages available in each repository, see :doc:`<packages>`.

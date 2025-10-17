@@ -6,14 +6,8 @@ A data acquisition (DAQ) server stores the data you generate from your experimen
 
 Here are the general steps, with contents links below.
 
-    Step 1a. :doc:`../install/index`. 
-    
-    Step 1b. :doc:`/guide/install/index`.
-
-    Step 1c. :doc:`Install MDSplus using instructions on this page</guide/install/index>`.
-    
-    (TODO: discuss whether we want relative paths (1a) or absolute paths (1b)--the syntax for both of these work fine. 1c shows link text not auto-pulled from page heading)
-
+    Step 1. :doc:`../install/index`.
+        
     Step 2. These steps are closely intertwined and are listed in no particular order. Multiple passes may be needed to complete these portions of the setup process.
     
     * :doc:`access`: (``mdsip.hosts``, tree access, on-demand-mdsip, static-mdsip)
@@ -31,7 +25,8 @@ Here are the general steps, with contents links below.
         
     * :doc:`experiment`: (mdsip services, dispatch table, devices)
 
-Full contents listed below
+
+Full contents are listed below for indexing purposes
 
 .. toctree::
     :titlesonly:
@@ -46,7 +41,3 @@ Full contents listed below
     tree-path-variables
     experiment
     faq
-    
-
-
-.. TODO: fix the links

@@ -3,7 +3,29 @@
 For this purpose you must choose either **systemd** or **xinetd**, but you cannot do both.
 
 ## systemd
-TODO: next time Stephen and Fernando are available together
+The recommended way to provide on-demand mdsip services is with systemd's `at` services. These consist of two parts:
+1. the `.socket`, which describes how to listen for incoming connections.
+2. the `.service`, which describes how to start a process to handle new connection.
+
+We provide usable versions of these files in the MDSplus installation located in `$MDSPLUS_DIR/rpm`. To use them, simply copy both `mdsip@.socket` and `mdsip@.service` to `/etc/systemd/system/int` and enable them.
+
+
+TODO: Stephen to verify all the commands in this section
+
+```sh
+sudo cp $MDSPLUS_DIR/rpm/mdsip@.socket /etc/systemd/system/int
+sudo cp $MDSPLUS_DIR/rpm/mdsip@.service /etc/systemd/system/int
+
+sudo systemctl enable mdsip@.socket
+sudo systemctl start mdsip@.socket
+```
+
+In order to inspect and debug these services, run:
+
+```sh
+sudo systemctl status 'mdsip@*'
+```
+
 
 ## xinetd
 

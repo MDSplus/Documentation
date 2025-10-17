@@ -117,51 +117,60 @@ sudo apt-get update
 
 ## 4. Packages
 
-MDSplus is split into several packages so that you can install just the parts you need. [View the full list here](/install/packages.md). You may add or remove packages as needed.
-
-## 5. Install MDSplus
-
-Once the MDSplus repository has been added to the /etc/apt/sources.list file, installing MDSplus packages can be done using the `apt-get` command. There are slight nuances to this command depending on whether you are using the alpha or stable version of Linux&mdash;see below. Please note you can only install packages from one flavor of repositories since packages from different releases may be incompatible. After successfully installing MDSplus you will need to log out and back in to pick up environment variables needed to operate MDSplus.
-
-### Alpha Package Installation
-
-Use this terminal command:
+MDSplus is split into several packages so that you can install just the parts you need. The full table is listed below. Select the packages you want to install and run:
 
 ```sh
-sudo apt-get install mdsplus-alpha-package
+sudo apt install <packages>
 ```
 
-If you are using the alpha repository, you will need to include `[alpha]` in the package name. See these examples:
+| Stable Package         | Alpha Package                | Description                                                                                                                                               |
+|------------------------|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Core**               |                              |                                                                                                                                                           |
+| mdsplus-kernel         | mdsplus-alpha-kernel         | All the core scripts and configuration files needed for most if not all MDSplus functions. Most other packages will include dependencies on this package. |
+| mdsplus-kernel-bin     | mdsplus-alpha-kernel-bin     | All the core libraries and executables needed for most if not all MDSplus functions. Most other packages will include dependencies on this package.       |
+| mdsplus-devel          | mdsplus-alpha-devel          | Header files for software development.                                                                                                                    |
+| mdsplus-devel-bin      | mdsplus-alpha-devel-bin      | Static libraries for software development.                                                                                                                |
+| mdsplus-motif          | mdsplus-alpha-motif          | Application menu entries for Open Motif based utilities including dwscope, traverser, actmon, and actions.                                                |
+| mdsplus-motif-bin      | mdsplus-alpha-motif-bin      | Executables, libraries, and user interface descriptions for Open Motif based utilities including dwscope, traverser, actmon, and actions.                 |
+|**Language/API Bindings**|                     |                                                                                                                                                           |
+| mdsplus-idl            | mdsplus-alpha-idl            | Procedures (.pro files) used to access MDSplus from within IDL (Interactive Data Language).                                                               |
+| mdsplus-idl-bin        | mdsplus-alpha-idl-bin        | Libraries used to access MDSplus from within IDL (Interactive Data Language).                                                                             |
+| mdsplus-java           | mdsplus-alpha-java           | Java classes for accessing MDSplus from within Java and utilities such as jScope, jTraverser, and jDispatcher.                                            |
+| mdsplus-java-bin       | mdsplus-alpha-java-bin       | Scripts used to launch jScope, jTraverser, and jDispatcher and the Java JNI interface library.                                                            |
+| mdsplus-labview        | mdsplus-alpha-labview        | LabVIEW source code (.vi files) for interfacing with MDSplus.                                                                                             |
+| mdsplus-labview-bin    | mdsplus-alpha-labview-bin    | Libraries needed by the LabVIEW source to interface with MDSplus.                                                                                         |
+| mdsplus-matlab         | mdsplus-alpha-matlab         | MATLAB API package to interface with MDSplus                                                                                                              |
+| mdsplus-mssql          | mdsplus-alpha-mssql          | The MdsSql library, used to access Microsoft SQL relational databases.                                                                                    |
+| mdsplus-python         | mdsplus-alpha-python         | Python API package to interface with MDSplus.                                                                                                             |
+| mdsplus-epics          | mdsplus-alpha-epics          | Configuration files and examples for integrating MDSplus into the EPICS control system software package.                                                  |
+| mdsplus-hdf5           | mdsplus-alpha-hdf5           | TDI functions to convert between HDF5 and MDSplus data files.                                                                                             |
+| mdsplus-hdf5-bin       | mdsplus-alpha-hdf5-bin       | Libraries and utilities to convert between HDF5 and MDSplus data files.                                                                                   |
+| **Site Specific**      |                              |                                                                                                                                                           |
+| mdsplus-d3d            | mdsplus-alpha-d3d            | TDI scripts for accessing data at the D3D experiment operated by GA in California.                                                                        |
+| mdsplus-kbsidevices    | mdsplus-alpha-kbsidevices    | TDI device codes for devices used by the Korea Basic Science Institute.                                                                                   |
+| mdsplus-mitdevices     | mdsplus-alpha-mitdevices     | TDI and Python device codes for devices used at the MIT Plasma Science and Fusion Laboratory.                                                             |
+| mdsplus-mitdevices-bin | mdsplus-alpha-mitdevices-bin | Device libraries for devices used at the MIT Plasma Science and Fusion Laboratory.                                                                        |
+| mdsplus-rfxdevices     | mdsplus-alpha-rfxdevices     | TDI, Python and Java device codes for devices used at the RFX experiment in Padova.                                                                       |
+| mdsplus-w7xdevices     | mdsplus-alpha-w7xdevices     | Python device codes used at the W7X experiment in Germany.                                                                                                |
+| **Legacy**             |                              |                                                                                                                                                           |
+| mdsplus-camac          | mdsplus-alpha-camac          | Scripts and TDI functions for communicating with CAMAC serial highway data acquisition devices.                                                           |
+| mdsplus-camac-bin      | mdsplus-alpha-camac-bin      | Libraries and executables for communicating with CAMAC serial highway data acquisition devices.                                                           |
+| mdsplus-gsi            | mdsplus-alpha-gsi            | Globus security infrastructure configuration files to enable secure mdsip communication using X.509 certificate authentication and authorization.         |
+| mdsplus-gsi-bin        | mdsplus-alpha-gsi-bin        | Globus security infrastructure interface libaries to enable secure mdsip communication using X.509 certificate authentication and authorization.          |
+| mdsplus-php            | mdsplus-alpha-php            | PHP interface to MDSplus used for web cgi development.                                                                                                    |
 
-````
-sudo apt-get install mdsplus-alpha-idl #### Installs the alpha version of camac package
-sudo apt-get install mdsplus-alpha     #### Installs all the alpha packages
-````
 
-### Stable Package Installation
 
-Use this terminal command:
 
-```sh
-sudo apt-get install mdsplus-package
-```
-
-Here some example installation commands for the stable repository:
-
-````
-sudo apt-get install mdsplus-python #### Installs the python module and dependencies
-sudo apt-get install mdsplus-kernel #### Installs the core part of MDSplus
-sudo apt-get install mdsplus        #### Installs all the core MDSplus packages
-````
-## 6. Update Your Installation
+## 5. Update Your Installation
 
 To perform updates of your MDSplus packages, enter the following terminal command:
 
 ````sh
-sudo apt-get upgrade 'mdsplus*'
+sudo apt upgrade 'mdsplus*'
 ````
 
-## 7. Manually Installing MDSplus package
+## Or, Manually Install MDSplus Package
 
 It is possible to manually install MDSplus debian packages instead of using a Debian repository, but you must account for all the dependencies yourself. It is recommended to use one of the repositories. To download packages, use the correct link below, depending on your operating system version.
 
