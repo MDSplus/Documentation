@@ -25,6 +25,8 @@ Here are the general steps, with contents links below.
         
     * :doc:`experiment`: (mdsip services, dispatch table, devices)
 
+    * :doc:`faq`
+
 
 Full contents are listed below for indexing purposes
 

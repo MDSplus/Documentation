@@ -2,7 +2,8 @@
 
 To install MDSplus for Windows, first download the appropriate version, and then open the installer (exe) file. Follow the on-screen prompts
 
-1. Read the License Agreement and click "I Agree" to continue
+1. Read the License Agreement and click "I Agree" to continue.
+
     ![](windows_installation01.png)
 
 2. Choose whether to install MDSplus for all users on the computer or just yourself. Choosing all users will default to the "Program Files" directory; choosing "just for me" will default to your user directory.
