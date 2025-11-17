@@ -14,11 +14,12 @@ TODO: make a table or something of shortcuts
 TODO: remove references to what VAX returns
 
 TODO for Mark:
-* remove min arguments/max arguments unless it's "interesting"
-* change arg0, arg1 (etc) to more useful things like _NUM, or [_NUM] if optional
-* c syntax in backticks
-* examples as Code blocks
-* remove c syntax from all the entries (should not be called by a human)
+* remove min arguments/max arguments unless it's "interesting" (not interesting: min-max 1, min1-max2)
+* change arg0, arg1 (etc) to more useful things like `_NUM`, or [_NUM] if optional. use backticks
+* examples should be rewritten as triple backtick (```) code blocks
+* DONE! ~~remove c syntax from all the entries (should not be called by a human)~~
+* move opcode, use natural language headings--try options for each. use LT and log10 as examples
+
 
 ## Contents
 Table of all the commands in each category, with symlinks to each heading
@@ -714,70 +715,22 @@ SPECIAL: "$VALUE" Raw field in a signal or value field in a param or subscript d
 
 ---
 
-## Functions
+## Built-in Functions
 
 > note: see `build_with_units` for more syntax
 
-### `abort` (Opcode 31) `OPTION 1`
+### `abort` (Opcode 31)
+
+|Syntax||
+|-|-|
+|TDI Syntax   | `ABORT(arg0,arg1,argn,...)` |
+|Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
+|Min arguments| 0  |
+|Max arguments| 255|
 
 Aborts an expression by causing an error.
 
 Examples: `IF_ERROR(A,B,ABORT())` aborts if both members are bad.
-
-|Syntax||
-|-|-|
-|TDI Syntax   | `ABORT(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
-
-|Arguments||
-|-|-|
-|Min arguments| 0  |
-|Max arguments| 255|
-|Argument type| Any, ignored.|
-
-|Returns||
-|-|-|
-|Return Type  |Miscellaneous|
-|Result       | None, error status.|
-
-
-### `abort` (Opcode 31) `OPTION 2`
-
-Aborts an expression by causing an error.
-
-|Syntax||
-|-|-|
-|TDI Syntax   | `ABORT(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
-
-|I/O||
-|-|-|
-|Min arguments| 0  |
-|Max arguments| 255|
-|Argument type| Any, ignored.|
-|Return Type  |Miscellaneous|
-|Result       | None, error status.|
-|Examples     |`IF_ERROR(A,B,ABORT())` aborts if both members are bad.|
-
-
-
-### `abort` (Opcode 31) `OPTION 3`
-
-Aborts an expression by causing an error.
-
-Examples: `IF_ERROR(A,B,ABORT())` aborts if both members are bad.
-
-|Syntax||
-|-|-|
-|TDI Syntax   | `ABORT(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
-
-|Arguments||
-|-|-|
-|Min arguments| 0  |
-|Max arguments| 255|
-|Argument type| Any, ignored.|
-
 
 
 
@@ -803,12 +756,12 @@ Returns absolute value of the input.
 * If argument is a `build_with_error` type, the function will ignore the error.
 
 Examples
-* `abs(2)` results in `2`
-* `abs($Faraday)` results in `Build_With_Units(96485.3, "C/mol")`
-* `abs(CMPLX(-3.0,4.0))` results in `5.0`.
-* `abs([-1,2,-3,4])` results in `[1,2,3,4]`
-* `abs([[-1,2],-3,4])` results in `[1,2,3,4]`
-* `abs([[-1,2],[-3,4]])` results in `[[1,2],[3,4]]`
+* `abs(2)` returns `2`
+* `abs($Faraday)` returns `Build_With_Units(96485.3, "C/mol")`
+* `abs(CMPLX(-3.0,4.0))` returns `5.0`.
+* `abs([-1,2,-3,4])` returns `[1,2,3,4]`
+* `abs([[-1,2],-3,4])` returns `[1,2,3,4]`
+* `abs([[-1,2],[-3,4]])` returns `[[1,2],[3,4]]`
 * signal example:
     ```TDI> _MYSIGNAL = BUILD_SIGNAL([-1,2,-3],*,BUILD_DIM(,[-1,0,1]))
     Build_Signal([-1,2,-3], *, Build_Dim(*, [-1,0,1]))
@@ -832,7 +785,7 @@ See also:
 Absolute value with L1 norm. Complex numbers result in the sum of the absolute values of the real and imaginary parts; otherwise, this function has the same behavior as `abs()`.
 
 Example
-* `abs1(cmplx(3.0,-4.0))` results in `7.0`.|
+* `abs1(cmplx(3.0,-4.0))` returns `7.0`.|
 
 See also: `abs()`
 
@@ -853,8 +806,8 @@ Absolute value squared.
 * Complex numbers become the sums of the squares of the real and imaginary parts.
 
 Examples
-* `abssq(cmplx(3.0,4.0))` results in `25.0.`
-* `abssq([[-1,2],[-3,4]])` results in `[[1,4], [9,16]]`
+* `abssq(cmplx(3.0,4.0))` returns `25.0.`
+* `abssq([[-1,2],[-3,4]])` returns `[[1,4], [9,16]]`
 
 
 
@@ -878,16 +831,16 @@ Running sum of all the elements of ARRAY along dimension DIM corresponding to th
 
 Examples
 * Simple:
-    * `ACCUMULATE([1,2,3])` results in `[1,3,6]`. 
+    * `ACCUMULATE([1,2,3])` returns `[1,3,6]`. 
 * Conditional
     * With `_C = [1, -2, -3, 4, 5]`, 
-    * `accumulate(_C,,_C > 0)` results in `[1,-2,-3,5,10]`
+    * `accumulate(_C,,_C > 0)` returns `[1,-2,-3,5,10]`
     * `ACCUMULATE(_C,,_C GT 0)` finds the running sum of all positive element of `C`.
 * Dimensional
     * With `_B = [[1,3,5], [2,4,6]]`:
-    * `accumulate(_B) results in [[1,4,9], [11,15,21]]
-    * `accumulate(_B, 0) results in [[1,4,9], [2,6,12]]
-    * `accumulate(_B, 1) results in [[1,3,5], [3,7,11]]
+    * `accumulate(_B) returns [[1,4,9], [11,15,21]]
+    * `accumulate(_B, 0) returns [[1,4,9], [2,6,12]]
+    * `accumulate(_B, 1) returns [[1,3,5], [3,7,11]]
  
 
 
@@ -908,8 +861,8 @@ I must be integer.
 For j between 0 and 127, the result is the character in position j of the ASCII collating sequence; otherwise, the result is processor dependent. It is truncated to 8 bits on the VAX.|
 
 Examples:
-* `achar(67)` results in `"C"`
-* `achar([72, 101, 108, 108, 111])` results in `["H","e","l","l","o"]`
+* `achar(67)` returns `"C"`
+* `achar([72, 101, 108, 108, 111])` returns `["H","e","l","l","o"]`
 
 
 |Signals      | Same as I.|
@@ -944,12 +897,12 @@ Arguments
 |Result       |
    
 Examples:
-* `acos(.9)` results in `.451027`
-* `acos($epsilon0)` results in `Build_With_Units(1.570796326786043D0, "?")`
-* `acos([.2, .3, .4, .5])` results in `[1.36944,1.2661,1.15928,1.0472]`
-* `acos(0.54030231)` results in `1.`
+* `acos(.9)` returns `.451027`
+* `acos($epsilon0)` returns `Build_With_Units(1.570796326786043D0, "?")`
+* `acos([.2, .3, .4, .5])` returns `[1.36944,1.2661,1.15928,1.0472]`
+* `acos(0.54030231)` returns `1.`
 * With `_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))`
-    `acos(_Signal)` results in `Build_Signal([0.,1.0472,1.31812], *, Build_Dim(*, [-1,0,1]))`
+    `acos(_Signal)` returns `Build_Signal([0.,1.0472,1.31812], *, Build_Dim(*, [-1,0,1]))`
 
 
 
@@ -970,9 +923,9 @@ Arguments
 * Out-of-range numbers get $ROPRAND.
 
 Examples
-* `acosd(0.54030231)` results in `57.2958`
+* `acosd(0.54030231)` returns `57.2958`
 * With `_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))`
-`acosd(_Signal)` results in `Build_Signal([0.,60.,75.5225], *, Build_Dim(*, [-1,0,1]))`
+`acosd(_Signal)` returns `Build_Signal([0.,60.,75.5225], *, Build_Dim(*, [-1,0,1]))`
 
 
 ### `add` (Opcode 38)
@@ -992,15 +945,15 @@ Adds two numbers.
 * Signals are treated like arrays, and dimensions are ignored.
 
 Examples
-* `add(3,4)` results in `7`
-* `[2,3,4] + 5.0` results in `[7.0,8.0,9.0]`. 
-* `add(cmplx(3,4),5)` results in `Cmplx(8.,4.)`
-* `add(cmplx(3,4),cmplx(5,6))` results in `Cmplx(8.,10.)`
-* `add([1,2],[3,4])` results in `[4,6]`
-* `add([1,2,3,4],[5,6])` results in `[6,8]`
+* `add(3,4)` returns `7`
+* `[2,3,4] + 5.0` returns `[7.0,8.0,9.0]`. 
+* `add(cmplx(3,4),5)` returns `Cmplx(8.,4.)`
+* `add(cmplx(3,4),cmplx(5,6))` returns `Cmplx(8.,10.)`
+* `add([1,2],[3,4])` returns `[4,6]`
+* `add([1,2,3,4],[5,6])` returns `[6,8]`
 * With `_Signal = Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))`   
 and with `_Signal1 = Build_Signal([3,4,5], *, Build_Dim(*, [0,1,2]))`  
-`add(_Signal, _Signal1)` results in `[4,6,8]`
+`add(_Signal, _Signal1)` returns `[4,6,8]`
 
 
 
@@ -1021,8 +974,8 @@ Adjust to the left, removing leading whitespace and inserting the same number of
 > TODO: Investigate tab characters; it seems to like spaces, but not tabs. 
 
 Examples
-* `adjustl("  word  ")` results in `"word    "`
-* `adjustr("  word  ")` results in `"    word"`
+* `adjustl("  word  ")` returns `"word    "`
+* `adjustr("  word  ")` returns `"    word"`
 
 
 ### `adjustr` (Opcode 40)
@@ -1036,8 +989,8 @@ Examples
 Adjust to the right, removing trailing whitespace and inserting the same number of leading blanks instead. Any input is treated as a string.
 
 Examples
-* `adjustl("  word  ")` results in `"word    "`
-* `adjustr("  word  ")` results in `"    word"`
+* `adjustl("  word  ")` returns `"word    "`
+* `adjustr("  word  ")` returns `"    word"`
 
 See also:
 * `adjustr`
@@ -1056,11 +1009,11 @@ See also:
 Returns the imaginary part of a complex number, in the same shape as the input.
 
 Examples
-* `aimag(cmplx(3,4))` results in `4.`
+* `aimag(cmplx(3,4))` returns `4.`
 * With `_IArray = [cmplx(1,2),cmplx(3,4), cmplx(5,6)]`  
-`aimag(_IArray)` results in `[2.,4.,6.]`
+`aimag(_IArray)` returns `[2.,4.,6.]`
 * With `_IArray = [[cmplx(1,2),cmplx(3,4)], [cmplx(5,6), cmplx(7,8)]]`  
-`aimag(_IArray)` results in `[[2.,4.], [6.,8.]]`
+`aimag(_IArray)` returns `[[2.,4.], [6.,8.]]`
 
 
 
@@ -1081,9 +1034,9 @@ Truncates a real number to a whole number.
 TODO: Stephen/Tim to investigate the "KIND" argument (see KIND() further below)
 
 Examples
-* `aint(-4.5)` results in `-4.`
-* `aint($PI)` results in `3D0`
-* `aint(0.999)` results in `0.`
+* `aint(-4.5)` returns `-4.`
+* `aint($PI)` returns `3D0`
+* `aint(0.999)` returns `0.`
 
 
 |Arguments, Results|
@@ -1181,7 +1134,7 @@ Logical intersection of elements. Returns true if both are true; otherwise, fals
 * Arguments are expected to be booleans (0 or 1)
 
 Examples
-* `[0,0,1,1] && [0,1,0,1]` results in `[$FALSE,$FALSE,$FALSE,$TRUE]`. 
+* `[0,0,1,1] && [0,1,0,1]` returns `[$FALSE,$FALSE,$FALSE,$TRUE]`. 
 
 See also
 * `eqv`, `nand`, `neqv`, `nor`, `or`, and others like `and_not` for other logical functions.
@@ -1201,7 +1154,7 @@ TODO: Stephen/Tim to confirm python syntax for this one
 Logical intersection with negation of second. Returns true if A is true and B is false; otherwise, false.
 
 Examples
-`and_not([0,0,1,1],[0,1,0,1])` results in `[$FALSE,$FALSE,$TRUE,$FALSE]`
+`and_not([0,0,1,1],[0,1,0,1])` returns `[$FALSE,$FALSE,$TRUE,$FALSE]`
 
 
 ### `anint` (Opcode 47)
@@ -1226,8 +1179,8 @@ KIND scalar integer type number, for example, KIND(1d0).
 * Type is KIND if it is present, else that of A.
 
 Examples
-* `ANINT(2.783)` results in `3.0`.
-* `ANINT(-2.783)` results in `-3.0`.
+* `ANINT(2.783)` returns `3.0`.
+* `ANINT(-2.783)` returns `-3.0`.
 
 See also: 
 * `NINT` for integer
@@ -1269,12 +1222,12 @@ See also
 
 TODO: Come back to the old examples
 OLD EXAMPLES (these use != instead of ==)
-* `ANY([$TRUE,$FALSE,$TRUE])` results in `$TRUE`.
+* `ANY([$TRUE,$FALSE,$TRUE])` returns `$TRUE`.
 * With `_B=[[1, 3, 5],[2, 4, 6]]` and  
 `_C=[[0, 3, 5],[7, 4, 8]]`  
-`ANY(_B NE _C)` results in `[$TRUE]`
-`ANY(_B NE _C,0)` results in `[$TRUE,$TRUE]`.  
-`ANY(_B NE _C,1)` results in `[$TRUE,$FALSE,$TRUE]`.
+`ANY(_B NE _C)` returns `[$TRUE]`
+`ANY(_B NE _C,0)` returns `[$TRUE,$TRUE]`.  
+`ANY(_B NE _C,1)` returns `[$TRUE,$FALSE,$TRUE]`.
 
 
 
@@ -1293,9 +1246,9 @@ Argument of complex number in radians.
 * Calculates via `atan2(aimag(cmplx(_Real, _Imaginary)),real(cmplx(_Real, _Imaginary)))`.
 
 Examples:
-* `arg(cmplx(3.0,4.0))` results in `0.927295`.
+* `arg(cmplx(3.0,4.0))` returns `0.927295`.
 * if `_A = [cmplx(3,4), cmplx(1,1)]`  
-`arg(_A)` results in `[.927295,.785398]`
+`arg(_A)` returns `[.927295,.785398]`
 
 See also:
 * `abs` for the complex length.
@@ -1314,9 +1267,9 @@ Argument of complex number in degrees.
 * Calculates via `atan2d(aimag(cmplx(_Real, _Imaginary)),real(cmplx(_Real, _Imaginary)))`.
 
 Examples:
-* `arg(ARGD(CMPLX(3.0,4.0)))` results in `53.1301`.
+* `arg(ARGD(CMPLX(3.0,4.0)))` returns `53.1301`.
 * if `_A = [cmplx(3,4), cmplx(1,1)]`  
-`arg(_A)` results in `[53.1301, 45.0]`
+`arg(_A)` returns `[53.1301, 45.0]`
 
 See also:
 * `abs` for the complex length.
@@ -1354,8 +1307,8 @@ Result: The N-th argument pointed to by A searched for:
 Examples
 
 * if `_sum = make_function(builtin_opcode("add"),3, 4)`  
-`arg_of(_sum)` results in `3`
-`arg_of(_sum, 1)` results in `4`
+`arg_of(_sum)` returns `3`
+`arg_of(_sum, 1)` returns `4`
 
 See also
 
@@ -1388,7 +1341,7 @@ Examples:
     [[0D0,0D0], [0D0,0D0], [0D0,0D0]]]
     ```
 
-* `array([1,1,1,1,1,1,1,1])` results in `[[[[[[[[0.]]]]]]]]`
+* `array([1,1,1,1,1,1,1,1])` returns `[[[[[[[[0.]]]]]]]]`
 
 See also: `ramp`, `random`, and `zero`.
 
@@ -1407,7 +1360,7 @@ Processor approximation to arcsin(X) (inverse sine) in radians.
 
 
 Examples
-* `ASIN(0.84147098)` results in `1.0`.
+* `ASIN(0.84147098)` returns `1.0`.
 
 'See also: `acos`, `acosd`, `asind`
 
@@ -1425,7 +1378,7 @@ Processor approximation to arcsin(X) (inverse sine) in degrees.
 * Results are in the range -90 to 90.
 
 Examples
-* `asind(0.5)` results in `30`.
+* `asind(0.5)` returns `30`.
 
 * See also: `acos`, `acosd`, `asin`
 
@@ -1454,10 +1407,10 @@ _B will be multiplied by three and that will be used.
 
 * with `_a = as_is(_b * 10)` and:  
     with `_b = 2`:    
-    * `_a` results in  `_b * 10`  
-    `data(_a)` results in `20`
+    * `_a` returns  `_b * 10`  
+    `data(_a)` returns `20`
     * then, with `_b = 3`  
-    `data(_a)` results in `30`
+    `data(_a)` returns `30`
 
 
 See also: `arg_of`, `data`, 
@@ -1476,7 +1429,7 @@ Arctangent, or inverse tangent. Processor approximation to arctan(X) (inverse ta
 * Units result in error.
 
 Examples
-* `ATAN(1.5574077)` results in `1.0`.
+* `ATAN(1.5574077)` returns `1.0`.
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1503,7 +1456,7 @@ TODO: Test with units and decide what to do with this blurb
 |Units        |None unless both have units and they don't match.
 
 Examples:
-* `ATAN2(1.5574077,1.0)` results in `1.0`.
+* `ATAN2(1.5574077,1.0)` returns `1.0`.
 * `ATAN2([ 1, 1], [-1, 1])` is `[3*pi/4 , pi/4]`.
 
 See also:
@@ -1542,8 +1495,8 @@ TODO: Test with units and decide what to do with this blurb
 |Units        |None unless both have units and they don't match.
 
 Examples
-* `ATAN2D(-1.0,-1.0)` results in `-135.0`.
-* `ATAN2D([ 1, 1], [-1, 1])` results in `[ 135. , 45.]`.
+* `ATAN2D(-1.0,-1.0)` returns `-135.0`.
+* `ATAN2D([ 1, 1], [-1, 1])` returns `[ 135. , 45.]`.
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1567,7 +1520,7 @@ Arctangent or inverse tangent. Processor approximation to arctan(X) in degrees.
 * Results lie in the range -90 to 90.
 
 Examples
-* `ATAND(1.0)` results in `45.0`.
+* `ATAND(1.0)` returns `45.0`.
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1660,7 +1613,7 @@ Returns the length of integer or other type in bits.
 * for arrays, returns the size of an individual element, not the whole array
 
 Examples
-* `bit_size(1)` results in `32`.
+* `bit_size(1)` returns `32`.
 
 
 
@@ -2503,8 +2456,8 @@ I must be integer.
 For j between 0 and 127, the result is the character in position j of the ASCII collating sequence; otherwise, the result is processor dependent. It is truncated to 8 bits on the VAX.
 
 Examples:
-* `char(67)` results in `"C"`
-* `char([72, 101, 108, 108, 111])` results in `["H","e","l","l","o"]`
+* `char(67)` returns `"C"`
+* `char([72, 101, 108, 108, 111])` returns `["H","e","l","l","o"]`
 
 See also: `achar`, `ichar`
 
@@ -2644,7 +2597,7 @@ See also build functions
 TODO: COME BACK TO THIS
 
 ---
-# Bookmark for internal use--regex used starting here
+## Bookmark for internal use--regex used starting here
 ---
 
 
@@ -5901,18 +5854,36 @@ Examples
 See also: `log10` for base-10 log
 
 
-
-### `log10` (Opcode 224)
+### `log10`  (Opcode 224)  
+> (version 1--original)
 |Syntax||
 |-|-|
 |TDI Syntax   | `log10(_NUM)` |
 |Python Syntax| `MDSplus.log10(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+
 
 Common logarithm (base 10).
-* Argument _NUM must be real.
-* Complex numbers result in an error.
+* Argument `_NUM` must be real.
+* Complex numbers result in error.
+* Units are disregarded
+
+Examples
+* `log10(10.0)` returns `1.0`.
+
+
+
+
+### Logarithm (common, base 10): `log10` 
+> (version 2--opcode moved, natural language title)
+|Syntax||
+|-|-|
+|TDI Syntax   | `log10(_NUM)` |
+|Python Syntax| `MDSplus.log10(_NUM)` |
+|Opcode |224|
+
+Common logarithm (base 10).
+* Argument `_NUM` must be real.
+* Complex numbers result in error.
 * Units are disregarded
 
 Examples
@@ -5928,7 +5899,7 @@ Examples
 |Max arguments| 1 |
 
 Logarithm, base 2.
-* Argument _NUM must be real. Complex numbers result in error.
+* Argument `_NUM` must be real. Complex numbers result in error.
 * Units are disregarded
 
 Examples
@@ -5997,7 +5968,7 @@ Examples
 * `long_unsigned(-1)` returns `4294967295LU`.
 
 
-### `lt` (Opcode 229)
+### `lt` (Opcode 229) (option 1--original)
 |Syntax||
 |-|-|
 |TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
@@ -6021,7 +5992,33 @@ Examples
 
 See also: `eq`, `ge`, `gt`, `le`, `ne`
 
-> TODO: Copy these see also items to their respective entries
+
+### Less than: `lt` (option 2 gussied up)
+|Syntax||
+|-|-|
+|TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
+|Python Syntax| `MDSplus.LT(X,Y)` |
+|Min arguments| 2  |
+|Max arguments| 2  |
+|Opcode       |229 |
+
+
+
+Tests for first argument less than second.
+* Arguments _X and _Y must both be numeric or character.
+* Complex numbers result in error.
+* Returns True if _X is less than _Y; otherwise, false.
+* A reserved operand is always false.
+* Characters are compared in the processor collating sequence.
+* WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1<=.2 is true. Integer values may be truncated when matched to floating numbers.
+
+Examples
+* `2<2.0` returns `$FALSE`.
+* `2 lt 2.1` returns `$TRUE`.
+* `lt(2.1, 2)` returns `$FALSE`
+
+See also: `eq`, `ge`, `gt`, `le`, `ne`
+
 
 
 ### `MAKE_ACTION`
