@@ -6,7 +6,6 @@ There are three ways to set up communication between MATLAB and MDSplus:
 * [Java bridge](#java-bridge)
 * [Python bridge](#python-bridge)
 * [mdsthin bridge](#mdsthin-bridge)
-> TODO Make these links to below
 
 For Java and Python, the full MDSplus suite must be installed on your computer, plus compatible versions of Java or Python (check MATLAB documentation for compatible [Python](https://www.mathworks.com/support/requirements/python-compatibility.html) and [OpenJDK](https://www.mathworks.com/support/requirements/openjdk.html)). For the mdsthin bridge, only [mdsthin](https://github.com/MDSplus/mdsthin) needs to be installed. See the section on [troubleshooting](#troubleshooting) for more information.
 
