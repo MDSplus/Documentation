@@ -61,7 +61,8 @@ If your organization runs MATLAB from a computing cluster, it will likely have m
 * [General Info](https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html)
 
 
-> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the "Setup" section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. TODO: Delete this note before this page gets published
+> note to self: To test the configuration of MATLAB / MDSplus, run `mdstest(0)`. See the "Setup" section of this page from the Wiki.   https://www.mdsplus.org/index.php/Documentation:Reference:Matlab. 
+TODO: Delete this note before this page gets published
 
 ---
 
@@ -86,6 +87,9 @@ To disable the Python bridge and revert to the Java bridge, use:
 ```
 mdsUsePython(false)
 ```
+
+TODO: From Mark W: Josh mentioned that the Python bridge might not be as robust as the Java bridge. The MDSplus developers should investigate and determine if there are any significant differences that merit describing in the documentation.
+
 
 ## 2c. mdsthin Bridge
 
