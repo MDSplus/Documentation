@@ -5873,8 +5873,10 @@ Examples
 
 
 
-### Logarithm (common, base 10): `log10` 
-> (version 2--opcode moved, natural language title)
+### Logarithm (common, base 10): `log10`  
+
+> (version 2--opcode moved, natural language title)  
+
 |Syntax||
 |-|-|
 |TDI Syntax   | `log10(_NUM)` |
@@ -5968,13 +5970,15 @@ Examples
 * `long_unsigned(-1)` returns `4294967295LU`.
 
 
-### `lt` (Opcode 229) (option 1--original)
+### `lt` (Opcode 229) 
+
+> (option 1--original)
+
 |Syntax||
 |-|-|
 |TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
 |Python Syntax| `MDSplus.LT(X,Y)` |
-|Min arguments| 2
-|Max arguments| 2
+
 
 
 Tests for first argument less than second.
@@ -5993,13 +5997,14 @@ Examples
 See also: `eq`, `ge`, `gt`, `le`, `ne`
 
 
-### Less than: `lt` (option 2 gussied up)
+### `lt` (Less than)
+
+> (option 2 gussied up)
+
 |Syntax||
 |-|-|
 |TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
 |Python Syntax| `MDSplus.LT(X,Y)` |
-|Min arguments| 2  |
-|Max arguments| 2  |
 |Opcode       |229 |
 
 
