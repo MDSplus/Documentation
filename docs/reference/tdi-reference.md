@@ -19,7 +19,22 @@ TODO for Mark:
 * examples should be rewritten as triple backtick (```) code blocks
 * DONE! ~~remove c syntax from all the entries (should not be called by a human)~~
 * move opcode, use natural language headings--try options for each. use LT and log10 as examples
+* global explanation of mismatched units (if they don't match, it just returns `?`)
+* move all the deprecated/broken/unimplemented to their own section
 
+
+
+TODO for Stephen
+* move opcode to bottom row of syntax table
+* python syntax for the `$` constants--need to be all caps after the `d`
+* python syntax arguments
+* see TODO's in entries
+* see also KIND
+* replace Fortran operators with their C equivalents
+* for the ones that have a symbol, remove the part where you call it by name
+* See [legacy syntax]() section at the end for all the fortran, etc. stuff
+* move all the examples not in code blocks...into code blocks
+* remove the word "examples" above the code blocks
 
 ## Contents
 Table of all the commands in each category, with symlinks to each heading
@@ -287,58 +302,63 @@ C:\Users\myuen\Documents\GitHub\mdsplus\java\mdsplus-api\src\main\java\mds\data\
 
 ## Constants
 
-### `$2PI` (Opcode 372)
+### `$2PI`
 
 |||
 |-|-|
 |TDI Syntax   | `$2PI`|
 |Python Syntax| `MDSplus.d2pi`|
 |Java mdsplus-api Syntax| `CONST.d2Pi()` |
+|Opcode|372|
 
 Two times pi, or equivalent to circumference of a circle divided by its radius (approx 6.2831853072)
 
 
-### `$A0` (Opcode  1)
+### `$A0`
 
 |||
 |-|-|
 | TDI Syntax | `$A0` |
 | Python Syntax | `MDSplus.dA0` |
 | Java mdsplus-api Syntax | `CONST.dA0()` |
+|Opcode|1|
 
 The BOHR Radius Constant of 52.9177E-12m, with a margin of error of 1168.02E-21
 
 
-### `$ALPHA` (Opcode 2)
+### `$ALPHA`
 
 |||
 |-|-|
 | TDI syntax| `$ALPHA`|
 | Python Syntax| `MDSplus.dalpha`|
 |Java mdsplus-api Syntax| `CONST.dAlpha()`|
+|Opcode|2|
 
 Fine-structure Constant: 7.29735308e-3 or 
 0.00729735, error of 143.276E-12
 
 
-### `$AMU` (Opcode 3)
+### `$AMU`
 
 |||
 |-|-|
 |TDI syntax: `$AMU`|
 |Python Syntax | `MDSplus.damu`|
 |Java mdsplus-api Syntax| `CONST.dAmu()` |
+|Opcode|3|
 
 Unified atomic mass unit: 1.6605402e-27, or 1660.54E-30 kg, error of 43.0666E-36
 
 
-### `$ATM` (Opcode 405)
+### `$ATM`
 
 |||
 |-|-|
 |TDI Syntax   | `$ATM`|
 |Python Syntax| `MDSplus.datm`|
 |Java mdsplus-api Syntax| `CONST.dAtm()` |
+|Opcode|405|
 
 Atmospheric pressure: 101325. Pa
 
@@ -637,7 +657,7 @@ False: 0 bu (zero bytes unsigned)
 |||
 |-|-|
 |TDI Syntax   | `$MISSING` |
-|Python Syntax| `MDSplus.$missing` |
+|Python Syntax| `MDSplus.dMISSING` |
 |Java mdsplus-api Syntax| `CONST.dMissing()`|
 
 Missing value (or argument). `$MISSING` is used internally to mark a missing argument and gives zero or blanks. `$MISSING` and `$ROPRAND` execute at compilation. Equivalent to "null" in other languages.
@@ -647,23 +667,23 @@ Missing value (or argument). `$MISSING` is used internally to mark a missing arg
 |||
 |-|-|
 |TDI Syntax   | `$NARG` |
-|Python Syntax| `MDSplus.dnarg` |
+|Python Syntax| `MDSplus.dNARG` |
 |Java mdsplus-api Syntax| `CONST.dNarg()`|
 
 Special: Actual arguments used to invoke the FUN
 
-TODO: ask Stephen what this means and also if "specials" get any other treatment and Also it says native python false is there anything we need to do about that?
+TODO: ask Stephen what this means 
 
 
-### `$ROPRAND` (Opcode 25)
+### `$ROPRAND` (Reserved Operand) 
 |||
 |-|-|
 |TDI Syntax   | `$ROPRAND` |
-|Python Syntax| `MDSplus.droprand` |
+|Python Syntax| `MDSplus.dROPRAND` |
 |Java mdsplus-api Syntax| `CONST.dRoprand()`|
+|Opcode|25|
 
-SPECIAL: Reserved operand "float nan"
-TODO: Interestingly, native python = true for this one. Ask Stephen what that means
+Used to represent float NaN (Not a Number) 
 
 
 ### `$SHOT` (Opcode 388)
@@ -717,9 +737,9 @@ SPECIAL: "$VALUE" Raw field in a signal or value field in a param or subscript d
 
 ## Built-in Functions
 
-> note: see `build_with_units` for more syntax
 
-### `abort` (Opcode 31)
+
+### `ABORT` 
 
 |Syntax||
 |-|-|
@@ -727,6 +747,7 @@ SPECIAL: "$VALUE" Raw field in a signal or value field in a param or subscript d
 |Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
 |Min arguments| 0  |
 |Max arguments| 255|
+|Opcode|31|
 
 Aborts an expression by causing an error.
 
@@ -734,40 +755,54 @@ Examples: `IF_ERROR(A,B,ABORT())` aborts if both members are bad.
 
 
 
-
-
-
-### `abs` (Opcode 32)
+### `ABS`
 
 |Syntax||
 |-|-|
-|TDI Syntax   | `abs(_NUM)` |
-|Python Syntax| `MDSplus.abs(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|TDI Syntax   | `ABS(_NUM)` |
+|Python Syntax| `MDSplus.ABS(_NUM)` |
+|Opcode|32|
 
 Returns absolute value of the input.
 
 * Arguments must be numeric.
-* Argument can be signal or array, as long as values are numeric. An array with a defined shape will return an array with the same shape; an Array with complex will return a flat array. See examples. TODO: Stephen to help Rephrase if needed
+* Argument can be signal or array, as long as values are numeric. 
+* An array with a defined shape will return an array with the same shape.
 * Unsigned integers are unchanged
 * Complex numbers result in the square root of the sum of the squares of the real and imaginary parts. The complex number parts are scaled to avoid overflow.
 * Arguments with units will result in values with the same units
 * If argument is a `build_with_error` type, the function will ignore the error.
 
 Examples
-* `abs(2)` returns `2`
-* `abs($Faraday)` returns `Build_With_Units(96485.3, "C/mol")`
-* `abs(CMPLX(-3.0,4.0))` returns `5.0`.
-* `abs([-1,2,-3,4])` returns `[1,2,3,4]`
-* `abs([[-1,2],-3,4])` returns `[1,2,3,4]`
-* `abs([[-1,2],[-3,4]])` returns `[[1,2],[3,4]]`
-* signal example:
-    ```TDI> _MYSIGNAL = BUILD_SIGNAL([-1,2,-3],*,BUILD_DIM(,[-1,0,1]))
-    Build_Signal([-1,2,-3], *, Build_Dim(*, [-1,0,1]))
-    TDI> abs(_MYSIGNAL)
-    Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))
-    ```
+
+```tdi
+TDI> abs(2)`
+2
+
+TDI> abs($Faraday)
+Build_With_Units(96485.3, "C/mol")`
+
+TDI> abs(CMPLX(-3.0,4.0))
+5.0
+
+TDI> abs([-1,2,-3,4])
+[1,2,3,4]
+
+TDI> abs([[-1,2],-3,4])
+[1,2,3,4]
+
+TDI> abs([[-1,2],[-3,4]])
+[[1,2],[3,4]]
+
+
+# signal
+
+_MYSIGNAL = BUILD_SIGNAL([-1,2,-3],*,BUILD_DIM(,[-1,0,1]))
+
+TDI> abs(_MYSIGNAL)
+Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))
+```
+
 
 See also:
 * `abs1` and `abssq` for complex number to avoid a square root.
@@ -775,28 +810,32 @@ See also:
 [todo: links]
 
 
-### `abs1` (Opcode 33)
+### `ABS1` 
 
 |Syntax||
 |-|-|
-|TDI Syntax   | `abs1(_NUM)` |
-|Python Syntax| `MDSplus.abs1(_NUM)` |
+|TDI Syntax   | `ABS1(_NUM)` |
+|Python Syntax| `MDSplus.ABS1(_NUM)` |
+|Opcode|33|
 
 Absolute value with L1 norm. Complex numbers result in the sum of the absolute values of the real and imaginary parts; otherwise, this function has the same behavior as `abs()`.
 
 Example
-* `abs1(cmplx(3.0,-4.0))` returns `7.0`.|
+
+```
+TDI> abs1(cmplx(3.0,-4.0))
+7.0
+```
 
 See also: `abs()`
 
 
-### `abssq` (Opcode 34)
+### `ABSSQ` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `abssq(_NUM)` |
-|Python Syntax| `MDSplus.abssq(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ABSSQ(_NUM)` |
+|Python Syntax| `MDSplus.ABSSQ(_NUM)` |
+|Opcode|34|
 
 Absolute value squared.
 * Units are same as for `a*a`.
@@ -806,113 +845,137 @@ Absolute value squared.
 * Complex numbers become the sums of the squares of the real and imaginary parts.
 
 Examples
-* `abssq(cmplx(3.0,4.0))` returns `25.0.`
-* `abssq([[-1,2],[-3,4]])` returns `[[1,4], [9,16]]`
+
+```TDI
+TDI> abssq(cmplx(3.0,4.0))
+25.0
+
+TDI> abssq([[-1,2],[-3,4]])
+[[1,4], [9,16]]
+```
 
 
 
-
-### `accumulate` (Opcode 439)
+### `ACCUMULATE`
 |Syntax||
 |-|-|
-|TDI Syntax   | `accumulate(_ARRAY, [_DIM], [_MASK])` |
-|Python Syntax| `MDSplus.accumulate(_ARRAY, [_DIM], [_MASK])` |
+|TDI Syntax   | `ACCUMULATE(_ARRAY, [_DIM], [_MASK])` |
+|Python Syntax| `MDSplus.ACCUMULATE(_ARRAY, [_DIM], [_MASK])` |
 |Min arguments| 1 |
 |Max arguments| 3 |
+|Opcode|439|
 
 > TODO: come back to this definition; needs fine-tuning. replace "mask" with "condition"? 
 
-Running sum of all the elements of ARRAY along dimension DIM corresponding to the true elements of MASK. The result is the running sum of the elements of ARRAY, using only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the running sum of the ARRAY elements with dimension DIM fixed as the element number of the result. Without DIM, the result is the sum from the first element ignoring the shape. If no value is found, 0 is given.
+Running sum of all the elements of `_ARRAY` along dimension `_DIM` corresponding to the true elements of `_MASK`. The result is the running sum of the elements of `_ARRAY`, using only those with true `_MASK` values and value not equal to the reserved operand ($ROPRAND). With `_DIM`, the value of an element of the result is the running sum of the ARRAY elements with dimension `_DIM` fixed as the element number of the result. Without `_DIM`, the result is the sum from the first element ignoring the shape. If no value is found, 0 is given.
 
-* ARRAY numeric array.
-* (optional) DIM integer scalar from 0 to n-1, where n is rank of ARRAY.
-* (optional) MASK logical and conformable to ARRAY.
+* `_ARRAY` numeric array.
+* (optional) [`_DIM`] integer scalar from 0 to n-1, where n is rank of ARRAY.
+* (optional) [`_MASK`] logical and conformable to ARRAY.
 * Can also accept signals, units
 
 Examples
-* Simple:
-    * `ACCUMULATE([1,2,3])` returns `[1,3,6]`. 
-* Conditional
-    * With `_C = [1, -2, -3, 4, 5]`, 
-    * `accumulate(_C,,_C > 0)` returns `[1,-2,-3,5,10]`
-    * `ACCUMULATE(_C,,_C GT 0)` finds the running sum of all positive element of `C`.
-* Dimensional
-    * With `_B = [[1,3,5], [2,4,6]]`:
-    * `accumulate(_B) returns [[1,4,9], [11,15,21]]
-    * `accumulate(_B, 0) returns [[1,4,9], [2,6,12]]
-    * `accumulate(_B, 1) returns [[1,3,5], [3,7,11]]
- 
+
+```TDI
+# Simple
+TDI> accumulate([1,2,3])
+[1,3,6]
+
+# Conditional
+_C = [1, -2, -3, 4, 5]
+
+TDI> `accumulate(_C,,_C > 0)
+[1,-2,-3,5,10]
+
+# This will find the running sum of all positive elements of `C`
+TDI> accumulate(_C,,_C GT 0)
+
+# Dimensional
+_B = [[1,3,5], [2,4,6]]
+
+TDI> accumulate(_B)
+[[1,4,9], [11,15,21]]
+
+TDI> accumulate(_B, 0)
+[[1,4,9], [2,6,12]]
+
+TDI> accumulate(_B, 1)
+[[1,3,5], [3,7,11]]
+```
 
 
-### `achar` (Opcode 35)
+### `ACHAR` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `ACHAR(arg0,arg1)` |
-|Python Syntax| `MDSplus.ACHAR(arg0,arg1)` |
+|TDI Syntax   | `ACHAR(_I, [_KIND])` |
+|Python Syntax| `MDSplus.ACHAR(i, [kind])` |
 |Min arguments| 1 |
 |Max arguments| 2 |
+|Opcode|35|
 
-
-The character in a specified position of the ASCII collating sequence. The inverse of IACHAR.
-
-* argument must be an integer
-* can also receive signals and units as long as 
-I must be integer.
-For j between 0 and 127, the result is the character in position j of the ASCII collating sequence; otherwise, the result is processor dependent. It is truncated to 8 bits on the VAX.|
+Converts the number, array, or signal `_I` into the equivalent ASCII character. 
+Optional `_KIND` (see [kind](todo:link)).
 
 Examples:
-* `achar(67)` returns `"C"`
-* `achar([72, 101, 108, 108, 111])` returns `["H","e","l","l","o"]`
+
+```tdi
+TDI> achar(67)
+C
+
+TDI> achar([72, 101, 108, 108, 111])
+["H","e","l","l","o"]
+```
+
+See also:
+
+* `CHAR` and its inverse `ICHAR` for a processor-dependent.|
+* `KIND`
 
 
-|Signals      | Same as I.|
-|Units        | Same as I.|
-|Form         | Length-one character of same shape.|
-|Result       | 
-|Examples     | `ACHAR(88)` has the value `X`.|
-|See also     | `CHAR` and its inverse `ICHAR` for a processor-dependent.|
-
-> TODO: Come back to this. Explain 2nd argument. 
-
-
-### `acos` (Opcode 36)
+### `ACOS`
 |Syntax||
 |-|-|
-|TDI Syntax   | `acos(_NUM)` |
+|TDI Syntax   | `ACOS(_NUM)` |
 |Python Syntax| `MDSplus.ACOS(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|36|
 
 Arccosine (inverse cosine) in radians; Processor approximation.
 
 Arguments
-* Argument must be real and be less than 1 in magnitude. Complex numbers cause an error.
+* Argument must be real and be less than 1 in magnitude. Complex numbers cause error.
 * Units are ignored
 * Results are in the range 0 to pi, inclusive.
-* Out-of-range numbers get $ROPRAND.  
-
-|Signals      |Same as X.
-|Units        |None, bad if X has units.
-|Form         |Real of same shape.
-|Result       |
-   
-Examples:
-* `acos(.9)` returns `.451027`
-* `acos($epsilon0)` returns `Build_With_Units(1.570796326786043D0, "?")`
-* `acos([.2, .3, .4, .5])` returns `[1.36944,1.2661,1.15928,1.0472]`
-* `acos(0.54030231)` returns `1.`
-* With `_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))`
-    `acos(_Signal)` returns `Build_Signal([0.,1.0472,1.31812], *, Build_Dim(*, [-1,0,1]))`
+* Out-of-range numbers return `$ROPRAND`.  
 
 
+Examples
 
-### `acosd` (Opcode 37)
+```tdi
+TDI> acos(.9)
+.451027
+
+TDI> acos($epsilon0)
+Build_With_Units(1.570796326786043D0, "?")
+
+TDI> acos([.2, .3, .4, .5])
+[1.36944,1.2661,1.15928,1.0472]
+
+TDI> acos(0.54030231)
+1
+
+_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))
+
+TDI> acos(_Signal)
+Build_Signal([0.,1.0472,1.31812], *, Build_Dim(*, [-1,0,1]))
+```
+
+
+### `ACOSD`
 |Syntax||
 |-|-|
-|TDI Syntax   | `acosd(arg0)` |
-|Python Syntax| `MDSplus.acosd(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ACOSD(arg0)` |
+|Python Syntax| `MDSplus.ACOSD(arg0)` |
+|Opcode|37|
 
 Arccosine (inverse cosine) in degrees; Processor approximation.
 
@@ -923,19 +986,25 @@ Arguments
 * Out-of-range numbers get $ROPRAND.
 
 Examples
-* `acosd(0.54030231)` returns `57.2958`
-* With `_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))`
-`acosd(_Signal)` returns `Build_Signal([0.,60.,75.5225], *, Build_Dim(*, [-1,0,1]))`
+
+```tdi
+TDI> acosd(0.54030231)
+57.2958
+
+_Signal = Build_Signal([1,.5,.25], *, Build_Dim(*, [-1,0,1]))
+
+TDI> acosd(_Signal)
+Build_Signal([0.,60.,75.5225], *, Build_Dim(*, [-1,0,1]))
+```
 
 
-### `add` (Opcode 38)
+### `ADD` 
 
 |Syntax||
 |-|-|
 |TDI Syntax| `_NUM1 + _NUM2` or `add(_NUM1, _NUM2)`|
 |Python Syntax| `MDSplus.add(_NUM1, _NUM2)`|
-|Min arguments| 2|
-|Max arguments| 2|
+|Opcode|38|
 
 Adds two numbers.
 
@@ -945,102 +1014,149 @@ Adds two numbers.
 * Signals are treated like arrays, and dimensions are ignored.
 
 Examples
-* `add(3,4)` returns `7`
-* `[2,3,4] + 5.0` returns `[7.0,8.0,9.0]`. 
-* `add(cmplx(3,4),5)` returns `Cmplx(8.,4.)`
-* `add(cmplx(3,4),cmplx(5,6))` returns `Cmplx(8.,10.)`
-* `add([1,2],[3,4])` returns `[4,6]`
-* `add([1,2,3,4],[5,6])` returns `[6,8]`
-* With `_Signal = Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))`   
-and with `_Signal1 = Build_Signal([3,4,5], *, Build_Dim(*, [0,1,2]))`  
-`add(_Signal, _Signal1)` returns `[4,6,8]`
+
+```
+TDI> add(3,4)
+7
+
+TDI> [2,3,4] + 5.0
+[7.0,8.0,9.0]
+
+TDI> add(cmplx(3,4),5)
+Cmplx(8.,4.)
+
+TDI> add(cmplx(3,4),cmplx(5,6))
+Cmplx(8.,10.)
+
+TDI> add([1,2],[3,4])
+[4,6]
+
+TDI> add([1,2,3,4],[5,6])
+[6,8]
+
+_Signal0 = Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))
+_Signal1 = Build_Signal([3,4,5], *, Build_Dim(*, [0,1,2]))
+
+TDI> add(_Signal0, _Signal1)
+[4,6,8]
+```
 
 
 
 
-
-
-### `adjustl` (Opcode 39)
+### `ADJUSTL` (Adjust to the Left)
 |Syntax||
 |-|-|
-|TDI Syntax   | `adjustl(_STRING)` |
-|Python Syntax| `MDSplus.adjustl(_STRING)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ADJUSTL(_STRING)` |
+|Python Syntax| `MDSplus.ADJUSTL(_STRING)` |
+|Opcode|39|
 
-Adjust to the left, removing leading whitespace and inserting the same number of trailing blanks instead. Any input is treated as a string.
-* See also: `adjustr`
+Adjust to the left, removing leading whitespace and inserting the same number of trailing spaces instead. Any input is treated as a string. Consumed TAB characters only count as a single space.
 
-> TODO: Investigate tab characters; it seems to like spaces, but not tabs. 
+
 
 Examples
-* `adjustl("  word  ")` returns `"word    "`
-* `adjustr("  word  ")` returns `"    word"`
 
+```tdi
+TDI> adjustl("  word  ")
+"word    "
 
-### `adjustr` (Opcode 40)
-|Syntax||
-|-|-|
-|TDI Syntax   | `adjustr(_STRING)` |
-|Python Syntax| `MDSplus.adjustr(_STRING)` |
-|Min arguments| 1|
-|Max arguments| 1|
+TDI> adjustr("  word  ")
+"    word"
 
-Adjust to the right, removing trailing whitespace and inserting the same number of leading blanks instead. Any input is treated as a string.
-
-Examples
-* `adjustl("  word  ")` returns `"word    "`
-* `adjustr("  word  ")` returns `"    word"`
+# Note: Leading TAB characters will be replaced with spaces at the end
+TDI> adjustl("\tword\t")
+"word\t "
+```
 
 See also:
 * `adjustr`
 * `TRIM` (non-elemental) to remove trailing blanks and tabs.
 
 
-### `aimag` (Opcode 41)
+### `ADJUSTR` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `aimag(_NUM)` |
-|Python Syntax| `MDSplus.aimag(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ADJUSTR(_STRING)` |
+|Python Syntax| `MDSplus.ADJUSTR(_STRING)` |
+|Opcode|40|
+
+Adjust to the right, removing trailing whitespace and inserting the same number of leading blanks instead. Any input is treated as a string. Consumed TAB characters only count as a single space.
+
+Examples
+
+```tdi
+TDI> adjustl("  word  ")
+"word    "
+
+TDI> adjustr("  word  ")
+"    word"
+
+# Note: Trailing TAB characters will be replaced with spaces at the beginning
+TDI> adjustr("\tword\t")
+" \tword"
+```
+
+See also:
+* `adjustl`
+* `TRIM` (non-elemental) to remove trailing blanks and tabs.
+
+
+### `AIMAG` (Imaginary part of a complex number)
+|Syntax||
+|-|-|
+|TDI Syntax   | `AIMAG(_NUM)` |
+|Python Syntax| `MDSplus.AIMAG(_NUM)` |
+|Opcode|41|
 
 
 Returns the imaginary part of a complex number, in the same shape as the input.
 
 Examples
-* `aimag(cmplx(3,4))` returns `4.`
-* With `_IArray = [cmplx(1,2),cmplx(3,4), cmplx(5,6)]`  
-`aimag(_IArray)` returns `[2.,4.,6.]`
-* With `_IArray = [[cmplx(1,2),cmplx(3,4)], [cmplx(5,6), cmplx(7,8)]]`  
-`aimag(_IArray)` returns `[[2.,4.], [6.,8.]]`
+```tdi
+TDI> aimag(cmplx(3,4))
+4
+
+_IArray = [cmplx(1,2),cmplx(3,4), cmplx(5,6)]
+
+TDI> aimag(_IArray)
+[2.,4.,6.]
+
+_IArray2 = [[cmplx(1,2),cmplx(3,4)], [cmplx(5,6), cmplx(7,8)]]
+
+TDI> aimag(_IArray2)
+[[2.,4.], [6.,8.]]
+```
 
 
-
-### `aint` (Opcode 42)
+### `AINT` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `aint(_NUM,_KIND)` |
-|Python Syntax| `MDSplus.aint(arg0,_KIND)` |
-|Min arguments| 1|
-|Max arguments| 2|
+|TDI Syntax   | `AINT(_NUM, [_KIND])` |
+|Python Syntax| `MDSplus.AINT(_NUM, [_KIND])` |
+|Opcode|42|
 
 
 Truncates a real number to a whole number.
-* Complex numbers result in an error.
 * Note: this function only removes numbers after the decimal point; it does not round.
-* (optional) 2nd argument: Type is `KIND` if it is present, else that of A. 
-* KIND: scalar integer type number, for example, KIND(1d0).
-TODO: Stephen/Tim to investigate the "KIND" argument (see KIND() further below)
+
+Arguments
+* `_NUM` must be real. Complex numbers result in error.
+* [_KIND] (optional): Type is `KIND` if it is present, else that of `_NUM`. Scalar integer type number, for example, KIND(1d0).
+
 
 Examples
-* `aint(-4.5)` returns `-4.`
-* `aint($PI)` returns `3D0`
-* `aint(0.999)` returns `0.`
 
+```tdi
+TDI> aint(-4.5)
+-4
 
-|Arguments, Results|
-Optional: KIND.
+TDI> aint($PI)
+3D0
+
+TDI> aint(0.999)
+0
+```
 
 See also:
 * `int` for integer result and `byte`, `word`, `long`, `quadword`, `octaword`, and `unsigned_byte`, etc., for specific forms. 
@@ -1048,68 +1164,71 @@ See also:
 * `floor` and `ceiling`.
 
 
-### `all` (Opcode 43)
+### `ALL` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `ALL(arg0,arg1)` |
-|Python Syntax| `MDSplus.ALL(arg0,arg1)` |
-|Min arguments| 1|
-|Max arguments| 2|
+|TDI Syntax   | `ALL(_MASK, [_DIM])` |
+|Python Syntax| `MDSplus.ALL(_MASK, [_DIM])` |
+|Opcode|43|
 
-|Return Type  |F90 Transformation |
-
-Determine if all values are true in MASK along dimension DIM.
+Determine if all values are true in `_MASK` along dimension `_DIM`.
 
 Arguments 
-Optional: DIM.
-MASK logical array.
-DIM integer scalar from 0 to n-1, where n is rank of MASK.
+* `_MASK`: a logical array.
+* [_DIM] optional: integer scalar from 0 to n-1, where n is rank of `_MASK`.
 
-|Signals      |None.
-|Units        |None.
-|Form         |Logical. It is scalar if DIM is absent or MASK is a vector; otherwise, the result is an array of rank n-1 and of shape like MASK's with DIM subscript omitted.
+Results
+* `ALL(_MASK)` returns `$TRUE` if all elements of `_MASK` are true or if MASK has size zero
+* `ALL(_MASK)` returns `$FALSE` if any element of `_MASK` is false.
+* For a vector MASK, `ALL(_MASK, _DIM)` is equal to `ALL(_MASK)`. Otherwise, the value of an element of the result is `ALL()` of the elements of `_MASK` varying the `_DIM` subscript.
 
-Result.
-(i) ALL(MASK) is $TRUE if all elements of MASK are true or if MASK has size zero and is $FALSE if any element of MASK is false.
-(ii) For a vector MASK, ALL(MASK,DIM) is equal to ALL(MASK). Otherwise, the value of an element of the result is ALL of the elements of MASK varying the DIM subscript.
+Examples
 
-Examples.
+```tdi
+TDI> ALL([$TRUE,$FALSE,$TRUE])
+$FALSE
 
-(i) ALL([$TRUE,$FALSE,$TRUE]) is $FALSE.
 
-(ii) If _B=[[1, 3, 5],[2, 4, 6]] and
+_B=[[1, 3, 5],[2, 4, 6]]
 _C=[[0, 3, 5],[2, 4, 6],[7, 4, 8]]
-ALL(_B NE _C,0) is [$FALSE,$FALSE,$FALSE].
-ALL(_B NE _C,1) is [$FALSE,$FALSE].
 
-|See also
+TDI> ALL(_B NE _C,0)
+[$FALSE,$FALSE,$FALSE]
+
+TDI> ALL(_B NE _C,1)
+[$FALSE,$FALSE]
+```
+
+See also:
 * `ANY` for logical. 
 * `COUNT` for the number of trues.
 
-TODO: Stephen/Tim to investigate further and provide explanation
 
 
-### `allocated` (Opcode 44)
+### `ALLOCATED`
 |Syntax||
 |-|-|
-|TDI Syntax   | `allocated(_STRING)` |
-|Python Syntax| `MDSplus.allocated(_STRING)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ALLOCATED(_STRING)` |
+|Python Syntax| `MDSplus.ALLOCATED(_STRING)` |
+|Opcode|44|
 
-Returns `$TRUE` ("1BU") if a variable has been declared and is populated, else, returns `$FALSE` ("0BU").
+Returns `$TRUE` if a variable has been declared and is populated, else, returns `$FALSE`.
 * Argument expected is variable name or  text string.
 * ALLOCATED(_Not_in use) is $FALSE unless it has appeared on the left side of an assignment expression.
 
 Example:
 ```
 _a = 1
+
 TDI> allocated(_a)
 1BU
+
 TDI> allocated("_a")
 1BU
+
 TDI> allocated(_b)
 0BU
+
 TDI> allocated("_b")
 0BU
 ```
@@ -1119,88 +1238,83 @@ See also
 * `reset_private` or `reset_public` for more drastic actions.
 
 
-### `and` (Opcode 45)
+### `AND` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `_BOOL0 && _BOOL1` or and(_BOOL0, _BOOL1)|
-|Python Syntax| `MDSplus.arg0 && arg1` |
-|Min arguments| 2|
-|Max arguments| 2|
-
-TODO: Stephen/Tim to confirm python syntax for this one
+|TDI Syntax   | `_A && _B` or `AND(_A, _B)`|
+|Python Syntax| `MDSplus.AND(a, b)` |
+|Opcode|45|
 
 Logical intersection of elements. Returns true if both are true; otherwise, false.
 * Note: do not confuse with `&` which is bit-wise `IAND`.
 * Arguments are expected to be booleans (0 or 1)
 
 Examples
-* `[0,0,1,1] && [0,1,0,1]` returns `[$FALSE,$FALSE,$FALSE,$TRUE]`. 
+
+```tdi
+TDI> [0,0,1,1] && [0,1,0,1]
+[0BU,0BU,0BU,1BU]
+```
 
 See also
 * `eqv`, `nand`, `neqv`, `nor`, `or`, and others like `and_not` for other logical functions.
 
 
 
-### `and_not` (Opcode 46)
+### `AND_NOT`
 |Syntax||
 |-|-|
-|TDI Syntax   | `and_not(_BOOL0, _BOOL1)` |
-|Python Syntax| `MDSplus.and_not(_BOOL0, _BOOL1)` |
-|Min arguments| 2|
-|Max arguments| 2|
+|TDI Syntax   | `AND_NOT(_BOOL0, _BOOL1)` |
+|Python Syntax| `MDSplus.AND_NOT(_BOOL0, _BOOL1)` |
+|Opcode|46|
 
-TODO: Stephen/Tim to confirm python syntax for this one
 
 Logical intersection with negation of second. Returns true if A is true and B is false; otherwise, false.
 
 Examples
-`and_not([0,0,1,1],[0,1,0,1])` returns `[$FALSE,$FALSE,$TRUE,$FALSE]`
 
+```tdi
+TDI> and_not([0,0,1,1],[0,1,0,1])
+[0BU,0BU,1BU,0BU]
 
-### `anint` (Opcode 47)
+TODO: Stephen
+
+```
+
+### `ANINT`
 |Syntax||
 |-|-|
-|TDI Syntax   | `anint(_NUM1, [_KIND])` |
-|Python Syntax| `MDSplus.anint(arg0,arg1)` |
-|Min arguments| 1|
-|Max arguments| 2|
-
-TODO: Come back to this after investigating "KIND"
+|TDI Syntax   | `ANINT(_NUM, [_KIND])` |
+|Python Syntax| `MDSplus.ANINT(_NUM, [_KIND])` |
+|Opcode|47|
 
 Rounds to the nearest whole number.
-Must be a real number; complex numbers result in error.
-
-(Optional argument): KIND.
-KIND scalar integer type number, for example, KIND(1d0).
-|Signals      |Same as A. |
-|Units        |Same as A. |
-|Form         |Same as A. |
-
+* `_NUM` Must be a real number; complex numbers result in error.
+* [`_KIND`] Optional: KIND scalar integer type number, for example, KIND(1d0).
 * Type is KIND if it is present, else that of A.
 
 Examples
-* `ANINT(2.783)` returns `3.0`.
-* `ANINT(-2.783)` returns `-3.0`.
+```tdi
+TDI> ANINT(2.783)
+3.0
+
+TDI> ANINT(-2.783)
+-3.0
+```
 
 See also: 
 * `NINT` for integer
 * `INT` and `AINT` for truncated results.
 
 
-### `any` (Opcode 48)
+### `ANY` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `any(_MASK, [DIM])` |
-|Python Syntax| `MDSplus.any(_MASK, [DIM])` |
-|Min arguments| 1|
-|Max arguments| 2|
+|TDI Syntax   | `ANY(_MASK, [_DIM])` |
+|Python Syntax| `MDSplus.ANY(_MASK, [_DIM])` |
+|Opcode|48|
 
-Matching function. Returns true if any element matches the condition described in the mask along the dimension. This can compare an array to a single element or two arrays to each other. Not providing a [DIM] will flatten the array. [DIM] must be an integer of n-1 of sub-arrays.
-
-TODO: Investigate why matching on subarrays doesn't work  
-If: `_A=[[1,2], [3,4], [5,6]]`  
-and `B=[3,4]`  
-`Any (_A==_B,n)` returns false, which shouldn't be the case
+Matching function. Returns true if any element matches the condition described in the mask along the dimension. This can compare an array to a single element or two arrays to each other. Not providing a `_DIM` will flatten the array. `_DIM` must be an integer of n-1 of sub-arrays.
 
 Examples
 * With:   
@@ -1233,203 +1347,243 @@ OLD EXAMPLES (these use != instead of ==)
 
 
 
-### `arg` (Opcode 49)
+### `ARG` (Complex number to radians)
 |Syntax||
 |-|-|
-|TDI Syntax   | `arg(cmplx(_Real, _Imaginary))` |
+|TDI Syntax   | `ARG(cmplx(_Real, _Imaginary))` |
 |Python Syntax| `MDSplus.ARG(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|49|
 
 Argument of complex number in radians.
 * Argument must be `cmplx()`.
 * Calculates via `atan2(aimag(cmplx(_Real, _Imaginary)),real(cmplx(_Real, _Imaginary)))`.
 
 Examples:
-* `arg(cmplx(3.0,4.0))` returns `0.927295`.
-* if `_A = [cmplx(3,4), cmplx(1,1)]`  
-`arg(_A)` returns `[.927295,.785398]`
+```tdi
+TDI> arg(cmplx(3.0,4.0))
+0.927295
+
+_A = [cmplx(3,4), cmplx(1,1)]
+
+TDI> arg(_A)
+[.927295,.785398]
+```
 
 See also:
 * `abs` for the complex length.
 
 
-### `argd` (Opcode 50)
+### `ARGD` (Complex number to degrees)
 |Syntax||
 |-|-|
-|TDI Syntax   | `argd(cmplx(_Real, _Imaginary))` |
-|Python Syntax| `MDSplus.argd(cmplx(_Real, _Imaginary))` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ARGD(cmplx(_Real, _Imaginary))` |
+|Python Syntax| `MDSplus.ARGD(cmplx(_Real, _Imaginary))` |
+|Opcode|50|
 
 Argument of complex number in degrees.
 * Argument must be `cmplx()`.
 * Calculates via `atan2d(aimag(cmplx(_Real, _Imaginary)),real(cmplx(_Real, _Imaginary)))`.
 
 Examples:
-* `arg(ARGD(CMPLX(3.0,4.0)))` returns `53.1301`.
-* if `_A = [cmplx(3,4), cmplx(1,1)]`  
-`arg(_A)` returns `[53.1301, 45.0]`
+```
+TDI> arg(ARGD(CMPLX(3.0,4.0)))
+53.1301
+
+_A = [cmplx(3,4), cmplx(1,1)]
+
+TDI> arg(_A)
+[53.1301, 45.0]
+```
 
 See also:
 * `abs` for the complex length.
 
 
-### `ARG_OF` (Opcode 51)
+### `ARG_OF` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `ARG_OF(_DESCRIPTOR, [_INDEX])` |
 |Python Syntax| `MDSplus.ARG_OF(_DESCRIPTOR, [_INDEX])` |
-|Min arguments| 1|
-|Max arguments| 2|
+|Opcode|51|
 
 Returns the n-th argument of an expression.
-* If no index value is given, defaults to the first (position 0)
+* If no `_INDEX` value is given, defaults to the first (position 0)
 
-TODO: COME BACK TO THIS AND SEE WHAT OF THIS IS RELEVANT
+TODO: REWRITE WITH STEPHEN
 MDS Operation
 Get the N-th argument of a record descriptor.
 The count does not include dscptrs like image or routine.
 
 A descriptor of class DSC$K_CLASS_R with arguments.
-N integer scalar from 0 to the number of descriptors - 1.
-
-Result: The N-th argument pointed to by A searched for:
-    DSC$K_DTYPE_CALL
-    DSC$K_DTYPE_CONDITION, the condition field.
-    DSC$K_DTYPE_DEPENDENCY
-    DSC$K_DTYPE_FUNCTION
-    DSC$K_DTYPE_METHOD
-    DSC$K_DTYPE_PROCEDURE
-    DSC$K_DTYPE_ROUTINE
-    Otherwise, an error.
+N integer scalar from 0 to the number of descriptors -1.
 
 Examples
 
-* if `_sum = make_function(builtin_opcode("add"),3, 4)`  
-`arg_of(_sum)` returns `3`
-`arg_of(_sum, 1)` returns `4`
+```tdi
+_sum = make_function(builtin_opcode("add"),3, 4)
+
+TDI> arg_of(_sum)
+3
+
+TDI> arg_of(_sum, 1)
+4
+```
 
 See also
-
 * `DSCPTRS_OF` for any descriptor.
 
 
-### `array` (Opcode 52)
+### `ARRAY` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `array([_SHAPE], [_TYPE])` |
-|Python Syntax| `MDSplus.array([_SHAPE], [_TYPE])` |
+|TDI Syntax   | `ARRAY([_SHAPE], [_KIND])` |
+|Python Syntax| `MDSplus.ARRAY([_SHAPE], [_KIND])` |
 |Min arguments| 0 |
 |Max arguments| 2 |
-
-TODO: confirm that "TYPE" works better than "MOLD" for this example
+|Opcode|52|
 
 Generates an unitialized array. The values are not defined and will depend on previous memory usage.
-* The _SHAPE argument goes from innermost to outermost. Can make up to an 8th dimensional array.
-* If _SHAPE is absent, the result is a scalar. 
-* If _TYPE is absent, the result will be floats.
+* The `_SHAPE` argument goes from innermost to outermost. Can make up to an 8th dimensional array.
+* If `_SHAPE` is absent, the result is a scalar. 
+* If `_TYPE` is absent, the result will be floats.
 
 
-Examples:
-* `array([2,3,4],1d0)` makes an array of double precision reals of shape `[2,3,4]`: 
+Examples
 
-    ```
-    [[[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
-    [[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
-    [[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
-    [[0D0,0D0], [0D0,0D0], [0D0,0D0]]]
-    ```
+```TDI
+# this makes an array of floats with of shape [3, 4, 6]
 
-* `array([1,1,1,1,1,1,1,1])` returns `[[[[[[[[0.]]]]]]]]`
+TDI> array([3, 4, 6])
+
+/*Here is the output but with line breaks for legibility: 
+[[[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]],
+ [[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]],
+ [[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]],
+ [[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]],
+ [[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]],
+ [[0.,0.,0.], [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]]] */
+
+
+# This makes an array of double precision reals of shape [2,3,4].
+
+TDI> array([2,3,4],1d0)
+
+/*Here is the output but with line breaks for legibility: 
+[[[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
+[[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
+[[0D0,0D0], [0D0,0D0], [0D0,0D0]],  
+[[0D0,0D0], [0D0,0D0], [0D0,0D0]]] */ 
+
+# This shows the maximum depth allowed with this function
+TDI> array([1,1,1,1,1,1,1,1])
+[[[[[[[[0.]]]]]]]]
+```
 
 See also: `ramp`, `random`, and `zero`.
 
 
-### `asin` (Opcode 53)
+### `ASIN` (Arcsine or Inverse Sine, in Radians)
 |Syntax||
 |-|-|
-|TDI Syntax   | `asin(_NUM)` |
-|Python Syntax| `MDSplus.asin(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ASIN(_NUM)` |
+|Python Syntax| `MDSplus.ASIN(_NUM)` |
+|Opcode|53|
 
 Processor approximation to arcsin(X) (inverse sine) in radians.
-* Argument must be real and be less than or equal to 1 in magnitude. Out-of-range numbers get $ROPRAND. Complex numbers cause an error.
-* Results are in the range -pi/2 to pi/2.
+* `_NUM` argument must be real and be less than or equal to 1 in magnitude.
+    * Out-of-range numbers get `$ROPRAND`.
+    * Complex numbers cause error.
+* Results are in the range from `-pi/2` to `pi/2`.
 
 
 Examples
-* `ASIN(0.84147098)` returns `1.0`.
+```tdi
+TDI> ASIN(0.84147098)
+1.0
+```
 
-'See also: `acos`, `acosd`, `asind`
+See also: `acos`, `acosd`, `asind`
 
 
-### `asind` (Opcode 54)
+### `ASIND` (Arcsine or Inverse Sine, in Degrees)
 |Syntax||
 |-|-|
-|TDI Syntax   | `asind(_NUM)` |
-|Python Syntax| `MDSplus.asind(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `ASIND(_NUM)` |
+|Python Syntax| `MDSplus.ASIND(_NUM)` |
+|Opcode|54|
+
 
 Processor approximation to arcsin(X) (inverse sine) in degrees.
-* Argument must be real and be less than or equal to 1 in magnitude. Out-of-range numbers get $ROPRAND. Complex numbers cause an error.
-* Results are in the range -90 to 90.
+* `_NUM` argument must be real and be less than or equal to 1 in magnitude.
+    * Out-of-range numbers get `$ROPRAND`.
+    * Complex numbers cause error.
+* Results are in the range `-90` to `90`.
 
 Examples
-* `asind(0.5)` returns `30`.
+```tdi
+TDI> asind(0.5)
+30
+```
 
 * See also: `acos`, `acosd`, `asin`
 
 
 
-### `as_is` (Opcode 55)
+### `AS_IS` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `as_is(arg0)` |
-|Python Syntax| `MDSplus.as_is(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `AS_IS(_ARG0)` |
+|Python Syntax| `MDSplus.as_is(_ARG0)` |
+|Opcode|55|
 
 Protects the argument from one level of evaluation.
-* Argument may be any expression and may be a NID, PATH, or FUNCTION.
+* `_ARG0` argument may be any expression and may be a NID, PATH, or FUNCTION.
 * returns the argument without evaluation.
 
 
-|Return Type  |Compile Operation |
-|Arguments, Results|
-|Result       |
 Examples
-* `_A = AS_IS(_B * 3.0)` makes the variable `_A` into an expression. So whereever `_A` is used the current value of
-_B will be multiplied by three and that will be used.
-* Note that `_A = _B * 3.0` would have returned the then current value and will not change as `_B` does.
 
-* with `_a = as_is(_b * 10)` and:  
-    with `_b = 2`:    
-    * `_a` returns  `_b * 10`  
-    `data(_a)` returns `20`
-    * then, with `_b = 3`  
-    `data(_a)` returns `30`
+```TDI
+# This makes the variable _A into an expression. So whereever `_A` is used, the current value of _B will be multiplied by three and that will be used.
 
+TDI> _A = AS_IS(_B * 3.0)
+
+# Note: The above expression would have returned the then-current value and will not automatically change as _B does.
+
+TDI> _a = as_is(_b * 10)
+TDI> _b = 2
+
+TDI> _a
+_b * 10
+
+TDI> data(_a)
+20
+
+TDI> _b = 3
+
+TDI> data(_a)
+30
+```
 
 See also: `arg_of`, `data`, 
 
-### `atan` (Opcode 56)
+### `ATAN` (Arctangent, in Radians, for Real Numbers)
 |Syntax||
 |-|-|
 |TDI Syntax   | `atan(_NUM)` |
 |Python Syntax| `MDSplus.atan(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|56|
 
-Arctangent, or inverse tangent. Processor approximation to arctan(X) (inverse tangent) in radians.
-* Arguments must be real. Complex numbers result in an error.
-* Results are in the range -pi/2 to pi/2, inclusive.
+Arctangent, or inverse tangent. Processor approximation to `arctan(X)` (inverse tangent) in radians.
+* Arguments must be real. Complex numbers result in error.
+* Results are in the range `-pi/2` to `pi/2`, inclusive.
 * Units result in error.
 
 Examples
-* `ATAN(1.5574077)` returns `1.0`.
+```tdi
+TDI> ATAN(1.5574077)
+1.0
+```
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1438,26 +1592,33 @@ See also:
 * `atan2D` for complex numbers, in degrees.
 * `arg` for the angle of a complex number.
 
-### `atan2` (Opcode 57)
+### `ATAN2` (Arctangent, in Radians, for Complex Numbers)
 |Syntax||
 |-|-|
 |TDI Syntax   | `atan2(_NUM1, _NUM2)` |
 |Python Syntax| `MDSplus.atan2(_NUM1, _NUM2)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|57|
 
 Arctangent, or inverse tangent. Processor approximation to `arctan(Y/X)` in radians. 
 * The principal value of the argument of the nonzero complex number `CMPLX(X,Y)`.
 * Arguments must be real. Complex numbers result in an error.
 * Results are in the range -pi to pi. If Y > 0, the result is positive.
 
-
-TODO: Test with units and decide what to do with this blurb
-|Units        |None unless both have units and they don't match.
-
 Examples:
-* `ATAN2(1.5574077,1.0)` returns `1.0`.
-* `ATAN2([ 1, 1], [-1, 1])` is `[3*pi/4 , pi/4]`.
+
+```TDI
+TDI> ATAN2(1.5574077,1.0)
+1.0
+
+# the answer is whatever [3*pi/4 , pi/4] evaluates to
+TDI> ATAN2([ 1, 1], [-1, 1])
+[2.35619,.785398]
+
+TDI> atan2([1,3],1)
+[.785398,1.24905]
+```
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1466,37 +1627,30 @@ See also:
 * `atan2D` for complex numbers, in degrees.
 * `arg` for the angle of a complex number.
 
-TODO: decide whether this is to much info
-
-`atan2(1,2)` => `.463648`
-`atan2(3,4)` => `.643501`
-`atan2([1,3],[2,4])` => `[.463648,.643501]`
-
-`atan2(1,1)` => `.785398`
-`atan2(3,1)` => `1.24905`
-`atan2([1,3],1)` => `[.785398,1.24905]`
 
 
-### `ATAN2D` (Opcode 58)
+### `ATAN2D` (Arctangent, in Degrees, for Complex Numbers)
 |Syntax||
 |-|-|
 |TDI Syntax   | `ATAN2D(arg0,arg1)` |
 |Python Syntax| `MDSplus.ATAN2D(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|58|
 
-
-Arctangent or inverse tangent. Processor approximation to arctan(Y/X) in degrees.  
+Arctangent or inverse tangent. Processor approximation to `arctan(Y/X)` in degrees.  
 * The principal value of the argument of the nonzero complex number `CMPLX(X,Y)`.
 * Arguments must be real. Complex numbers result in an error.
-* Results are in the range -180 to 180. If `Y>0`, the result is positive.
-
-TODO: Test with units and decide what to do with this blurb
-|Units        |None unless both have units and they don't match.
+* Results are in the range `-180` to `180`. If `Y>0`, the result is positive.
 
 Examples
-* `ATAN2D(-1.0,-1.0)` returns `-135.0`.
-* `ATAN2D([ 1, 1], [-1, 1])` returns `[ 135. , 45.]`.
+```tdi
+TDI> ATAN2D(-1.0,-1.0)
+-135.0
+
+TDI> ATAN2D([ 1, 1], [-1, 1])
+[ 135. , 45.]
+```
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1506,7 +1660,7 @@ See also:
 * `arg` for the angle of a complex number.
 
 
-### `atand` (Opcode 59)
+### `atand` (Arctangent, in Degrees, for Real Numbers)
 |Syntax||
 |-|-|
 |TDI Syntax   | `atand(arg0)` |
@@ -1514,13 +1668,17 @@ See also:
 |Min arguments| 1|
 |Max arguments| 1|
 
-Arctangent or inverse tangent. Processor approximation to arctan(X) in degrees.
-* X must be real and be less than 1 in magnitude.
-* Complex numbers cause an error.
-* Results lie in the range -90 to 90.
+Arctangent or inverse tangent. Processor approximation to `arctan(X)` in degrees.
+* `_NUM` argument must be real and be less than 1 in magnitude.
+* Complex numbers cause error.
+* Results lie in the range `-90` to `90`.
 
 Examples
-* `ATAND(1.0)` returns `45.0`.
+
+```tdi
+TDI> ATAND(1.0)
+45.0
+```
 
 See also:
 * `atan` for real numbers, in radians.
@@ -1531,160 +1689,160 @@ See also:
 
 
 
-### `atanh` (Opcode 60)
+### `ATANH` (Hyperbolic Arctangent, for Real Numbers)
 |Syntax||
 |-|-|
-|TDI Syntax   | `atanh(_NUM)` |
+|TDI Syntax   | `ATANH(_NUM)` |
 |Python Syntax| `MDSplus.ATANH(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|60|
 
-TODO: COME BACK TO THIS ONE. IT DOESN'T SEEM TO BE WORKING??
+This is currently broken.
 
-Mathematical Elemental.
 Hyperbolic arctangent (inverse tangent).
-|Arguments, Results|X must be real. Complex numbers cause an error.
-|Signals      |Same as X.
-|Units        |None, bad if X has units.
-|Form         |Real of same shape.
-|Result       |Processor approximation to arctanh(X) in radians.
-|Examples     |ATANH(0.7615942) is 1.0, approximately. // TODO: Figure out why this isn't evaluating per what's written here
+* `_NUM` argument must be real. Complex numbers cause error.
 
+Examples
 
-### `axis_of` (Opcode 61)
+```tdi
+TDI> ATANH(0.7615942)
+1.0
+```
+
+### `AXIS_OF` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `axis_of(arg0)` |
 |Python Syntax| `MDSplus.axis_of(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode 61|
 
-TODO: COME BACK TO THIS ONE
+This is deprecated.
 
 Get the axis field.
-|Arguments, Results|
-
-A is searched for these:
-* DSC$K_DTYPE_DIMENSION, the axis field.
-* DSC$K_DTYPE_RANGE, the range.
-* DSC$K_DTYPE_SLOPE, the slope, !deprecated!.
-* Otherwise, an error.
-|Examples     |AXIS_OF(BUILD_DIM(BUILD_WINDOW(B,E,X0),1:10)) is 1:10.
-
-
-### `BEGIN_OF` (Opcode 64)
-|Syntax||
-|-|-|
-|TDI Syntax   | `BEGIN_OF(arg0,arg1)` |
-|Python Syntax| `MDSplus.BEGIN_OF(arg0,arg1)` |
-|Min arguments| 1|
-|Max arguments| 2|
-
-TODO: COME BACK TO THIS ONE. Why does `1:10` work but not an array consisting of the numbers 1-10?
-
-MDS Operation
-Get the begin field.
-Arguments Optional: N.
-A as below.
-N integer scalar, for slopes from 1 to the number of segments less one. The first segment has no beginning if the axis is infinite.
-
-A is searched for these:
-* DSC$K_DTYPE_RANGE, the begin field (may be an array).
-* DSC$K_DTYPE_SLOPE, N-th segment's begin field !deprecated!.
-* DSC$K_DTYPE_WINDOW, the startidx field.
+Argument is searched for these:
+* `DSC$K_DTYPE_DIMENSION`, the axis field.
+* `DSC$K_DTYPE_RANGE`, the range.
+* `DSC$K_DTYPE_SLOPE`, the slope, !deprecated!.
 * Otherwise, an error.
 
 Examples
-* `BEGIN_OF(1:10)` is 1.
+
+```tdi
+TDI> AXIS_OF(BUILD_DIM(BUILD_WINDOW(B,E,X0),1:10))
+1:10
+```
+
+
+### `BEGIN_OF`
+|Syntax||
+|-|-|
+|TDI Syntax   | `BEGIN_OF(_A, [_N])` |
+|Python Syntax| `MDSplus.BEGIN_OF(_A, [_N])` |
+|Min arguments| 1|
+|Max arguments| 2|
+|Opcode|64|
+
+Gets the `begin` field of things that have a `begin` field (ranges, slopes, windows, etc.).
+TODO: reword this as needed
+
+Arguments 
+* `_A` is searched for these:
+    * `DSC$K_DTYPE_RANGE`, the begin field (may be an array).
+    * `DSC$K_DTYPE_SLOPE`, N-th segment's begin field !deprecated!.
+    * `DSC$K_DTYPE_WINDOW`, the startidx field.
+    * Otherwise, an error.
+
+* `_N` optional: integer scalar, for slopes from 1 to the number of segments less one. The first segment has no beginning if the axis is infinite.
+
+
+Examples
+
+```tdi
+TDI> BEGIN_OF(1:10)
+1
+```
 
 See also: 
 * `end_of`
 
-### `bit_size` (Opcode 411)
+### `BIT_SIZE` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `bit_size(_ARG)` |
-|Python Syntax| `MDSplus.bit_size(_ARG)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|TDI Syntax   | `BIT_SIZE(_ARG)` |
+|Python Syntax| `MDSplus.BIT_SIZE(_ARG)` |
+|Opcode|411|
 
 Returns the length of integer or other type in bits.
 * input can be any type, scalar or array.
 * for arrays, returns the size of an individual element, not the whole array
 
 Examples
-* `bit_size(1)` returns `32`.
+
+```tdi
+TDI> bit_size(1)
+32
+```
 
 
 
-### `break` (Opcode 66)
+### `BREAK` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `break` |
-|Python Syntax| `MDSplus.break` |
-|Min arguments| 0|
-|Max arguments| 0|
+|TDI Syntax   | `BREAK` |
+|Python Syntax| `MDSplus.BREAK()` |
+|Opcode 66|
 
-Breaks from a `for` or `while` loop or `switch` statement. To be included in a `fun` script.
-* Can be used  with or without the parenthesis: `break` or `break()` [? SEE TODO BELOW]
+Breaks from a `for` or `while` loop or `switch` statement.
+* To be included in a `fun` script.
 
-TODO: COME BACK TO THIS. EXPLORE THE 'SYNTACTICALLY INVALID` PIECE FURTHER?
-CC Statement.
-Break from FOR or WHILE loops or SWITCH.
-Usual Form BREAK;
-Function Form BREAK(). May be syntatically invalid.
 
 Examples
-```
-<!-- old example -->
-FOR (_J=DSIZE(_X); --J>=0; ) IF (_X[_J]) BREAK; IF (_J < 0) ABORT();
-is a lousy way to do IF (!ALL(_X)) ABORT();.
-```
-
-```
-<!-- new example -->
-for(_j=0; _j < 5; _j+=1) IF (_j == 3) break; IF (_j>=5) abort();
-_j
+```tdi
+TDI> for(_j=0; _j < 5; _j+=1) IF (_j == 3) break; IF (_j>=5) abort();
+TDI> _j
 3
 ```
 
-### `bsearch` (Opcode 67)
+### `bsearch` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `bsearch(_KEY, _TABLEARRAY, _MODE, arg3)` |
+|TDI Syntax   | `bsearch(_KEY, _TABLEARRAY, [_MODE], arg3)` |
 |Python Syntax| `MDSplus.bsearch(arg0,arg1,arg2,arg3)` |
 |Min arguments| 2|
 |Max arguments| 4|
+|Opcode|67|
 
 TODO: Come back to this, investigate Arg2 and Arg3 further
 
 Binary search in a sorted table.
-Arguments Optional: MODE.
-X integer, real, or text, scalar or array. No complex.
-TABLE ascending-sorted, scalar or array. Should be integer, real, or text.
-MODE integer scalar, default is 0.
-|Signals      |Same as X.
-|Units        |None.
-|Form         |Integer offset in table of match.
-|Result       |
-The offset in TABLE whose value matches X.
-For each list element k and matching table element j:
-1. `MODE=0, TABLE[j] == X[k]` with result range 0 to n-1,
-    where n is the number of elements in TABLE
-    or -1 if no exactly matching element number.
-2. `MODE=+1, TABLE[j] <= X[k] < TABLE[j+1]` with result range -1 to n.
-3. `MODE=-1, TABLE[j-1] < X[k] < TABLE[j]` with result range 0 to n+1.
-Effectively, TABLE[-1] is negative infinity and TABLE[n] is positive infinity.
 
+Arguments
+* `_KEY` integer, real, or text, scalar or array. No complex.
+* `_TABLEARRAY` ascending-sorted, scalar or array. Should be integer, real, or text.
+* `[_MODE]` optional: integer scalar, default is 0.
+* `_arg3` TODO: investigate and come back to this. probably kind
 
+Returns:
+* The offset in TABLE whose value matches X.  
+* Integer offset in table of match.
+* For each list element k and matching table element j:
+    1. `MODE=0, TABLE[j] == X[k]` with result range 0 to n-1, where n is the number of elements in TABLE or -1 if no exactly matching element number.
+    2. `MODE=+1, TABLE[j] <= X[k] < TABLE[j+1]` with result range -1 to n.
+    3. `MODE=-1, TABLE[j-1] < X[k] < TABLE[j]` with result range 0 to n+1.
+
+Effectively, `TABLE[-1]` is negative infinity and `TABLE[n]` is positive infinity.
 
 Examples:
-* `BSEARCH(3,1:10)` is `2`.
-* `BSEARCH(1:8,3:5)` is `[-1,-1,0,1,2,-1,-1,-1]`.
-* `MAP(1:10,BSEARCH(3.9,1:10,1))` is `3`.
+```
+TDI> BSEARCH(3,1:10)
+2
 
-* apparently sortval ([3,2,1,5,4]) will give you [1,2,3,4,5] // TODO: is this the same as map()?
-    ```
+TDI> BSEARCH(1:8,3:5)
+[-1,-1,0,1,2,-1,-1,-1]
+
+TDI> MAP(1:10,BSEARCH(3.9,1:10,1))
+3
+
+# TODO: apparently sortval ([3,2,1,5,4]) will give you [1,2,3,4,5]. Is this the same as map()?
     _a = [3, 2, 4, 1]
     [3,2,4,1]
     sort (_a)
@@ -1693,71 +1851,55 @@ Examples:
     [1,2,3,4]
     bsearch(2, map(_a,sort(_a)))
     1
-    ```
+```
     
 `See also:
  `SORT` and `SORTI` for data and index sorting.
 * `MAP` to pick the selected elements.
 
-Numeric and Character Elemental.
 
 
-### `btest` (Opcode 69)
+### `BTEST` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `btest(_BIT_FIELD, _POWEROF2)` |
-|Python Syntax| `MDSplus.btest(_BIT_FIELD, _POWEROF2)` |
-|Min arguments| 2|
-|Max arguments| 2|
+|TDI Syntax   | `BTEST(_BIT_FIELD, _POWEROF2)` |
+|Python Syntax| `MDSplus.BTEST(_BIT_FIELD, _POWEROF2)` |
+|Opcode|69|
 
-This function preforms a bit-wise calculation to see if a specific bit in a bitfield is set by providing a bitfield and a postion(power of 2) to compare. 
+This function preforms a bit-wise calculation to see if a specific bit in a bitfield is set by providing a bitfield and a postion (power of 2) to compare. 
 * True is returned if the bit at the provided position is 1; and false otherwise.
 * If first argument is a scalar, second argument can be an array of any length
 * The first argument should be a a bit field
 * If both arguments are arrays, they must match in length
 * The second argument (_POWEROF2) reads from the rightmost bit to the left.
 
-Examples:
-* `btest(5, [0, 1, 2, 3])` returns `Byte_Unsigned([1,0,1,0])` (hint: 5 in binary is 0101)
-* `btest(8,3)` returns `$TRUE`.
+Examples
 
-TODO: bug here to be investigated further. this is the old example:
+```TDI
+TDI> btest(5, [0, 1, 2, 3])
+Byte_Unsigned([1,0,1,0])
+# (hint: 5 in binary is 0101)
+
+TDI> btest(8,3)
+1BU
+
+# TODO: bug here to be investigated further. this is the old example...
 * if _A = Set_range(2,2,[1,3,2,4]):  
     * `btest(_A,2)` returns Set_Range(2,2,[$FALSE,$FALSE,$FALSE,$TRUE]).
     * `btest(2,_A)` returns Set_Range(2,2,[$TRUE,$FALSE,$FALSE,$FALSE]).
 
-TODO: this is what it actually returns; investigate further
+# ...but this is what it actually returns; investigate further
 _A = Set_range(2,2,[1,3,2,4])
 `btest(_A,2)`
 `Byte_Unsigned([[0,0], [0,0]])`
 `btest(2,_A)`
 `Byte_Unsigned([[1,0], [0,0]])`
+```
 
 See also:
 * `ibclr` to clear
 * `bits` to extract
 * `ibset` to set
-
-TODO: delete the text below before publishing. this is for reference:
-
-```
-TDI> btest(15,0)
-1BU
-TDI> btest(15,1)
-1BU
-TDI> btest(15,2)
-1BU
-TDI> btest(15,3)
-1BU
-TDI> btest(15,4)
-0BU 
-```
-
-15 is 01111
-
-0, 1, 2, 3, 4 
-1, 1, 1, 1, 0  
-1, 2, 4, 8, 16 
 
 
 ## Build Functions
@@ -1766,15 +1908,16 @@ Note:
 * Use BUILD_xxx for immediate structure building.
 * Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 
-TODO: Come back to the BUILD_ and MAKE_ functions? will likely require deeper investigation
+TODO: Come back to the BUILD_ and MAKE_ functions? These will all likely require deeper investigation
 
-### `build_action` (Opcode 70)
+### `build_action` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `build_action(arg0,arg1,arg2,arg3,arg4)` |
 |Python Syntax| `MDSplus.build_action(arg0,arg1,arg2,arg3,arg4)` |
 |Min arguments| 2|
 |Max arguments| 5|
+|Opcode|70|
 
 Make an action descriptor.
 Arguments
@@ -1792,13 +1935,14 @@ has only dispatch and task.
 
 See also: Build Functions,  make_action
 
-### `BUILD_CALL` (Opcode 397)
+### `BUILD_CALL`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_CALL(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_CALL(arg0,arg1,argn,...)` |
 |Min arguments| 3|
 |Max arguments| 254|
+|Opcode 397|
 
 |Return Type  |MDS Operation |
 Make a call of a routine in a sharable image.
@@ -1823,13 +1967,14 @@ the slow and hard way to do SIND(30.).
 |See also     |CALL for info on argument form and type of output.
 
 
-### `BUILD_CONDITION` (Opcode 71)
+### `BUILD_CONDITION`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_CONDITION(arg0,arg1)` |
 |Python Syntax| `MDSplus.BUILD_CONDITION(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|71|
 
 |Return Type  |MDS Operation |
 Make a condition descriptor.OBSOLETE. NO LONGER SUPPORTED.
@@ -1846,13 +1991,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |See also     |BUILD_DEPENDENCY BUILD_EVENT and COMPILE_DEPENDENCY.
 
 
-### `BUILD_CONGLOM` (Opcode 72)
+### `BUILD_CONGLOM`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_CONGLOM(arg0,arg1,arg2,arg3)` |
 |Python Syntax| `MDSplus.BUILD_CONGLOM(arg0,arg1,arg2,arg3)` |
 |Min arguments| 4|
 |Max arguments| 4|
+|Opcode|72|
 
 |Return Type  |MDS Operation |
 Make a conglomerate descriptor.
@@ -1867,13 +2013,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |None, normally done by module add routines.
 
 
-### `BUILD_DEPENDENCY` (Opcode 73)
+### `BUILD_DEPENDENCY`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_DEPENDENCY(arg0,arg1,arg2)` |
 |Python Syntax| `MDSplus.BUILD_DEPENDENCY(arg0,arg1,arg2)` |
 |Min arguments| 3|
 |Max arguments| 3|
+|Opcode|73|
 
 |Return Type  |MDS Operation |
 Make a dependency descriptor.
@@ -1890,13 +2037,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |See also     |BUILD_CONDITION BUILD_EVENT and COMPILE_DEPENDENCY.
 
 
-### `BUILD_DIM` (Opcode 74)
+### `BUILD_DIM` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_DIM(arg0,arg1)` |
 |Python Syntax| `MDSplus.BUILD_DIM(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|74|
 
 |Return Type  |MDS Operation |
 Make a dimension descriptor.
@@ -1917,13 +2065,14 @@ makes dimension with value
 SET_RANGE(-1:3, [7.,10.,13.,16.,19.]).
 
 
-### `BUILD_DISPATCH` (Opcode 75)
+### `BUILD_DISPATCH` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_DISPATCH(arg0,arg1,arg2,arg3,arg4)` |
 |Python Syntax| `MDSplus.BUILD_DISPATCH(arg0,arg1,arg2,arg3,arg4)` |
 |Min arguments| 5|
 |Max arguments| 5|
+|Opcode|75|
 
 |Return Type  |MDS Operation |
 Make a dispatch descriptor.
@@ -1942,13 +2091,12 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |None, normally done by module add routine.
 
 
-### `BUILD_EVENT` (Opcode 76)
+### `BUILD_EVENT`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_EVENT(arg0)` |
 |Python Syntax| `MDSplus.BUILD_EVENT(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|76|
 
 |Return Type  |MDS Operation |
 Make an event descriptor.
@@ -1960,13 +2108,14 @@ descriptors.
 |See also     |BUILD_CONDITION BUILD_DEPENDENCY and COMPILE_DEPENDENCY.
 
 
-### `BUILD_FUNCTION` (Opcode 77)
+### `BUILD_FUNCTION` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_FUNCTION(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_FUNCTION(arg0,arg1,argn,...)` |
 |Min arguments| 1|
 |Max arguments| 254|
+|Opcode|77|
 
 |Return Type  |MDS Operation |
 Make a function descriptor.
@@ -1980,13 +2129,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 expression SIN(30).
 
 
-### `BUILD_METHOD` (Opcode 78)
+### `BUILD_METHOD`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_METHOD(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_METHOD(arg0,arg1,argn,...)` |
 |Min arguments| 3|
 |Max arguments| 254|
+|Opcode|78|
 
 |Return Type  |MDS Operation |
 Make a method descriptor.
@@ -2001,13 +2151,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |None, normally done by module add routine.
 
 
-### `BUILD_OPAQUE` (Opcode 454)
+### `BUILD_OPAQUE` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_OPAQUE(arg0,arg1)` |
 |Python Syntax| `MDSplus.BUILD_OPAQUE(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|454|
 
 |Return Type  |MDS Operation |
 Construct an Opaque object consisting of a byte array and a description string.
@@ -2027,13 +2178,14 @@ A series of Opaque objects can be stored as individual
 segments in a tree node.
 
 
-### `build_param` (Opcode 79)
+### `BUILD_PARAM`
 |Syntax||
 |-|-|
 |TDI Syntax   | `build_param(_VALUE, _HELP, _VALIDATION)` |
 |Python Syntax| `MDSplus.build_param(_VALUE, _HELP, _VALIDATION)` |
 |Min arguments| 3|
 |Max arguments| 3|
+|Opcode|79|
 
 * Makes a parameter descriptor.
 * Arguments
@@ -2054,13 +2206,14 @@ Examples
 then `data({_PARAM})` is `42.0` and `validation({_PARAM})` returns `1BU`.
 
 
-### `BUILD_PATH` (Opcode 80)
+### `BUILD_PATH`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_PATH(arg0)` |
 |Python Syntax| `MDSplus.BUILD_PATH(arg0)` |
 |Min arguments| 1|
 |Max arguments| 1|
+|Opcode|80|
 
 |Return Type  |MDS Operation |
 Make a path (tree location) descriptor.
@@ -2071,13 +2224,14 @@ Immediate at compilation.
 evaluated.
 
 
-### `BUILD_PROCEDURE` (Opcode 81)
+### `BUILD_PROCEDURE` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_PROCEDURE(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_PROCEDURE(arg0,arg1,argn,...)` |
 |Min arguments| 3|
 |Max arguments| 254|
+|Opcode|81|
 
 |Return Type  |MDS Operation |
 Make a procedure call
@@ -2093,13 +2247,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |None, normally done by module add routine.
 
 
-### `BUILD_PROGRAM` (Opcode 82)
+### `BUILD_PROGRAM` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_PROGRAM(arg0,arg1)` |
 |Python Syntax| `MDSplus.BUILD_PROGRAM(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|82|
 
 |Return Type  |MDS Operation |
 Make a procedure call
@@ -2115,13 +2270,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |None, normally done by module add routine.
 
 
-### `BUILD_RANGE` (Opcode 83)
+### `BUILD_RANGE`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_RANGE(arg0,arg1,arg2)` |
 |Python Syntax| `MDSplus.BUILD_RANGE(arg0,arg1,arg2)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|83|
 
 |Return Type  |MDS Operation |
 Make a range descriptor.
@@ -2146,13 +2302,14 @@ WARNINGS, the colon (:) form may be confused with a tree member and the dot-dot 
 Examples. 2:5 becomes [2,3,4,5] and 2:5:1.8 becomes [2.,3.8].
 
 
-### `BUILD_ROUTINE` (Opcode 84)
+### `BUILD_ROUTINE`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_ROUTINE(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_ROUTINE(arg0,arg1,argn,...)` |
 |Min arguments| 3|
 |Max arguments| 254|
+|Opcode|84|
 
 |Return Type  |MDS Operation |
 Make a routine descriptor.
@@ -2167,13 +2324,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |BUILD_ROUTINE(1.2,MYIMAGE,MYROUTINE,5).
 
 
-### `BUILD_SIGNAL` (Opcode 85)
+### `BUILD_SIGNAL`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_SIGNAL(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_SIGNAL(arg0,arg1,argn,...)` |
 |Min arguments| 2|
 |Max arguments| 10|
+|Opcode|85|
 
 |Return Type  |MDS Operation |
 Make data with dimensions.
@@ -2200,13 +2358,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 Use this form if IMAGE or ROUTINE must be expressions.
 
 
-### `BUILD_SLOPE` (Opcode 86)
+### `BUILD_SLOPE`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_SLOPE(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.BUILD_SLOPE(arg0,arg1,argn,...)` |
 |Min arguments| 1|
 |Max arguments| 254|
+|Opcode|86|
 
 |Return Type  |MDS Operation |
 Make a piece-wise linear slope-axis for dimension.
@@ -2239,13 +2398,14 @@ Often BEGIN[j+1] is the same as END[j] + SLOPE[j] as in
 a clock that does not stop but does change rate.
 
 
-### `BUILD_WINDOW` (Opcode 87)
+### `BUILD_WINDOW`
 |Syntax||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
 |Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
 |Min arguments| 3|
 |Max arguments| 3|
+|Opcode|87|
 
 |Return Type  |MDS Operation |
 Make a window descriptor for a dimension.
@@ -2262,13 +2422,14 @@ Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |BUILD_WINDOW(-1024,7168,BUILD_WITH_UNIT(-0.1,'s'))
 
 
-### `BUILD_WITH_ERROR` (Opcode 445)
+### `BUILD_WITH_ERROR`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILD_WITH_ERROR(arg0,arg1)` |
 |Python Syntax| `MDSplus.BUILD_WITH_ERROR(arg0,arg1)` |
 |Min arguments| 2|
 |Max arguments| 2|
+|Opcode|445|
 
 |Return Type  |MDS Operation |
 Make a data with error structure.
@@ -2282,22 +2443,16 @@ Example:
 _A0 = Build_With_Error(52.9177E-12, 2400E-21)
 
 
-### `BUILD_WITH_UNITS` (Opcode 88)
-
-|Return Type  |MDS Operation | Make a describe data with units.
-
-Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V'`) or similar. Note this could also have been `BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6, BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2')`. |
+### `BUILD_WITH_UNITS` 
 
 |Syntax||
 |-|-|
-| TDI syntax | `BUILD_WITH_UNITS(arg0,arg1)` |
-| Python Syntax | `MDSplus.BUILD_WITH_UNITS(arg0,arg1)` TODO: Confirm |
+|TDI syntax | `BUILD_WITH_UNITS(arg0,arg1)` |
+|Python Syntax | `MDSplus.BUILD_WITH_UNITS(arg0,arg1)` TODO: Confirm |
+|Min Arguments | 2 |
+|Max arguments | 2 |
+|Opcode 88|
 
-
-|I/O||
-|-|-|
-| Min Arguments | 2 |
-| Max arguments | 2 |
 |DATA | any expression that DATA(this) will be valid. |
 |UNITS | character string. See the primary section on "Units".|
 |Result | Class-R descriptor. <BR> Use `BUILD_xxx` for immediate structure building. <BR> Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
@@ -2317,88 +2472,101 @@ BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6,
 BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2').
 
 
-### `builtin_opcode` (Opcode 89)
+
+Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V'`) or similar. Note this could also have been `BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6, BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2')`. |
+
+
+
+
+### `builtin_opcode`
 |Syntax||
 |-|-|
 |TDI Syntax   | `BUILTIN_OPCODE(_BUILTINNAME)` |
 |Python Syntax| `MDSplus.BUILTIN_OPCODE(_BUILTINNAME)` |
 |Min arguments| 1|
 |Max arguments| 1|
+|Opcode|89|
 
 
 Takes a string that is the name of any builtin with an opcode and returns that opcode. 
 
 Examples
-* `BUILTIN_OPCODE('$')` returns `0W`.
-* `builtin_opcode('$PI')` returns `22W`
-* `builtin_opcode('add')` returns `38W`
-* `builtin_opcode('subtract')` returns `336W`
-* `builtin_opcode('multiply')` returns `247W`
-* `builtin_opcode('builtin_opcode')` returns `89W`
 
+```tdi
+TDI> BUILTIN_OPCODE('$')
+0W
 
-### `byte` (Opcode 90)
+TDI> builtin_opcode('$PI')
+22W
+
+TDI> builtin_opcode('add')
+38W
+
+TDI> builtin_opcode('subtract')
+336W
+
+TDI> builtin_opcode('multiply')
+247W
+
+TDI> builtin_opcode('builtin_opcode')
+89W
+```
+
+### `byte`
 |Syntax||
 |-|-|
 |TDI Syntax   | `byte(_NUM)` |
 |Python Syntax| `MDSplus.byte(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|90|
 
 Converts a number to a one-byte integer.
 * Argument must be numeric.
-* Returns the truncated whole part of the argument. Immediate at compilation. 
+* Returns the truncated whole part of the argument.
+* Immediate at compilation. 
 * Warning: truncation does not cause an error.
-
-|Signals      |Same as A. 
-|Units        |Same as A. 
-|Form         |Byte-length integer of same shape.
 
 Examples
 `BYTE(123)` returns `123B`.
 `BYTE(257)` returns `1B`.
 
 
-00000000
 
-100000001
-00000001
-
-### `byte_unsigned` (Opcode 91)
+### `BYTE_UNSIGNED` 
 
 |Syntax||
 |-|-|
-|TDI Syntax   | `byte_unsigned(_NUM)` |
-|Python Syntax| `MDSplus.byte_unsigned(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `BYTE_UNSIGNED(_NUM)` |
+|Python Syntax| `MDSplus.BYTE_UNSIGNED(_NUM)` |
+|Opcode|91|
 
-Conversion Elemental.
 Convert a number to a one-byte unsigned integer.
 * Argument must be numeric.
 * Returns the truncated whole part of the argument. Immediate at compilation. 
 * Warning: truncation does not cause an error.
 
 Examples
-* `byte_unsigned(123)` returns `123BU`.
-* `BYTE_UNSIGNED(257)` is `1BU`.
+```tdi
+TDI> byte_unsigned(123)
+123BU
+
+TDI> BYTE_UNSIGNED(257)
+1BU
+```
 
 
-## C
-
-
-### `CASE` (Opcode 92)
+### `CASE`
 |Syntax||
 |-|-|
 |TDI Syntax   | `CASE(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.CASE(arg0,arg1,argn,...)` |
 |Min arguments| 2|
 |Max arguments| 254|
+|Opcode|92|
 
 TODO: come back to this and test with a file.
 
 CC-F90 Modified Statement.
-Do statement if SWITCH test matches value. Required Usual Form CASE (X) STMT. >>>>>>>>>WARNING, the parentheses are required here, unlike in C.
+Do statement if SWITCH test matches value. Required Usual Form CASE (X) STMT. 
 Note F90 uses SELECT CASE (X) ... END CASE. Function Form CASE(X,STMT,...). May be syntatically invalid.
 
 Arguments
@@ -2422,53 +2590,63 @@ SWITCH (_k) {
 
 See also `default`, `switch`
 
-### `ceiling` (Opcode 93)
+### `CEILING` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `ceiling(_NUM)` |
-|Python Syntax| `MDSplus.ceiling(_NUM)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `CEILING(_NUM)` |
+|Python Syntax| `MDSplus.CEILING(_NUM)` |
+|Opcode|93|
 
 Takes a number and rounds up to the nearest whole number.
 * Argument must be real. Complex numbers cause an error.
 
-Examples.
-* `CEILING(2.783)` returns `3.0`.
-* `CEILING(-2.783)` returns `-2.0`.
+Examples
+
+```
+TDI> CEILING(2.783)
+3.0
+
+TDI> CEILING(-2.783)
+-2.0
+```
 
 See also: `floor`
 
-### `char` (Opcode 94)
+### `CHAR` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `char(_INDEX)` |
-|Python Syntax| `MDSplus.char(_INDEX)` |
+|TDI Syntax   | `CHAR(_INDEX)` |
+|Python Syntax| `MDSplus.CHAR(_INDEX)` |
 |Min arguments| 1|
 |Max arguments| 2|
+|Opcode|94|
 
 The character in a specified position of the ASCII collating sequence. The inverse of `ICHAR`.
-TODO: the ACHAR description says CHAR & ICHAR are "processor dependent" -- investigate.
 
 * argument must be an integer
 * can also receive signals and units as long as 
 I must be integer.
 For j between 0 and 127, the result is the character in position j of the ASCII collating sequence; otherwise, the result is processor dependent. It is truncated to 8 bits on the VAX.
 
-Examples:
-* `char(67)` returns `"C"`
-* `char([72, 101, 108, 108, 111])` returns `["H","e","l","l","o"]`
+Examples
+```tdi
+TDI> char(67) 
+"C"
+
+TDI> char([72, 101, 108, 108, 111])
+["H","e","l","l","o"]
+```
 
 See also: `achar`, `ichar`
 
 
-### `class` (Opcode 95)
+### `CLASS` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `class(arg0)` |
 |Python Syntax| `MDSplus.class(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|95|
+
 
 Class of data storage descriptor.
 * Argument may be any descriptor.
@@ -2476,21 +2654,31 @@ Class of data storage descriptor.
 * Descriptor data types `(DSC$K_DTYPE_DSC)` are removed.
 * Use `CLASS` for data class without NID, PATH, or variable. 
 * Use `CLASS_OF` for data class including them.
+TODO: STEPHEN TO INVESTIGATE
 
 Examples
-* `CLASS(3)` returns `1BU (DSC$K_CLASS_S)`  
-* `CLASS([])` returns `4BU (DSC$K_CLASS_A)`
-* `CLASS(_A)` returns the class of the value in variable `_A`.
+```tdi
+# TODO: Confirm these outputs
+# CLASS_S
+TDI> CLASS(3)
+1BU
+
+# CLASS_A
+TDI> CLASS([])
+4BU
+
+#The following will return the class of the value in variable `_A`
+TDI> CLASS(_A)
+
+```
 
 
-
-### `class_of` (Opcode 435)
+### `CLASS_OF` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `class_of(arg0)` |
-|Python Syntax| `MDSplus.class_of(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|TDI Syntax   | `CLASS_OF(arg0)` |
+|Python Syntax| `MDSplus.CLASS_OF(arg0)` |
+|Opcode|435|
 
 Class of data storage descriptor.
 * Argument may be any descriptor.
@@ -2500,20 +2688,27 @@ Class of data storage descriptor.
 * Use `CLASS_OF` for data class including them.
 
 Examples
-* `CLASS_OF(3)` returns `1BU (DSC$K_CLASS_S)`
-* `CLASS_OF([])` returns `4BU (DSC$K_CLASS_A)` 
-* `CLASS(_A)` returns `1BU (DSC$K_CLASS_S)`
+```tdi
+# TODO: Confirm these outputs
 
+TDI> CLASS_OF(3)
+1BU (DSC$K_CLASS_S)
 
-### `cmplx` (Opcode 97)
+TDI> CLASS_OF([])
+4BU (DSC$K_CLASS_A)
+
+TDI> CLASS(_A)
+1BU (DSC$K_CLASS_S)
+```
+
+### `CMPLX` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `cmplx(_REALNUM, _IMAGINARYNUM, [_KIND])` |
-|Python Syntax| `MDSplus.cmplx(_REALNUM, _IMAGINARYNUM, [_KIND])` |
+|TDI Syntax   | `CMPLX(_REALNUM, _IMAGINARYNUM, [_KIND])` |
+|Python Syntax| `MDSplus.CMPLX(_REALNUM, _IMAGINARYNUM, [_KIND])` |
 |Min arguments| 1 |
 |Max arguments| 3 |
-
-|Return Type  |F90 Conversion Elemental |
+|Opcode|97|
 
 Creates a complex number.
 * First argument is the real component. 
@@ -2523,31 +2718,29 @@ Creates a complex number.
 * WARNING: truncation does not cause an error.
 
 Examples:
-* `cmplx(-3)` is `cmplx(-3.0,0.0)`. 
-* `cmplx(3,4,5d6)` is `cmplx(3d0,4d0)`.
-
-TODO: OLD CONTENT HERE FOR REFERENCE. COME BACK TO 'KIND' AFTER FURTHER INVESTIGATION
-Arguments Optional: Y, KIND. X numeric. Y numeric. Default is zero. KIND scalar integer type number, for example, KIND(1d0).
-Default is compatible form of X and Y.
-|Signals      |Single signal or smaller data. 
-|Units        |Single or common units, else bad. 
-|Form         |Complex. If KIND present, the complex type KIND; otherwise, the complex type of X and Y. The compatible shape of X and Y.
-|Result       |Type KIND if it is present, else complex of compatible type of X and Y. If Y is absent and X is not complex, it is as if Y were present with value zero. If Y is absent and X is complex, it is as if Y were present with the value AIMAG(X). If both are present, the real parts of X and Y are used. If KIND is absent, it is ignored; otherwise, CMPLX(X,Y,KIND) has real part REAL(X,KIND) and imaginary part REAL(Y,KIND). Immediate at compilation.
+TDI> cmplx(-3)` is `cmplx(-3.0,0.0)`. 
+TDI> cmplx(3,4,5d6)` is `cmplx(3d0,4d0)`.
 
 
-### `comma` (Opcode 98)
+
+### `COMMA`
 |Syntax||
 |-|-|
 |TDI Syntax   | `comma(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.comma(arg0,arg1,argn,...)` |
 |Min arguments| 2|
 |Max arguments| 254|
+|Opcode|98|
 
 Evaluates each argument, returns results only from the last argument.
 * Arguments may be expressions.
 * Note that used as an argument of a function, it must be parenthesized.
 
-`comma(_a=3, _b=4, _a + _b)` returns `7` and the variables `_a` and `_b` will be set.
+```tdi
+TDI> comma(_a=3, _b=4, _a + _b)`
+7 
+# the variables `_a` and `_b` will also be set
+```
 
 
 ### `compile` (Opcode 99)
@@ -2563,51 +2756,45 @@ Convert a text string into a functional form of the expression with the possibil
 * Comments cannot be recovered by `decompile`. 
 
 Optional Arguments: 
-* STRING character scalar. 
-> TODO: COME BACK TO THIS. We should investigate '$k' here and change '$k' to something else, since $k is also the boltzman constant
+* `_STRING` character scalar. 
 * Other expressions that may be accessed as $a where a runs from 1 to the number of additional arguments.
-> TODO: COME BACK TO THIS. INVESTIGATE 'DEP'
-* `dep | dep` Is logical OR of dependencies. ( dep ) Allows grouping.
-* Immediate at compilation.
+
+Examples
+```
+TDI> compile("add(1, 2)")
+1 + 2
+
+TDI> compile ("$+$+$", _a, _b, _c)
+_a + _b + _c
+```
 
 See also: `decompile`, `rem` to retain a comment, `execute`
 
-Examples:
-* `compile("add(1, 2)")` returns `1 + 2`
-* `compile ("$+$+$", _a, _b, _c)` returns `_a + _b + _c`
 
 
-
-
-### `completion_message_of` (Opcode 442)
+### `completion_message_of` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `completion_message_of(arg0)` |
 |Python Syntax| `MDSplus.completion_message_of(arg0)` |
-|Min arguments| 1|
-|Max arguments| 1|
+|Opcode|442|
 
 MDS Operation
 Get the completion field.
-A is searched for this: DSC$K_DTYPE_ACTION, the completion_message field.
+Argument is searched for this: DSC$K_DTYPE_ACTION, the completion_message field.
 Otherwise, an error.
 
 See also build functions
 
 TODO: COME BACK TO THIS
 
----
-## Bookmark for internal use--regex used starting here
----
 
-
-### `completion_of` (Opcode 100)
+### `completion_of` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `completion_of(arg0)` |
 |Python Syntax| `MDSplus.COMPLETION_OF(arg0)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|Opcode|100|
 
 |Return Type  |MDS Operation |
 Get the completion field.
@@ -2618,32 +2805,42 @@ TODO: COME BACK TO THIS
 See also build functions, dispatch
 
 
-### `concat` (Opcode 101)
+### `concat`
 |Syntax||
 |-|-|
 |TDI Syntax   | `concat(_STRING0, _STRING1, ..., _STRINGN)` or `_STRING0 // _STRING1`|
 |Python Syntax| `MDSplus.concat(_STRING0, _STRING1, ..., _STRINGN)` |
 |Min arguments| 2  |
 |Max arguments| 254|
+|Opcode|10|
 
 Concatenates text strings.
 * Limit 253 character expressions.
 
 Examples:
-* `concat("he", "ll", "o")` returns `"hello"`
-* `ABC // DEF` returns `"ABCDEF"`
-* `concat("Hello ", ["Mark", "Tim", "Stephen"])` returns `["Hello Mark   ", "Hello Tim    ", "Hello Stephen"]`
-* `concat(["Hello ", "Hi ", "Howdy "], ["Mark", "Tim", "Stephen"])` returns `["Hello Mark   ","Hi    Tim    ","Howdy Stephen"]`
+```
+TDI> concat("he", "ll", "o")
+"hello"`
+
+TDI> ABC // DEF
+"ABCDEF"`
+
+TDI> concat("Hello ", ["Mark", "Tim", "Stephen"])
+["Hello Mark   ", "Hello Tim    ", "Hello Stephen"]
+
+TDI> concat(["Hello ", "Hi ", "Howdy "], ["Mark", "Tim", "Stephen"])
+["Hello Mark   ","Hi    Tim    ","Howdy Stephen"]
+```
 
 
-
-### `conditional` (Opcode 102)
+### `conditional`
 |Syntax||
 |-|-|
-|TDI Syntax   | `conditional(arg0,arg1,arg2)` |
-|Python Syntax| `MDSplus.conditional(arg0,arg1,arg2)` |
+|TDI Syntax   | `conditional(_TSOURCE, _FSOURCE, _MASK)` |
+|Python Syntax| `MDSplus.conditional(_TSOURCE, _FSOURCE, _MASK)` |
 |Min arguments| 3 |
 |Max arguments| 3 |
+|Opcode|102|
 
 TODO: investigate further--is this broken?
 `conditional (3>4, $true, $false)` seems to always return `$true` no matter what
@@ -2654,9 +2851,9 @@ Select from 2 sources according to a mask.
 * Warning: range and conditional nesting may be confusing, use parentheses to help. For example, `2?3:4:5` will not compile but `2?3:(4:5)` or `2?(3:4):5` are fine.
 
 Arguments:
-* TSOURCE any type and shape.
-* FSOURCE any type and shape.
-* MASK scalar logical, vector is treated as MERGE.
+* `_TSOURCE` any type and shape.
+* `_FSOURCE` any type and shape.
+* `_MASK` scalar logical, vector is treated as MERGE.
 
 |Signals      |That of the selected source. 
 |Units        |That of the selected source. 
@@ -2684,33 +2881,33 @@ Get the condition field.
 
 
 
-### `CONJG` (Opcode 103)
+### `CONJG` 
 |Syntax||
 |-|-|
-|TDI Syntax   | `conjg(arg0)` |
-|Python Syntax| `MDSplus.conjg(arg0)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|TDI Syntax   | `CONJG(ARG0)` |
+|Python Syntax| `MDSplus.CONJG(ARG0)` |
+|Opcode|103|
 
 Conjugate of a complex number.
 * Argument must take the form `cmplx(x,y)` and function will return `cmplx(x,-y)`. 
 * Reals are not converted.
 
-Examples:
-* `conjg(cmplx(2.0,3.0))` returns `cmplx(2.0,-3.0)`.
+Examples
+```
+TDI> conjg(cmplx(2.0,3.0))
+cmplx(2.0,-3.0)
+```
 
 
 
 
-### `CONTINUE` (Opcode 104)
+### `CONTINUE` 
 
 |Syntax||
 |-|-|
 |TDI Syntax   | `continue` or  `continue()`|
 |Python Syntax| `MDSplus.continue` |
-|Min arguments| 0 |
-|Max arguments| 0 |
-
+|Opcode|104|
 
 Take next iteration of FOR or WHILE loop.
 * Usual Form CONTINUE;. 
@@ -2722,7 +2919,7 @@ Results. None.
 Examples     
 ```
 FOR (_J=SIZE(_X); --_J>=0; ) {     IF (_X[_J]) CONTINUE; ... } 
-<!-- where lots of code is skipped for those true. -->
+#where lots of code is skipped for those true.
 ```
 
 ```
@@ -2745,72 +2942,85 @@ for( _i = 0; _i <= 5; ++_i)
 
 
 
-### `COS` (Opcode 106)
+### `COS`
 |Syntax||
 |-|-|
 |TDI Syntax   | `COS(_NUM)` |
 |Python Syntax| `MDSplus.COS(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|Opcode|106|
 
 Cosine of angle in radians; Processor approximation to cos(X).
 * Arguments accepted: real numbers and real part of cmplx(x,y) in radians.
 * Units not accepted.
 
 Examples
-* `COS(1)` returns `0.540302`.
-* `cos(cmplx(1.0,3))` returns `Cmplx(5.43958,-8.42975)`
-* `cos($2pi)` returns `1D0`
 
+```tdi
+TDI> COS(1)
+0.540302
 
-### `cosd` (Opcode 107)
+TDI> cos(cmplx(1.0,3))
+Cmplx(5.43958,-8.42975)
+
+TDI> cos($2pi)
+1D0
+```
+
+### `COSD`
 |Syntax||
 |-|-|
-|TDI Syntax   | `cosd(_NUM)`         |
-|Python Syntax| `MDSplus.cosd(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|TDI Syntax   | `COSD(_NUM)`         |
+|Python Syntax| `MDSplus.COSD(_NUM)` |
+|Opcode|107|
 
 Cosine of angle in degrees; returns processor approximation of cos(x)
 * X (degrees) must be real.
 * Complex numbers result in an error.
 * Units are not accepted
 
-Examples:
-* `cosd(60.0)` is `0.5`.
+Examples
+
+```tdi
+TDI> cosd(60.0)
+0.5
+```
 
 
 
-### `cosh` (Opcode 108)
+### `COSH` 
 |Syntax||
 |-|-|
 |TDI Syntax   | `COSH(_NUM)` |
 |Python Syntax| `MDSplus.COSH(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|Opcode|108|
 
 Hyperbolic cosine; returns processor approximation to cosh(X).
 * Argument must be real.
 * Units not accepted
 
 Examples
-* `COSH(1.0)` returns `1.54308`
+
+```tdi
+TDI> COSH(1.0)
+1.54308`
+```
 
 
 
 
 
-### `count` (Opcode 109)
+### `count`
 |Syntax||
 |-|-|
 |TDI Syntax   | `COUNT(_MASK, [_DIM])` |
 |Python Syntax| `MDSplus.COUNT(_MASK, [_DIM])` |
-|Min arguments| 1 |
-|Max arguments| 2 |
+|Opcode|109|
 
-Counts the number of true elements in MASK along dimension DIM.
-* first argument: MASK or logical array. 
-* second argument: (optional) DIM or integer scalar from 0 to n-1, where n is rank of MASK.
+Counts the number of true elements in `_MASK` along dimension `_DIM`.
+
+Arguments
+* `_MASK` or logical array. 
+* `_DIM`(optional)  or integer scalar from 0 to n-1, where n is rank of MASK.
 * form: Integer. It is scalar if DIM is absent or MASK is a vector; otherwise, the result is an array of rank n-1 and of shape like MASK's with DIM subscript omitted.
 
 Results
@@ -2818,14 +3028,18 @@ Results
 * For a vector MASK, COUNT(MASK,DIM) is equal to COUNT(MASK). For higher dimensional cases, the value of an element of the result is COUNT of elements of MASK varying the DIM subscript.
 
 Examples.
-* count([$TRUE,$FALSE,$TRUE]) returns `2`.
-* With:
-    * `_B=[[1,3,5,7], [2,4,6,8], [0,0,0,0]]` and  
+
+```tdi
+TDI> count([$TRUE,$FALSE,$TRUE])
+2
+
+
+    `_B=[[1,3,5,7], [2,4,6,8], [0,0,0,0]]` and  
     `_C=[[0,3,5,6], [7,4,8,8], [1,1,1,1]]`  
     * `count(_B == _C)` returns `4`
     * `count(_B == _C,0)` returns `[2,2,0]`
     * `count(_B == _C,1)` returns `[0,2,1,1]`
-
+```
 
 
 ### `CULL` (Opcode 390)
@@ -4690,8 +4904,8 @@ Examples
 ### `ge` (Opcode 174)
 |Syntax||
 |-|-|
-|TDI Syntax   | `_X >= _Y` or `_X ge _Y` or `ge(_X,_Y)` |
-|Python Syntax| `MDSplus.ge(_X,_Y)` |
+|TDI Syntax   | `_X >= _Y` |
+|Python Syntax| `MDSplus.GE(x, y)` |
 |Min arguments| 2 |
 |Max arguments| 2 |
 
@@ -4706,6 +4920,7 @@ Examples
 * `2>=2.0` returns `$TRUE`.
 
 See also: `eq`, `gt`, `le`, `lt`, `ne`
+See [legacy syntax]()
 
 
 ### `GETDBI` (Opcode 389)
@@ -5873,15 +6088,15 @@ Examples
 
 
 
-### Logarithm (common, base 10): `log10`  
+### `LOG10` (Base-10 Logarithm)
 
 > (version 2--opcode moved, natural language title)  
 
 |Syntax||
 |-|-|
-|TDI Syntax   | `log10(_NUM)` |
+|TDI Syntax   | `LOG10(_NUM)` |
 |Python Syntax| `MDSplus.log10(_NUM)` |
-|Opcode |224|
+|Opcode |224 (0xE0)|
 
 Common logarithm (base 10).
 * Argument `_NUM` must be real.
@@ -5889,7 +6104,10 @@ Common logarithm (base 10).
 * Units are disregarded
 
 Examples
-* `log10(10.0)` returns `1.0`.
+```tdi
+TDI> log10(10.0)
+1.0
+```
 
 
 ### `log2` (Opcode 225)
@@ -5997,7 +6215,7 @@ Examples
 See also: `eq`, `ge`, `gt`, `le`, `ne`
 
 
-### `lt` (Less than)
+### `lt` (Less Than)
 
 > (option 2 gussied up)
 
@@ -6005,7 +6223,7 @@ See also: `eq`, `ge`, `gt`, `le`, `ne`
 |-|-|
 |TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
 |Python Syntax| `MDSplus.LT(X,Y)` |
-|Opcode       |229 |
+|Opcode       |229 (0xFF) TODO |
 
 
 
@@ -6018,6 +6236,12 @@ Tests for first argument less than second.
 * WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1<=.2 is true. Integer values may be truncated when matched to floating numbers.
 
 Examples
+```tdi
+TDI> 2 < 2.0
+0BU
+
+TDI> 
+```
 * `2<2.0` returns `$FALSE`.
 * `2 lt 2.1` returns `$TRUE`.
 * `lt(2.1, 2)` returns `$FALSE`
@@ -6434,7 +6658,7 @@ MAKE_WINDOW
 |Syntax||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
-
+|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
 (Opcode 432
 |Min arguments| 3
 |Max arguments| 3
@@ -6461,7 +6685,7 @@ MAKE_WITH_ERROR
 |Syntax||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
-
+|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
 (Opcode 447
 |Min arguments| 2
 |Max arguments| 2
@@ -6485,7 +6709,7 @@ MAKE_WITH_UNITS
 |Syntax||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
-
+|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
 (Opcode 433
 |Min arguments| 2
 |Max arguments| 2
@@ -6501,87 +6725,135 @@ DATA any expression that DATA(this) will be valid.
 UNITS character string. See the primary section on "Units".
 |Result       |Class-R descriptor. Use BUILD_xxx for immediate structure building. Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
 |Examples     |_S = MAKE_WITH_UNITS($VALUE*6,'m/s^2') can be used in a MAKE_SIGNAL(_S,MAKE_WITH_UNITS(5./1024*raw_node,'V') or similar. Note this could also have been MAKE_WITH_UNITS(MAKE_SIGNAL($VALUE*6, MAKE_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2').
-MAP
+
+
+
 ### `MAP`
 |Syntax||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-(Opcode 394
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: MAP(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `MAP(_ARRAY,_OFFSET)` |
+|Python Syntax| `MDSplus.MAP(_ARRAY,_OFFSET)` |
+|Min arguments| 2 |
+|Max arguments| 2 |
+|Opcode|394|
 
+Element selection from an array. Basically, it lets you grab sub-samples from an array or sort it out. See examples
 
-|Return Type  |Transformation |
-Element selection from an array.
-Arguments A an array of any type considered to be a vector. B a list of offsets into the A array.
+Arguments
+* `_ARRAY` (A) an array of any type considered to be a vector.
+* `_OFFSET` (B) a list of offsets into the `_ARRAY`.  
 Values are from 0 to the number of elements in A less 1. Out-of-bounds values are considered to be at the limits.
-|Signals      |Same as B. |Units        |Same as A. |Form         |Same type as A and same shape as B.
+
+|Signals      |Same as B. 
+|Units        |Same as A. 
+|Form         |Same type as A and same shape as B.
 |Result       |Each value in B is used to look up a value in A. The value is copied into the result. This is the same as A(B) in IDL when B is a vector.
->>>>>>>>>WARNING, multidimensional arrays referenced by bad offsets will likely be junk.
-Examples. MAP(1:10,[20,-1,5]) is [10,1,6]. _A=5:1:-1, MAP(_A,SORTI(_A)) is [1,2,3,4,5], which is the same as SORT(5:1:-1).
-|See also     |CULL to remove bad B values. SUBSCRIPT for dimensional indexing into signal and multiple index access to arrays.
-MAX
+* WARNING, multidimensional arrays referenced by bad offsets will likely be junk.
+
+Examples
+
+```tdi
+ TDI> MAP(1:10,[20,-1,5])
+ [10,1,6]
+ 
+ _A=5:1:-1
+ 
+ TDI> MAP(_A,SORTI(_A))
+ [1,2,3,4,5]
+ # note that this is the same as SORT(5:1:-1).
+```
+
+See also:
+
+* CULL to remove bad B values. 
+* SUBSCRIPT for dimensional indexing into signal and multiple index access to arrays.
+
+
+
 ### `MAX`
 |Syntax||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 233
-|Min arguments| 2
-|Max arguments| 254
-******Compiler syntax: MAX(arg0,arg1,argn,...)
-|Native python|False|
+|TDI Syntax   | `MAX(_NUM0, _NUM1, _NUM2,...)` |
+|Python Syntax| `MDSplus.MAX(_NUM0, _NUM1, _NUM2,...)` |
+|Min arguments| 2  |
+|Max arguments| 254|
+|Opcode|233|
 
+Returns the maximum (highest?) value.
+* Arguments must be integer or real. Complex numbers cause error.
+* Signals: The single signal or the smallest.
+* Units: The single or matching units, else bad. 
+* Form: The compatible form of all the arguments. Conversion is done pairwise.
+* Result: The largest 
+* Arguments, Results: A reserved operand will dominate.
 
-|Type         |F90 Numeric Elemental|
-Maximum value.
-Arguments Integer or real. Complex numbers are an error.
-|Signals      |The single signal or the smallest. |Units        |The single or matching units, else bad. |Form         |The compatible form of all the arguments. Conversion is
-done pairwise.
-|Result       |The largest |Arguments, Results|A reserved operand will dominate.
-|Examples     |MAX(-9.0,7.0,2.0) is 7.0.
-MAXEXPONENT
+Examples
+
+```tdi
+TDI> MAX(-9.0,7.0,2.0) 
+7.0
+```
+
 ### `MAXEXPONENT`
 |Syntax||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 234
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: MAXEXPONENT(arg0) 
-|Native python|False|
+|TDI Syntax   | `MAXEXPONENT(_NUM)` |
+|Python Syntax| `MDSplus.MAXEXPONENT(_NUM)` |
+|Opcode|234|
 
 
-F90 Inquiry.
 The maximum exponent in the model representing numbers of the same type as the argument.
 |Arguments, Results|X is real, scalar or array.
-|Signals      |None. |Units        |None. |Form         |Integer scalar.
-|Result       |The number emax for the model of the same type as X. |Examples     |MAXEXPONENT(1.0) is 127 on the VAX.
-MAXLOC
+|Signals      |None. 
+|Units        |None. 
+|Form         |Integer scalar.
+|Result       |The number emax for the model of the same type as X. 
+
+Examples
+```tdi
+MAXEXPONENT(1.0) is 127 on the VAX.
+```
+
+
+
 ### `MAXLOC`
 |Syntax||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
 |Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 235
-|Min arguments| 1
-|Max arguments| 3
-******Compiler syntax: MAXLOC(arg0,arg1,arg2)
-|Native python|False|
+|Min arguments| 1|
+|Max arguments| 3|
+******Compiler syntax: MAXLOC(_ARRAY, [_MASK], [_arg3])
+
+|Opcode|235|
 
 
-|Return Type  |F90 Transformation |
 Determine the location of an element of ARRAY with the maximum value of the elements identified by MASK.
-Arguments Optional: MASK. ARRAY numeric array. MASK logical and conformable with ARRAY.
+
+Arguments 
+* `_ARRAY` numeric array. 
+* `[_MASK]` Optional: logical and conformable with ARRAY.
+* `[_arg3]`: TODO: investigate further 
+
 |Signals      |None. |Units        |None. |Form         |Long vector of size equal to rank of ARRAY.
 |Result       |The result is the vector of subscripts of an element whose value equals the maximum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
-Examples. MAXLOC([2,4,6]) is [2].
-For _A=[0 -5 8 -3], MAXLOC(_A,_A LT 6) is [2,1]. [3 4-1 2][1 5 6-4]
+Examples
+```
+TDI> MAXLOC([2,4,6])
+[2]
+
+_A=[0 -5 8 -3]
+TDI> MAXLOC(_A,_A LT 6)
+[2,1]. [3 4-1 2][1 5 6-4]
+# TODO: investigate further
+```
+
+
 |See also     |MAXVAL for the value.
-MAXVAL
+
+
+
+
 ### `MAXVAL`
 |Syntax||
 |-|-|
@@ -9216,147 +9488,8 @@ Total of 404 builtins of which 103 are implemented in Python
 
 
 
----
-## Bookmark for internal reference
 
-
-
-### `TitleGoesHere` (Opcode )
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-|Min arguments| |
-|Max arguments| |
-
-Description goes here
-
-
-
-
-
-
-### `BUILD_WITH_UNITS` (Opcode 88)
-
-|Return Type  |MDS Operation | Make a describe data with units.
-
-Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V'`) or similar. Note this could also have been `BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6, BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2')`. |
-
-|||
-|-|-|
-| TDI syntax | `BUILD_WITH_UNITS(arg0,arg1)` |
-| Python Syntax | `MDSplus.BUILD_WITH_UNITS(arg0,arg1)` TODO: Confirm |
-
-
-|I/O||
-|-|-|
-| Min Arguments | 2 |
-| Max arguments | 2 |
-|DATA | any expression that DATA(this) will be valid. |
-|UNITS | character string. See the primary section on "Units".|
-|Result | Class-R descriptor. <BR> Use `BUILD_xxx` for immediate structure building. <BR> Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
-
-|Return Type  |MDS Operation |
-Make a describe data with units.
-Arguments
-DATA any expression that DATA(this) will be valid.
-UNITS character string. See the primary section on "Units".
-|Result       |Class-R descriptor.
-Use BUILD_xxx for immediate structure building.
-Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
-|Examples     |_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2') can be used in a
-BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V')
-or similar. Note this could also have been
-BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6,
-BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2').
-
-
-
-
-
-
-
-### `MAKE_WITH_ERROR` (Opcode 447)
-
-|||
-|-|-|
-|TDI Syntax   | MAKE_WITH_ERROR(arg0,arg1)|
-|Python Syntax| `Mdsplus.TdiMakeWithError(arg0,arg1)` |
-|Max arguments | 2 |
-|Min Arguments | 2 |
-
-|**Arguments**||
-|-|-|
-|DATA |any expression that DATA(this) will be valid.|
-|ERROR |Error value.|
-|Result | Class-R descriptor.|
-||Use `BUILD_xxx` for immediate structure building.|
-||Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
-
-MDS Operation; makes a structure that holds data with error.
-
-Example: `_A0 = Build_With_Error(52.9177E-12, 2400E-21)`
-
-
-
-### `IF` (Opcode 189)
-
-|||
-|-|-|
-|TDI syntax| if (condition) {statements} [else {statements}]|
-|Python syntax: False|
-|Min arguments|  2|
-|Max arguments|  3|
-|Required Usual Forms| `IF (TEST) STMT` <BR> `IF (TEST) STMT ELSE ELSESTMT`.
-|Function Form| `IF(TEST,STMT,[ELSESTMT])`. May be syntatically invalid.|
-|Arguments Optional| `ELSESTMT`|
-|TEST |logical scalar|
-|STMT |statement, simple or `{brace enclosed}`.|
-|ELSESTMT |statement, simple or `{brace enclosed}`.|
-|Result |None|
-
-CC Statement.
-
-Do statement if expression true, else possibly do another.
-
-Example: `IF (_A) _B=2; ELSE _B=3;`.
-
-
-### `SET_RANGE` (Opcode 311)
-
-|Return Type  |Transformation |
-Set array bounds and multipliers from a list.
-
-Examples:
-* `_A=SET_RANGE(2:3,5,1:10)` is `[1, 3, 5, 7, 9]` and `[2, 4, 6, 8, 10]`
-* `SET_RANGE(-2:,:3,_A)` has `LBOUND(_A,0)` of `[-2,-1]` and `UBOUND(_A,1)` of `[-1,3]`.
-
-|||
-|-|-|
-|TDI Syntax   | `SET_RANGE(arg0,arg1,argn,...)`|
-|Python Syntax | False|
-
-|||
-|-|-|
-| **Arguments** | Optional: BOUND,....|
-|Min Arguments | 2|
-|Max arguments | 9|
-|| BOUND,... integer scalar or range, they are taken from ARRAY where omitted.|
-| ARRAY | any type scalar, vector, or array.|
-| Signals| Same as ARRAY.|
-| Units | Same as ARRAY.|
-| Form | Same type as ARRAY with shape from the bounds list. Any omitted bounds are picked from the corresponding bounds of ARRAY.|
-| Result | Elements in array order from ARRAY. Immediate at compilation even if all but last argument are ranges and provided last argument is an array.|
-
-
----
-> this is buffer text. for internal use only because vscode does weird things when multiple people are typing in the same doc
-
----so
-
-
-
-Builtins--Here is the Full list, just in case
+## Builtins--Here is the Full list, just in case
 
 ABORT
 ABS
@@ -9745,3 +9878,8 @@ ZERO
 
 
 ---
+---
+> this is buffer text. for internal use only because vscode does weird things when multiple people are typing in the same doc
+
+---so
+
