@@ -278,7 +278,7 @@ Table of all the commands in each category, with symlinks to each heading
 Two times π
 
 ```tdi
-tdi> $2pi
+TDI> $2pi
 6.283185307179586D0
 ```
 
@@ -294,7 +294,7 @@ tdi> $2pi
 The Bohr radius constant (a<sub>0</sub>): 52.9177 x 10<sup>-12</sup> m, with an error of 1168.02 x 10<sup>-21</sup>
 
 ```tdi
-tdi> $a0
+TDI> $a0
 Build_With_Units(Build_With_Error(52.9177E-12, 1168.02E-21), "m")
 ```
 
@@ -310,7 +310,7 @@ Build_With_Units(Build_With_Error(52.9177E-12, 1168.02E-21), "m")
 The Fine-Structure Constant (α): 0.00729735, with an error of 143.276 x 10<sup>-12</sup>
 
 ```tdi
-tdi> $alpha
+TDI> $alpha
 Build_With_Error(.00729735, 143.276E-12)
 ```
 
@@ -326,7 +326,7 @@ Build_With_Error(.00729735, 143.276E-12)
 One unified atomic mass unit (Da or u): 1660.54 x 10<sup>-30</sup> kg, with an error of 43.0666 x 10<sup>-36</sup>
 
 ```tdi
-tdi> $amu
+TDI> $amu
 Build_With_Units(Build_With_Error(1660.54E-30, 43.0666E-36), "kg")
 ```
 
@@ -343,7 +343,7 @@ The atmospheric pressure constant: 101325.0 Pa
 Alias of `$P0`
 
 ```tdi
-tdi> $atm
+TDI> $atm
 Build_With_Units(101325., "Pa")
 ```
 
@@ -359,7 +359,7 @@ Build_With_Units(101325., "Pa")
 The speed of light (c): 299792458.0 m/s
 
 ```tdi
-tdi> $c
+TDI> $c
 Build_With_Units(299792458D0, "m/s")
 ```
 
@@ -375,7 +375,7 @@ Build_With_Units(299792458D0, "m/s")
 One calorie: 4.1868 J
 
 ```tdi
-tdi> $cal
+TDI> $cal
 Build_With_Units(4.1868, "J")
 ```
 
@@ -392,10 +392,10 @@ One degree: (pi/180) or 0.0174532925199433 radians.
 Used for converting from degrees into radians
 
 ```tdi
-tdi> $degree
+TDI> $degree
 .0174532925199433D0
 
-tdi> 180 * $degree
+TDI> 180 * $degree
 3.141592653589793D0
 ```
 
@@ -411,7 +411,7 @@ tdi> 180 * $degree
 The vacuum permittivity constant (ε<sub>0</sub>): 8854.187817620389 x 10<sup>-15</sup> F/m
 
 ```tdi
-tdi> $epsilon0
+TDI> $epsilon0
 Build_With_Units(8854.187817620389D-15, "F/m")
 ```
 
@@ -428,7 +428,7 @@ One Electron-volt (eV): 160.218 x 10<sup>-21</sup> J/eV, with an error of 3654.1
 > TODO: Change units to just "J"
 
 ```tdi
-tdi> $ev
+TDI> $ev
 Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "J/eV")
 ```
 
@@ -443,7 +443,7 @@ Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "J/eV")
 The Faraday constant (F): 96485.3 C/mol, with an error of .00381419
 
 ```tdi
-tdi> $faraday
+TDI> $faraday
 Build_With_Units(Build_With_Error(96485.3, .00381419), "C/mol")
 ```
 
@@ -458,7 +458,7 @@ Build_With_Units(Build_With_Error(96485.3, .00381419), "C/mol")
 The gravitational constant (G): 66.743 x 10<sup>-12</sup> m<sup>3</sup>/s<sup>2</sup>/kg, with an error of 1500.02 x 10<sup>-18</sup>
 
 ```tdi
-tdi> $g
+TDI> $g
 Build_With_Units(Build_With_Error(66.743E-12, 1500.02E-18), "m^3/s^2/kg")
 ```
 
@@ -473,7 +473,7 @@ Build_With_Units(Build_With_Error(66.743E-12, 1500.02E-18), "m^3/s^2/kg")
 The ideal gas constant: 8.31446 J/K/mol, with an error of 43.5899 x 10<sup>9</sup>
 
 ```tdi
-tdi> $gas
+TDI> $gas
 Build_With_Units(Build_With_Error(8.31446, 43.5899E-9), "J/K/mol")
 ```
 
@@ -489,7 +489,7 @@ Build_With_Units(Build_With_Error(8.31446, 43.5899E-9), "J/K/mol")
 The acceleration of gravity: 9.80665 m/s<sup>2</sup>
 
 ```tdi
-tdi> $gn
+TDI> $gn
 Build_With_Units(9.80665, "m/s^2")
 ```
 
@@ -505,7 +505,7 @@ Build_With_Units(9.80665, "m/s^2")
 The Planck constant: 662.607 x 10<sup>36</sup> J*s, with an error of 2857.25 x 10<sup>45</sup>
 
 ```tdi
-tdi> $h
+TDI> $h
 Build_With_Units(Build_With_Error(662.607E-36, 2857.25E-45), "J*s")
 ```
 
@@ -521,7 +521,7 @@ Build_With_Units(Build_With_Error(662.607E-36, 2857.25E-45), "J*s")
 The reduced Planck constant (H/2pi or <span style="text-decoration: overline">H</span>): 105.457 x 10<sup>36</sup> J*s, with an error of 1967.42 x 10<sup>45</sup>
 
 ```tdi
-tdi> $hbar
+TDI> $hbar
 Build_With_Units(Build_With_Error(105.457E-36, 1967.42E-45), "J*s")
 ```
 
@@ -537,7 +537,7 @@ Build_With_Units(Build_With_Error(105.457E-36, 1967.42E-45), "J*s")
 Imaginary (i): `Cmplx(0.0, 1.0)`
 
 ```tdi
-tdi> $i
+TDI> $i
 Cmplx(0.,1.)
 ```
 
@@ -553,7 +553,7 @@ Cmplx(0.,1.)
 The Boltzmann constant: 13.8065 x 10<sup>24</sup> J/K, with an error of 276.341 x 10<sup>33</sup>
 
 ```tdi
-tdi> $k
+TDI> $k
 Build_With_Units(Build_With_Error(13.8065E-24, 276.341E-33), "J/K")
 ```
 
@@ -569,7 +569,7 @@ Build_With_Units(Build_With_Error(13.8065E-24, 276.341E-33), "J/K")
 The mass of an electron (m<sub>e</sub>): 910.938 x 10<sup>33</sup> kg, with an error of 25.8874 x 10<sup>39</sup>
 
 ```tdi
-tdi> $me
+TDI> $me
 Build_With_Units(Build_With_Error(910.938E-33, 25.8874E-39), "kg")
 ```
 
@@ -585,7 +585,7 @@ Build_With_Units(Build_With_Error(910.938E-33, 25.8874E-39), "kg")
 The mass of a proton (p): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
 
 ```tdi
-tdi> $mp
+TDI> $mp
 Build_With_Units(Build_With_Error(1672.62E-30, 85.2717E-36), "kg")
 ```
 
@@ -601,7 +601,7 @@ Build_With_Units(Build_With_Error(1672.62E-30, 85.2717E-36), "kg")
 The permeability of a vacuum (μ<sub>0</sub>): 1256.637061435917 x 10<sup>-9</sup> N/A<sup>2</sup>
 
 ```tdi
-tdi> $mu0
+TDI> $mu0
 Build_With_Units(1256.637061435917D-9, "N/A^2")
 ```
 
@@ -618,7 +618,7 @@ Loschmidt's number (n<sub>0</sub>): 26.8678 x 10<sup>24</sup> /m<sup>3</sup>, wi
 > TODO: Verify units should start with /
 
 ```tdi
-tdi> $n0
+TDI> $n0
 Build_With_Units(Build_With_Error(26.8678E24, 743.623E15), "/m^3")
 ```
 
@@ -635,7 +635,7 @@ Avogadro's number (N<sub>A</sub>): 602.214 x 10<sup>21</sup> /mol, with an error
 > TODO: Verify units should start with /
 
 ```tdi
-tdi> $na
+TDI> $na
 Build_With_Units(Build_With_Error(602.214E21, 11.645E15), "/mol")
 ```
 
@@ -651,7 +651,7 @@ Atmospheric pressure: 101325. Pa
 Alias of `$ATM`
 
 ```tdi
-tdi> $p0
+TDI> $p0
 Build_With_Units(101325., "Pa")
 ```
 
@@ -667,7 +667,7 @@ Build_With_Units(101325., "Pa")
 Pi, the circumference divided by the radius (π): 3.141592653589793
 
 ```tdi
-tdi> $pi
+TDI> $pi
 3.141592653589793D0
 ```
 
@@ -683,7 +683,7 @@ tdi> $pi
 The negative charge of an electron (e): 160.218 x 10<sup>21</sup> C, with an error of 3654.14 x 10<sup>30</sup>
 
 ```tdi
-tdi> $qe
+TDI> $qe
 Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "C")
 ```
 
@@ -699,7 +699,7 @@ Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "C")
 The classical electron radius: 2817.94 x 10<sup>18</sup> m, with an error of 12.7156 x 10<sup>24</sup>
 
 ```tdi
-tdi> $re
+TDI> $re
 Build_With_Units(Build_With_Error(2817.94E-18, 12.7156E-24), "m")
 ```
 
@@ -716,7 +716,7 @@ The Rydberg constant: 10.9737 x 10<sup>6</sup> /m, with an error of 0.443876
 > TODO: Verify units should start with /
 
 ```tdi
-tdi> $rydberg
+TDI> $rydberg
 Build_With_Units(Build_With_Error(10.9737E6, .443876), "/m")
 ```
 
@@ -732,7 +732,7 @@ Build_With_Units(Build_With_Error(10.9737E6, .443876), "/m")
 THe standard temperature constant: 273.15 K
 
 ```tdi
-tdi> $t0
+TDI> $t0
 Build_With_Units(273.15, "K")
 ```
 
@@ -748,7 +748,7 @@ Build_With_Units(273.15, "K")
 One Torr (approximately 1mmHg pressure): 133.3223684210526 Pa
 
 ```tdi
-tdi> $torr
+TDI> $torr
 Build_With_Units(133.3223684210526D0, "Pa")
 ```
 
@@ -770,11 +770,11 @@ Same as `getdbi('DEFAULT')`.
 
 ```tdi
 # With a tree open
-tdi> $default
+TDI> $default
 "\\MAIN::TOP"
 
 # Without a tree open
-tdi> $default
+TDI> $default
 %TDI Error in $DEFAULT()
 %TDI Error in EXECUTE("$DEFAULT")
 ```
@@ -797,7 +797,7 @@ Same as `getdbi('NAME')`.
 
 ```tdi
 # With a tree open
-tdi> $expt
+TDI> $expt
 "MAIN"
 
 # Without a tree open
@@ -911,7 +911,7 @@ Same as `getdbi('shot')` or `getdbi('shotid')`.
 
 ```tdi
 # With a tree open
-tdi> $shot
+TDI> $shot
 12345
 
 # With a model tree open
