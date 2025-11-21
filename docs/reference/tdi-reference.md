@@ -834,7 +834,7 @@ TDI> 1 == 2
 ```
 
 See also:
-* `$TRUE`
+* [`$TRUE`](#true-true-constant)
 
 ### `$MISSING` (Missing Value/Argument, Null)
 
@@ -997,13 +997,13 @@ TDI> data(_sig)
 See also:
 * `BUILD_SIGNAL`
 * `BUILD_PARAM`
-* `$VALUE`
+* [`$VALUE`](#value-current-structure-value)
 * `RAW_OF()`
 * `DIM_OF()`
 * `VALUE_OF()`
 * `HELP_OF()`
 
-### `$TRUE` (T)
+### `$TRUE` (True Constant)
 
 |||
 |-|-|
@@ -1012,19 +1012,20 @@ See also:
 |Java mdsplus-api Syntax| `CONST.dTrue()`|
 |Opcode|29|
 
-Boolean constant for true: 0BU
+Boolean constant for true: 1BU
 
 Note: Any expression that returns `$true` will display as 1BU
 
 ```tdi
-TDI> $false
+TDI> $true
 1BU
 
 TDI> 1 == 1
 1BU
 ```
 
-See also `$FALSE`.
+See also:
+* [`$FALSE`](#false-false-constant).
 
 ### `$VALUE` (Current Structure Value)
 |Opcode|30|
@@ -1058,7 +1059,7 @@ TDI> data(_sig)
 See also:
 * `BUILD_SIGNAL`
 * `BUILD_PARAM`
-* `$THIS`
+* [`$THIS`](#this-current-structure)
 * `RAW_OF()`
 * `VALUE_OF()`
 
