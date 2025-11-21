@@ -275,7 +275,7 @@ Table of all the commands in each category, with symlinks to each heading
 |Java mdsplus-api Syntax| `CONST.d2Pi()` |
 |Opcode       | 372 (0x174)|
 
-Two times π
+Two times pi (<em>2π</em>): 6.283185307179586
 
 ```tdi
 TDI> $2pi
@@ -291,7 +291,7 @@ TDI> $2pi
 | Java mdsplus-api Syntax | `CONST.dA0()` |
 |Opcode       | 1 (0x01)|
 
-The Bohr radius constant (a<sub>0</sub>): 52.9177 x 10<sup>-12</sup> m, with an error of 1168.02 x 10<sup>-21</sup>
+The Bohr radius constant (<em>a<sub>0</sub></em>): 52.9177 x 10<sup>-12</sup> m, with an error of 1168.02 x 10<sup>-21</sup>
 
 ```tdi
 TDI> $a0
@@ -307,7 +307,7 @@ Build_With_Units(Build_With_Error(52.9177E-12, 1168.02E-21), "m")
 |Java mdsplus-api Syntax| `CONST.dAlpha()`|
 |Opcode       | 2 (0x02)|
 
-The Fine-Structure Constant (α): 0.00729735, with an error of 143.276 x 10<sup>-12</sup>
+The Fine-Structure Constant (<em>α</em>): 0.00729735, with an error of 143.276 x 10<sup>-12</sup>
 
 ```tdi
 TDI> $alpha
@@ -323,7 +323,7 @@ Build_With_Error(.00729735, 143.276E-12)
 |Java mdsplus-api Syntax| `CONST.dAmu()` |
 |Opcode       | 3 (0x03)|
 
-One unified atomic mass unit (Da or u): 1660.54 x 10<sup>-30</sup> kg, with an error of 43.0666 x 10<sup>-36</sup>
+One unified atomic mass unit (<em>Da</em> or <em>u</em>): 1660.54 x 10<sup>-30</sup> kg, with an error of 43.0666 x 10<sup>-36</sup>
 
 ```tdi
 TDI> $amu
@@ -340,7 +340,8 @@ Build_With_Units(Build_With_Error(1660.54E-30, 43.0666E-36), "kg")
 |Opcode       | 405 (0x195)|
 
 The atmospheric pressure constant: 101325.0 Pa
-Alias of `$P0`
+
+Note: This is an alias of `$P0`
 
 ```tdi
 TDI> $atm
@@ -356,7 +357,7 @@ Build_With_Units(101325., "Pa")
 |Java mdsplus-api Syntax| `CONST.dC()` |
 |Opcode|4 (0x04)|
 
-The speed of light (c): 299792458.0 m/s
+The speed of light (<em>c</em>): 299792458.0 m/s
 
 ```tdi
 TDI> $c
@@ -389,6 +390,7 @@ Build_With_Units(4.1868, "J")
 |Opcode|6 (0x06)|
 
 One degree: (pi/180) or 0.0174532925199433 radians.
+
 Used for converting from degrees into radians
 
 ```tdi
@@ -408,7 +410,7 @@ TDI> 180 * $degree
 |Java mdsplus-api Syntax| `CONST.dEpsilon0()`|
 |Opcode|406 (0x196)|
 
-The vacuum permittivity constant (ε<sub>0</sub>): 8854.187817620389 x 10<sup>-15</sup> F/m
+The vacuum permittivity constant (<em>ε<sub>0</sub></em>): 8854.187817620389 x 10<sup>-15</sup> F/m
 
 ```tdi
 TDI> $epsilon0
@@ -424,7 +426,7 @@ Build_With_Units(8854.187817620389D-15, "F/m")
 |Java mdsplus-api Syntax| `CONST.dEv()`|
 |Opcode|7 (0x07)|
 
-One Electron-volt (eV): 160.218 x 10<sup>-21</sup> J/eV, with an error of 3654.14 x 10<sup>-30</sup>
+One Electron-volt (<em>eV</em>): 160.218 x 10<sup>-21</sup> J/eV, with an error of 3654.14 x 10<sup>-30</sup>
 > TODO: Change units to just "J"
 
 ```tdi
@@ -440,7 +442,7 @@ Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "J/eV")
 |Java mdsplus-api Syntax| `CONST.dFaraday()`|
 |Opcode|9 (0x09)|
 
-The Faraday constant (F): 96485.3 C/mol, with an error of .00381419
+The Faraday constant (<em>F</em>): 96485.3 C/mol, with an error of .00381419
 
 ```tdi
 TDI> $faraday
@@ -455,7 +457,7 @@ Build_With_Units(Build_With_Error(96485.3, .00381419), "C/mol")
 |Java mdsplus-api Syntax| `CONST.dG()`|
 |Opcode|10 (0x0A)|
 
-The gravitational constant (G): 66.743 x 10<sup>-12</sup> m<sup>3</sup>/s<sup>2</sup>/kg, with an error of 1500.02 x 10<sup>-18</sup>
+The gravitational constant (<em>G</em>): 66.743 x 10<sup>-12</sup> m<sup>3</sup>/s<sup>2</sup>/kg, with an error of 1500.02 x 10<sup>-18</sup>
 
 ```tdi
 TDI> $g
@@ -518,7 +520,7 @@ Build_With_Units(Build_With_Error(662.607E-36, 2857.25E-45), "J*s")
 |Java mdsplus-api Syntax| `CONST.dHbar()`|
 |Opcode|13 (0x0D)|
 
-The reduced Planck constant (H/2pi or <span style="text-decoration: overline">H</span>): 105.457 x 10<sup>36</sup> J*s, with an error of 1967.42 x 10<sup>45</sup>
+The reduced Planck constant (<em>H/2pi</em> or <em><span style="text-decoration: overline">H</span></em>): 105.457 x 10<sup>36</sup> J*s, with an error of 1967.42 x 10<sup>45</sup>
 
 ```tdi
 TDI> $hbar
@@ -534,7 +536,7 @@ Build_With_Units(Build_With_Error(105.457E-36, 1967.42E-45), "J*s")
 |Java mdsplus-api Syntax| `CONST.dI()`|
 |Opcode|14 (0x0E)|
 
-Imaginary (i): `Cmplx(0.0, 1.0)`
+Imaginary (<em>i</em>): `Cmplx(0.0, 1.0)`
 
 ```tdi
 TDI> $i
@@ -566,7 +568,7 @@ Build_With_Units(Build_With_Error(13.8065E-24, 276.341E-33), "J/K")
 |Java mdsplus-api Syntax| `CONST.dMe()`|
 |Opcode|16 (0x10)|
 
-The mass of an electron (m<sub>e</sub>): 910.938 x 10<sup>33</sup> kg, with an error of 25.8874 x 10<sup>39</sup>
+The mass of an electron (<em>m<sub>e</sub></em>): 910.938 x 10<sup>33</sup> kg, with an error of 25.8874 x 10<sup>39</sup>
 
 ```tdi
 TDI> $me
@@ -582,7 +584,7 @@ Build_With_Units(Build_With_Error(910.938E-33, 25.8874E-39), "kg")
 |Java mdsplus-api Syntax| `CONST.dMp()`|
 |Opcode|18 (0x12)|
 
-The mass of a proton (p): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
+The mass of a proton (<em>p</em>): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
 
 ```tdi
 TDI> $mp
@@ -598,7 +600,7 @@ Build_With_Units(Build_With_Error(1672.62E-30, 85.2717E-36), "kg")
 |Java mdsplus-api Syntax| `CONST.dMu0()`|
 |Opcode|408 (0x198)|
 
-The permeability of a vacuum (μ<sub>0</sub>): 1256.637061435917 x 10<sup>-9</sup> N/A<sup>2</sup>
+The permeability of a vacuum (<em>μ<sub>0</sub></em>): 1256.637061435917 x 10<sup>-9</sup> N/A<sup>2</sup>
 
 ```tdi
 TDI> $mu0
@@ -614,7 +616,7 @@ Build_With_Units(1256.637061435917D-9, "N/A^2")
 |Java mdsplus-api Syntax| `CONST.dN0()`|
 |Opcode|19 (0x13)|
 
-Loschmidt's number (n<sub>0</sub>): 26.8678 x 10<sup>24</sup> /m<sup>3</sup>, with an error of 743.623 x 10<sup>15</sup>
+Loschmidt's number (<em>n<sub>0</sub></em>): 26.8678 x 10<sup>24</sup> /m<sup>3</sup>, with an error of 743.623 x 10<sup>15</sup>
 > TODO: Verify units should start with /
 
 ```tdi
@@ -631,7 +633,7 @@ Build_With_Units(Build_With_Error(26.8678E24, 743.623E15), "/m^3")
 |Java mdsplus-api Syntax| `CONST.dNa()`|
 |Opcode|20 (0x14)|
 
-Avogadro's number (N<sub>A</sub>): 602.214 x 10<sup>21</sup> /mol, with an error of 11.645 x 10<sup>15</sup>
+Avogadro's number (<em>N<sub>A</sub></em>): 602.214 x 10<sup>21</sup> /mol, with an error of 11.645 x 10<sup>15</sup>
 > TODO: Verify units should start with /
 
 ```tdi
@@ -648,7 +650,8 @@ Build_With_Units(Build_With_Error(602.214E21, 11.645E15), "/mol")
 |Opcode|21 (0x15)|
 
 Atmospheric pressure: 101325. Pa
-Alias of `$ATM`
+
+Note: This is an alias of `$ATM`
 
 ```tdi
 TDI> $p0
@@ -664,7 +667,7 @@ Build_With_Units(101325., "Pa")
 |Java mdsplus-api Syntax| `CONST.dPi()`|
 |Opcode|22 (hex(0x16)|
 
-Pi, the circumference divided by the radius (π): 3.141592653589793
+Pi, the circumference divided by the radius (<em>π</em>): 3.141592653589793
 
 ```tdi
 TDI> $pi
@@ -680,7 +683,7 @@ TDI> $pi
 |Java mdsplus-api Syntax| `CONST.dQe()`|
 |Opcode|23|
 
-The negative charge of an electron (e): 160.218 x 10<sup>21</sup> C, with an error of 3654.14 x 10<sup>30</sup>
+The negative charge of an electron (<em>e</em>): 160.218 x 10<sup>21</sup> C, with an error of 3654.14 x 10<sup>30</sup>
 
 ```tdi
 TDI> $qe
