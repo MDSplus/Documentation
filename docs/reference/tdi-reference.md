@@ -264,550 +264,866 @@ Table of all the commands in each category, with symlinks to each heading
 |-|
 |ZERO|
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-template for each entry:
-```
-### `TitleGoesHere` (Opcode )
-|||
-|-|-|
-|TDI Syntax   | `take from Compiler syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith**d**___ANDMAKEITLOWERCASE` |
-|Java mdsplus-api Syntax| `CONST.ifitexistsitgoeshere()`|
-
-Description goes here
-```
-
-to check the java syntax open this folder in a new vscode window
-C:\Users\myuen\Documents\GitHub\mdsplus\java\mdsplus-api\src\main\java\mds\data\descriptor_r\function\CONST.java
-
-
 ## Constants
 
-### `$2PI`
+### `$2PI` (Two Pi)
 
 |||
 |-|-|
 |TDI Syntax   | `$2PI`|
-|Python Syntax| `MDSplus.d2pi`|
+|Python Syntax| `MDSplus.d2PI()`|
 |Java mdsplus-api Syntax| `CONST.d2Pi()` |
-|Opcode|372|
+|Opcode       | 372 (0x174)|
 
-Two times pi, or equivalent to circumference of a circle divided by its radius (approx 6.2831853072)
+Two times π
 
+```tdi
+tdi> $2pi
+6.283185307179586D0
+```
 
-### `$A0`
+### `$A0` (Bohr Radius)
 
 |||
 |-|-|
 | TDI Syntax | `$A0` |
-| Python Syntax | `MDSplus.dA0` |
+| Python Syntax | `MDSplus.dA0()` |
 | Java mdsplus-api Syntax | `CONST.dA0()` |
-|Opcode|1|
+|Opcode       | 1 (0x01)|
 
-The BOHR Radius Constant of 52.9177E-12m, with a margin of error of 1168.02E-21
+The Bohr radius constant (a<sub>0</sub>): 52.9177 x 10<sup>-12</sup> m, with an error of 1168.02 x 10<sup>-21</sup>
 
+```tdi
+tdi> $a0
+Build_With_Units(Build_With_Error(52.9177E-12, 1168.02E-21), "m")
+```
 
-### `$ALPHA`
+### `$ALPHA` (Fine-Structure Constant)
 
 |||
 |-|-|
 | TDI syntax| `$ALPHA`|
-| Python Syntax| `MDSplus.dalpha`|
+| Python Syntax| `MDSplus.dALPHA()`|
 |Java mdsplus-api Syntax| `CONST.dAlpha()`|
-|Opcode|2|
+|Opcode       | 2 (0x02)|
 
-Fine-structure Constant: 7.29735308e-3 or 
-0.00729735, error of 143.276E-12
+The Fine-Structure Constant (α): 0.00729735, with an error of 143.276 x 10<sup>-12</sup>
 
+```tdi
+tdi> $alpha
+Build_With_Error(.00729735, 143.276E-12)
+```
 
-### `$AMU`
+### `$AMU` (Atomic Mass Unit)
 
 |||
 |-|-|
-|TDI syntax: `$AMU`|
-|Python Syntax | `MDSplus.damu`|
+|TDI syntax| `$AMU`|
+|Python Syntax | `MDSplus.dAMU()`|
 |Java mdsplus-api Syntax| `CONST.dAmu()` |
-|Opcode|3|
+|Opcode       | 3 (0x03)|
 
-Unified atomic mass unit: 1.6605402e-27, or 1660.54E-30 kg, error of 43.0666E-36
+One unified atomic mass unit (Da or u): 1660.54 x 10<sup>-30</sup> kg, with an error of 43.0666 x 10<sup>-36</sup>
 
+```tdi
+tdi> $amu
+Build_With_Units(Build_With_Error(1660.54E-30, 43.0666E-36), "kg")
+```
 
-### `$ATM`
+### `$ATM` (Atmospheric Pressure Constant)
 
 |||
 |-|-|
 |TDI Syntax   | `$ATM`|
-|Python Syntax| `MDSplus.datm`|
+|Python Syntax| `MDSplus.dATM()`|
 |Java mdsplus-api Syntax| `CONST.dAtm()` |
-|Opcode|405|
+|Opcode       | 405 (0x195)|
 
-Atmospheric pressure: 101325. Pa
+The atmospheric pressure constant: 101325.0 Pa
+Alias of `$P0`
 
+```tdi
+tdi> $atm
+Build_With_Units(101325., "Pa")
+```
 
-### `$C` (Opcode 4)
+### `$C` (Speed of Light Constant)
 
 |||
 |-|-|
 |TDI Syntax   | `$C`|
-|Python Syntax| `MDSplus.dc`|
+|Python Syntax| `MDSplus.dC()`|
 |Java mdsplus-api Syntax| `CONST.dC()` |
+|Opcode|4 (0x04)|
 
-Speed of light: 299792458. m/s
+The speed of light (c): 299792458.0 m/s
 
+```tdi
+tdi> $c
+Build_With_Units(299792458D0, "m/s")
+```
 
-### `$CAL` (Opcode 5)
+### `$CAL` (Calorie)
 
 |||
 |-|-|
 |TDI Syntax   | `$CAL`|
-|Python Syntax| `MDSplus.dcal` |
+|Python Syntax| `MDSplus.dCAL()` |
 |Java mdsplus-api Syntax| `CONST.dCal()`|
+|Opcode|5 (0x05)|
 
-Calorie: 4.1868 J
+One calorie: 4.1868 J
 
+```tdi
+tdi> $cal
+Build_With_Units(4.1868, "J")
+```
 
-### `$DEGREE` (Opcode 6)
+### `$DEGREE` (Degrees to Radians)
 
 |||
 |-|-|
 |TDI Syntax   | `$DEGREE` |
-|Python Syntax| `MDSplus.ddegree` |
+|Python Syntax| `MDSplus.dDEGREE()` |
 |Java mdsplus-api Syntax| `CONST.dDegree()`|
+|Opcode|6 (0x06)|
 
-Degree (pi/180): 0.0174532925199433
+One degree: (pi/180) or 0.0174532925199433 radians.
+Used for converting from degrees into radians
 
+```tdi
+tdi> $degree
+.0174532925199433D0
 
-### `$EPSILON0` (Opcode 406)
+tdi> 180 * $degree
+3.141592653589793D0
+```
+
+### `$EPSILON0` (Vacuum Permittivity Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$EPSILON0` |
-|Python Syntax| `MDSplus.depsilon0` |
+|Python Syntax| `MDSplus.dEPSILON0()` |
 |Java mdsplus-api Syntax| `CONST.dEpsilon0()`|
+|Opcode|406 (0x196)|
 
-Epsilon0, Permitivity of vacuum: 8854.187817620389 e-15 F/m
+The vacuum permittivity constant (ε<sub>0</sub>): 8854.187817620389 x 10<sup>-15</sup> F/m
 
+```tdi
+tdi> $epsilon0
+Build_With_Units(8854.187817620389D-15, "F/m")
+```
 
-### `$EV` (Opcode 7)
+### `$EV` (Electron-Volt)
+
 |||
 |-|-|
 |TDI Syntax   | `$EV` |
-|Python Syntax| `MDSplus.dev` |
+|Python Syntax| `MDSplus.dEV()` |
 |Java mdsplus-api Syntax| `CONST.dEv()`|
+|Opcode|7 (0x07)|
 
-Electron volt: 160.218E-21 J/eV, with error 3654.14E-30
+One Electron-volt (eV): 160.218 x 10<sup>-21</sup> J/eV, with an error of 3654.14 x 10<sup>-30</sup>
+> TODO: Change units to just "J"
 
+```tdi
+tdi> $ev
+Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "J/eV")
+```
 
-### `$FARADAY` (Opcode 9)
+### `$FARADAY` (Faraday Constant)
 |||
 |-|-|
 |TDI Syntax   | `$FARADAY` |
-|Python Syntax| `MDSplus.dfaraday` |
+|Python Syntax| `MDSplus.dFARADAY()` |
 |Java mdsplus-api Syntax| `CONST.dFaraday()`|
+|Opcode|9 (0x09)|
 
-Faraday constant: 96485.3 C/mol, with error .00381419
+The Faraday constant (F): 96485.3 C/mol, with an error of .00381419
 
+```tdi
+tdi> $faraday
+Build_With_Units(Build_With_Error(96485.3, .00381419), "C/mol")
+```
 
-### `$G` (Opcode 10)
+### `$G` (Gravitational Constant)
 |||
 |-|-|
 |TDI Syntax   | `$G` |
-|Python Syntax| `MDSplus.dg` |
+|Python Syntax| `MDSplus.dG()` |
 |Java mdsplus-api Syntax| `CONST.dG()`|
+|Opcode|10 (0x0A)|
 
-Gravitational constant: 66.743E-12 m^3/s^2/kg, with error 1500.02E-18
+The gravitational constant (G): 66.743 x 10<sup>-12</sup> m<sup>3</sup>/s<sup>2</sup>/kg, with an error of 1500.02 x 10<sup>-18</sup>
 
+```tdi
+tdi> $g
+Build_With_Units(Build_With_Error(66.743E-12, 1500.02E-18), "m^3/s^2/kg")
+```
 
-### `$GAS` (Opcode 11)
+### `$GAS` (Ideal Gas Constant)
 |||
 |-|-|
 |TDI Syntax   | `$GAS` |
-|Python Syntax| `MDSplus.dgas` |
+|Python Syntax| `MDSplus.dGAS()` |
 |Java mdsplus-api Syntax| `CONST.dGas()`|
+|Opcode|11 (0x0B)|
 
-Gas constant: 8.31446 J/K/mol, with error 43.5899E-9
+The ideal gas constant: 8.31446 J/K/mol, with an error of 43.5899 x 10<sup>9</sup>
 
+```tdi
+tdi> $gas
+Build_With_Units(Build_With_Error(8.31446, 43.5899E-9), "J/K/mol")
+```
 
-### `$GN` (Opcode 407)
+### `$GN` (Gravity Acceleration Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$GN` |
-|Python Syntax| `MDSplus.dgn` |
+|Python Syntax| `MDSplus.dGN()` |
 |Java mdsplus-api Syntax| `CONST.dGn()`|
+|Opcode|407 (0x197)|
 
-Acceleration of gravity: 9.80665 m/s^2
+The acceleration of gravity: 9.80665 m/s<sup>2</sup>
 
+```tdi
+tdi> $gn
+Build_With_Units(9.80665, "m/s^2")
+```
 
-### `$H` (Opcode 12)
+### `$H` (Planck Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$H` |
-|Python Syntax| `MDSplus.dh` |
+|Python Syntax| `MDSplus.dH()` |
 |Java mdsplus-api Syntax| `CONST.dH()`|
+|Opcode|12 (0x0C)|
 
-Planck constant: 662.607E-36 J*s, with error 2857.25E-45
+The Planck constant: 662.607 x 10<sup>36</sup> J*s, with an error of 2857.25 x 10<sup>45</sup>
 
+```tdi
+tdi> $h
+Build_With_Units(Build_With_Error(662.607E-36, 2857.25E-45), "J*s")
+```
 
-### `$HBAR` (Opcode 13)
+### `$HBAR` (Reduced Planck Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$HBAR` |
-|Python Syntax| `MDSplus.dhbar` |
+|Python Syntax| `MDSplus.dHBAR()` |
 |Java mdsplus-api Syntax| `CONST.dHbar()`|
+|Opcode|13 (0x0D)|
 
-Planck constant/2PI: 105.457E-36 J*s, with error 1967.42E-45
+The reduced Planck constant (H/2pi or <span style="text-decoration: overline">H</span>): 105.457 x 10<sup>36</sup> J*s, with an error of 1967.42 x 10<sup>45</sup>
 
+```tdi
+tdi> $hbar
+Build_With_Units(Build_With_Error(105.457E-36, 1967.42E-45), "J*s")
+```
 
-### `$I` (Opcode 14)
+### `$I` (Imaginary)
+
 |||
 |-|-|
 |TDI Syntax   | `$I` |
-|Python Syntax| `MDSplus.di` |
+|Python Syntax| `MDSplus.dI()` |
 |Java mdsplus-api Syntax| `CONST.dI()`|
+|Opcode|14 (0x0E)|
 
-Imaginary: Cmplx(0.,1.)
+Imaginary (i): `Cmplx(0.0, 1.0)`
 
+```tdi
+tdi> $i
+Cmplx(0.,1.)
+```
 
-### `$K` (Opcode 15)
+### `$K` (Boltzmann Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$K` |
-|Python Syntax| `MDSplus.dk` |
+|Python Syntax| `MDSplus.dK()` |
 |Java mdsplus-api Syntax| `CONST.dK()`|
+|Opcode|15 (0x0F)|
 
-Boltzmann constant: 13.8065E-24 J/K, with error 276.341E-33
+The Boltzmann constant: 13.8065 x 10<sup>24</sup> J/K, with an error of 276.341 x 10<sup>33</sup>
 
+```tdi
+tdi> $k
+Build_With_Units(Build_With_Error(13.8065E-24, 276.341E-33), "J/K")
+```
 
-### `$ME` (Opcode 16)
+### `$ME` (Electron Mass)
+
 |||
 |-|-|
 |TDI Syntax   | `$ME` |
-|Python Syntax| `MDSplus.dme` |
+|Python Syntax| `MDSplus.dME()` |
 |Java mdsplus-api Syntax| `CONST.dMe()`|
+|Opcode|16 (0x10)|
 
-Mass of electron: 910.938E-33 kg, with error 25.8874E-39
+The mass of an electron (m<sub>e</sub>): 910.938 x 10<sup>33</sup> kg, with an error of 25.8874 x 10<sup>39</sup>
 
+```tdi
+tdi> $me
+Build_With_Units(Build_With_Error(910.938E-33, 25.8874E-39), "kg")
+```
 
-### `$MP` (Opcode 18)
+### `$MP` (Proton Mass)
+
 |||
 |-|-|
 |TDI Syntax   | `$MP` |
-|Python Syntax| `MDSplus.dmp` |
+|Python Syntax| `MDSplus.dMP()` |
 |Java mdsplus-api Syntax| `CONST.dMp()`|
+|Opcode|18 (0x12)|
 
-Mass of proton: 1672.62E-30 kg, with error 85.2717E-36
+The mass of a proton (p): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
 
+```tdi
+tdi> $mp
+Build_With_Units(Build_With_Error(1672.62E-30, 85.2717E-36), "kg")
+```
 
-### `$MU0` (Opcode 408)
+### `$MU0` (Vacuum Permeability)
+
 |||
 |-|-|
 |TDI Syntax   | `$MU0` |
-|Python Syntax| `MDSplus.dmu0` |
+|Python Syntax| `MDSplus.dMU0()` |
 |Java mdsplus-api Syntax| `CONST.dMu0()`|
+|Opcode|408 (0x198)|
 
-Permeability of vacuum: 1256.637061435917D-9 N/A^2
+The permeability of a vacuum (μ<sub>0</sub>): 1256.637061435917 x 10<sup>-9</sup> N/A<sup>2</sup>
 
+```tdi
+tdi> $mu0
+Build_With_Units(1256.637061435917D-9, "N/A^2")
+```
 
-### `$N0` (Opcode 19)
+### `$N0` (Loschmidt's Number)
+
 |||
 |-|-|
 |TDI Syntax   | `$N0` |
-|Python Syntax| `MDSplus.dn0` |
+|Python Syntax| `MDSplus.dN0()` |
 |Java mdsplus-api Syntax| `CONST.dN0()`|
+|Opcode|19 (0x13)|
 
-Loschmidt's number: 26.8678E24 /m^3, with error 743.623E15
+Loschmidt's number (n<sub>0</sub>): 26.8678 x 10<sup>24</sup> /m<sup>3</sup>, with an error of 743.623 x 10<sup>15</sup>
+> TODO: Verify units should start with /
 
+```tdi
+tdi> $n0
+Build_With_Units(Build_With_Error(26.8678E24, 743.623E15), "/m^3")
+```
 
-### `$NA` (Opcode 20)
+### `$NA` (Avogadro's Number)
+
 |||
 |-|-|
 |TDI Syntax   | `$NA` |
-|Python Syntax| `MDSplus.dna` |
+|Python Syntax| `MDSplus.dNA()` |
 |Java mdsplus-api Syntax| `CONST.dNa()`|
+|Opcode|20 (0x14)|
 
-Avogadro's number: 602.214E21 /mol, with error 11.645E15
+Avogadro's number (N<sub>A</sub>): 602.214 x 10<sup>21</sup> /mol, with an error of 11.645 x 10<sup>15</sup>
+> TODO: Verify units should start with /
 
+```tdi
+tdi> $na
+Build_With_Units(Build_With_Error(602.214E21, 11.645E15), "/mol")
+```
 
-### `$P0` (Opcode 21)
+### `$P0` (Atmospheric Pressure Constant)
 |||
 |-|-|
 |TDI Syntax   | `$P0` |
-|Python Syntax| `MDSplus.dp0` |
+|Python Syntax| `MDSplus.dP0()` |
 |Java mdsplus-api Syntax| `CONST.dP0()`|
+|Opcode|21 (0x15)|
 
 Atmospheric pressure: 101325. Pa
+Alias of `$ATM`
 
+```tdi
+tdi> $p0
+Build_With_Units(101325., "Pa")
+```
 
-### `$PI` (Opcode 22)
+### `$PI` (Pi)
+
 |||
 |-|-|
 |TDI Syntax   | `$PI` |
-|Python Syntax| `MDSplus.dpi` |
+|Python Syntax| `MDSplus.dPI()` |
 |Java mdsplus-api Syntax| `CONST.dPi()`|
+|Opcode|22 (hex(0x16)|
 
-Pi, Circumference/radius: 3.141592653589793D0
+Pi, the circumference divided by the radius (π): 3.141592653589793
 
+```tdi
+tdi> $pi
+3.141592653589793D0
+```
 
-### `$QE` (Opcode 23)
+### `$QE` (Elementary Charge)
+
 |||
 |-|-|
 |TDI Syntax   | `$QE` |
-|Python Syntax| `MDSplus.dqe` |
+|Python Syntax| `MDSplus.dQE()` |
 |Java mdsplus-api Syntax| `CONST.dQe()`|
+|Opcode|23|
 
-Charge on electron: 160.218E-21 C, with error 3654.14E-30
+The negative charge of an electron (e): 160.218 x 10<sup>21</sup> C, with an error of 3654.14 x 10<sup>30</sup>
 
+```tdi
+tdi> $qe
+Build_With_Units(Build_With_Error(160.218E-21, 3654.14E-30), "C")
+```
 
-### `$RE` (Opcode 24)
+### `$RE` (Classical Electron Radius)
+
 |||
 |-|-|
 |TDI Syntax   | `$RE` |
-|Python Syntax| `MDSplus.dre` |
+|Python Syntax| `MDSplus.dRE()` |
 |Java mdsplus-api Syntax| `CONST.dRe()`|
+|Opcode|24|
 
-Classical electron rad: 2817.94E-18 m, with error 12.7156E-24
+The classical electron radius: 2817.94 x 10<sup>18</sup> m, with an error of 12.7156 x 10<sup>24</sup>
 
+```tdi
+tdi> $re
+Build_With_Units(Build_With_Error(2817.94E-18, 12.7156E-24), "m")
+```
 
-### `$RYDBERG` (Opcode 26)
+### `$RYDBERG` (Rydberg Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$RYDBERG` |
-|Python Syntax| `MDSplus.drydberg` |
+|Python Syntax| `MDSplus.dRYDBERG()` |
 |Java mdsplus-api Syntax| `CONST.dRydberg()`|
+|Opcode|26|
 
-Rydberg constant: 10.9737E6 /m, with error 0.443876
+The Rydberg constant: 10.9737 x 10<sup>6</sup> /m, with an error of 0.443876
+> TODO: Verify units should start with /
 
+```tdi
+tdi> $rydberg
+Build_With_Units(Build_With_Error(10.9737E6, .443876), "/m")
+```
 
-### `$T0` (Opcode 27)
+### `$T0` (Standard Temperature Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$T0` |
 |Python Syntax| `MDSplus.$T0` |
 |Java mdsplus-api Syntax| `CONST.dT0()`|
+|Opcode|27|
 
-Standard temperature: 273.15 K
+THe standard temperature constant: 273.15 K
 
+```tdi
+tdi> $t0
+Build_With_Units(273.15, "K")
+```
 
-### `$TORR` (Opcode 28)
+### `$TORR` (Torr)
+
 |||
 |-|-|
 |TDI Syntax   | `$TORR` |
-|Python Syntax| `MDSplus.dtorr` |
+|Python Syntax| `MDSplus.dTORR()` |
 |Java mdsplus-api Syntax| `CONST.dTorr()`|
+|Opcode|28|
 
-Torr or 1mm Hg pressure: 133.3223684210526D0 Pa
+One Torr (approximately 1mmHg pressure): 133.3223684210526 Pa
+
+```tdi
+tdi> $torr
+Build_With_Units(133.3223684210526D0, "Pa")
+```
 
 
+## Special Variables
 
-
-
-
-## Other Special Variables beginning with `$`
-
-### `$DEFAULT` (Opcode 386)
+### `$DEFAULT` (Default Node Path)
 
 |||
 |-|-|
 |TDI Syntax   | `$DEFAULT` |
-|Python Syntax| `MDSplus.ddefault` |
+|Python Syntax| `MDSplus.dDEFAULT()` |
 |Java mdsplus-api Syntax| `CONST.dDefault()`|
+|Opcode|386|
 
-Current default tree node (TreeNode) location
+The path to the current default tree node.
 
+Same as `getdbi('DEFAULT')`.
 
-### `$EXPT` (Opcode 387)
+```tdi
+# With a tree open
+tdi> $default
+"\\MAIN::TOP"
+
+# Without a tree open
+tdi> $default
+%TDI Error in $DEFAULT()
+%TDI Error in EXECUTE("$DEFAULT")
+```
+
+See also
+* `GETDBI()`
+
+### `$EXPT` (Tree/Experiment Name)
+
 |||
 |-|-|
 |TDI Syntax   | `$EXPT` |
-|Python Syntax| `MDSplus.dexpt` |
+|Python Syntax| `MDSplus.dEXPT()` |
 |Java mdsplus-api Syntax| `CONST.dExpt()`|
+|Opcode|387|
 
-Current tree name
+The name of the current tree.
 
+Same as `getdbi('NAME')`.
 
-### `$FALSE` (Opcode 8)
+```tdi
+# With a tree open
+tdi> $expt
+"MAIN"
+
+# Without a tree open
+TDI> $expt
+%TDI Error in $EXPT()
+%TDI Error in EXECUTE("$EXPT")
+```
+
+See also:
+* `GETDBI()`
+
+### `$FALSE` (False Constant)
+
 |||
 |-|-|
 |TDI Syntax   | `$FALSE` |
-|Python Syntax| `MDSplus.dfalse` |
+|Python Syntax| `MDSplus.dFALSE()` |
 |Java mdsplus-api Syntax| `CONST.dFalse()`|
+|Opcode|8|
 
-False: 0 bu (zero bytes unsigned)
+Boolean constant for false: 0BU
 
+Note: Any expression that returns `$false` will display as 0BU
 
-### `$MISSING` (Opcode 17)
+```tdi
+TDI> $false
+0BU
+
+TDI> 1 == 2
+0BU
+```
+
+See also:
+* `$TRUE`
+
+### `$MISSING` (Missing Value/Argument, Null)
+
 |||
 |-|-|
 |TDI Syntax   | `$MISSING` |
-|Python Syntax| `MDSplus.dMISSING` |
+|Python Syntax| `MDSplus.dMISSING()` |
 |Java mdsplus-api Syntax| `CONST.dMissing()`|
+|Opcode|17|
 
-Missing value (or argument). `$MISSING` is used internally to mark a missing argument and gives zero or blanks. `$MISSING` and `$ROPRAND` execute at compilation. Equivalent to "null" in other languages.
+Indicates a missing value (or argument), equivalent to `null` in other languages.
 
+> TODO: More examples?
+```tdi
+TDI>
+$Missing
+```
 
-### `$NARG` (Opcode 373)
+See also:
+* `$ROPERAND`
+
+### `$NARG` (Number of Arguments)
+
 |||
 |-|-|
 |TDI Syntax   | `$NARG` |
-|Python Syntax| `MDSplus.dNARG` |
+|Python Syntax| `MDSplus.dNARG()` |
 |Java mdsplus-api Syntax| `CONST.dNarg()`|
+|Opcode|373|
 
-Special: Actual arguments used to invoke the FUN
+The number of arguments used to invoke the current function.
 
-TODO: ask Stephen what this means 
+```tdi
+TDI> fun count_args(optional in _a, optional in _b, optional in _c) { return($NARG); }
+Fun count_args (OPTIONAL IN _a, OPTIONAL IN _b, OPTIONAL IN _c) {
+        Return ($NARG);
+}
 
+TDI> count_args(1)
+1
+TDI> count_args(1, 2)
+2
+TDI> count_args(1, 2, 3)
+3
+```
 
-### `$ROPRAND` (Reserved Operand) 
+See also:
+* `FUN`
+
+### `$ROPRAND` (NaN, Infinity, Reserved Operand)
+
 |||
 |-|-|
 |TDI Syntax   | `$ROPRAND` |
-|Python Syntax| `MDSplus.dROPRAND` |
+|Python Syntax| `MDSplus.dROPRAND()` |
 |Java mdsplus-api Syntax| `CONST.dRoprand()`|
-|Opcode|25|
+|Opcode       | 25 (0x19)|
 
-Used to represent float NaN (Not a Number) 
+Represents NaN or Infinity from floating point math.
 
+```tdi
+TDI> 1.0 / 0.0
+$ROPRAND
+```
 
-### `$SHOT` (Opcode 388)
+### `$SHOT` (Current Shot Number)
+|Opcode|388|
 |||
 |-|-|
 |TDI Syntax   | `$SHOT` |
-|Python Syntax| `MDSplus.dshot` |
+|Python Syntax| `MDSplus.dSHOT()` |
 |Java mdsplus-api Syntax| `CONST.dShot()`|
 
-The current tree's shot number
+The shot number of the current tree.
 
+Same as `getdbi('shot')` or `getdbi('shotid')`.
 
-### `$SHOTNAME` (Opcode 444)
+```tdi
+# With a tree open
+tdi> $shot
+12345
+
+# With a model tree open
+TDI> $shot
+-1
+
+# Without a tree open
+TDI> $shot
+%TDI Error in $SHOT()
+%TDI Error in EXECUTE("$shot")
+```
+
+See also:
+* `$SHOTNAME`
+* `GETDBI()`
+
+### `$SHOTNAME` (Current Shot Number String)
+
 |||
 |-|-|
 |TDI Syntax   | `$SHOTNAME` |
 |Python Syntax| `MDSplus.dshotname` |
 |Java mdsplus-api Syntax| `CONST.dShotname()`|
+|Opcode|444|
 
-The current tree's shot number as text, can return MODEL
+The shot number of the current tree as a string, or "MODEL" for shot -1.
 
-### `$THIS` (Opcode 403)
+```tdi
+# With a tree open
+TDI> $shotname
+"12345"
+
+# With a model tree open
+TDI> $shotname
+"MODEL"
+
+# Without a tree open
+TDI> $shotname
+%TDI Error in $SHOTNAME()
+%TDI Error in EXECUTE("$shotname")
+```
+
+See also:
+* `$SHOT`
+
+### `$THIS` (Current Structure)
+
 |||
 |-|-|
 |TDI Syntax   | `$THIS` |
-|Python Syntax| `MDSplus.dthis` |
+|Python Syntax| `MDSplus.dTHIS()` |
 |Java mdsplus-api Syntax| `CONST.dThis()`|
+|Opcode|403|
 
-SPECIAL: Signal or param associated with one of its parts
+For use with `Signal` or `Param`, can be used to access another field of the current structure.
 
-### `$TRUE` (Opcode 29)
+Note: Can trigger infinite recursion
+
+> TODO: Investigate use with Param and signal subscripting (see TdiGetData.c:605)
+
+```tdi
+# Reference the `raw` field of the Signal when defining the `value` field
+# Note: The more correct way to do this is with $VALUE
+TDI> _sig = build_signal(raw_of($this) * 10, [1, 2, 3])
+Build_Signal(RAW_OF($THIS) * 10, [1,2,3])
+
+# The `value` field is now an expression of the `raw` field
+TDI> data(_sig)
+[10,20,30]
+
+
+# Reference a `dimension` field of the Signal when defining the `value` field
+TDI> _sig = build_signal(dim_of($this) * 100, *, [0.1, 0.2, 0.3])
+# The `value` field is now an expression of the first `dimension` field
+
+TDI> data(_sig)
+[10.,20.,30.]
+```
+
+See also:
+* `BUILD_SIGNAL`
+* `BUILD_PARAM`
+* `$VALUE`
+* `RAW_OF()`
+* `DIM_OF()`
+* `VALUE_OF()`
+* `HELP_OF()`
+
+### `$TRUE` (T)
+
 |||
 |-|-|
 |TDI Syntax   | `$TRUE` |
-|Python Syntax| `MDSplus.dtrue` |
+|Python Syntax| `MDSplus.dTRUE()` |
 |Java mdsplus-api Syntax| `CONST.dTrue()`|
+|Opcode|29|
 
-True: 1 bu (byte unsigned)
+Boolean constant for true: 0BU
 
+Note: Any expression that returns `$true` will display as 1BU
 
-### `$VALUE` (Opcode 30)
+```tdi
+TDI> $false
+1BU
+
+TDI> 1 == 1
+1BU
+```
+
+See also `$FALSE`.
+
+### `$VALUE` (Current Structure Value)
+|Opcode|30|
 |||
 |-|-|
 |TDI Syntax   | `$VALUE` |
 |Python Syntax| `MDSplus.dvalue` |
 |Java mdsplus-api Syntax| `CONST.dValue()`|
 
-SPECIAL: "$VALUE" Raw field in a signal or value field in a param or subscript dimensional element
+For use with `Signal` or `Param`, can be used to access another field of the current structure.
+
+When used in the `value` field of a `Signal`, it will reference the `raw_of()` the signal.
+> TODO: Param
+
+Note: Can trigger infinite recursion
+
+> TODO: Investigate use with Param (see TdiGetData.c:622)
 
 ---
 
-## Built-in Functions
-
-
-
-### `ABORT` 
-
-|Syntax||
-|-|-|
-|TDI Syntax   | `ABORT(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.ABORT(arg0,arg1,argn,...)` |
-|Min arguments| 0  |
-|Max arguments| 255|
-|Opcode|31|
-
-Aborts an expression by causing an error.
-
-Examples: `IF_ERROR(A,B,ABORT())` aborts if both members are bad.
-
-
-
-### `ABS`
-
-|Syntax||
-|-|-|
-|TDI Syntax   | `ABS(_NUM)` |
-|Python Syntax| `MDSplus.ABS(_NUM)` |
-|Opcode|32|
-
-Returns absolute value of the input.
-
-* Arguments must be numeric.
-* Argument can be signal or array, as long as values are numeric. 
-* An array with a defined shape will return an array with the same shape.
-* Unsigned integers are unchanged
-* Complex numbers result in the square root of the sum of the squares of the real and imaginary parts. The complex number parts are scaled to avoid overflow.
-* Arguments with units will result in values with the same units
-* If argument is a `build_with_error` type, the function will ignore the error.
-
-Examples
-
 ```tdi
-TDI> abs(2)`
-2
+# Reference the `raw` field of the Signal when defining the `value` field
+TDI> _sig = build_signal($value * 10, [1, 2, 3])
+Build_Signal($VALUE * 10, [1,2,3])
 
-TDI> abs($Faraday)
-Build_With_Units(96485.3, "C/mol")`
-
-TDI> abs(CMPLX(-3.0,4.0))
-5.0
-
-TDI> abs([-1,2,-3,4])
-[1,2,3,4]
-
-TDI> abs([[-1,2],-3,4])
-[1,2,3,4]
-
-TDI> abs([[-1,2],[-3,4]])
-[[1,2],[3,4]]
-
-
-# signal
-
-_MYSIGNAL = BUILD_SIGNAL([-1,2,-3],*,BUILD_DIM(,[-1,0,1]))
-
-TDI> abs(_MYSIGNAL)
-Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))
+# The `value` field is now an expression of the `raw` field
+TDI> data(_sig)
+[10,20,30]
 ```
 
+See also:
+* `BUILD_SIGNAL`
+* `BUILD_PARAM`
+* `$THIS`
+* `RAW_OF()`
+* `VALUE_OF()`
+
+
+## Built-in Functions
+
+### `ABORT` (Abort Execution)
+
+|||
+|-|-|
+|TDI Syntax   | `ABORT()` |
+|Python Syntax| `MDSplus.ABORT()` |
+|Opcode       | 31 (0x1f)|
+
+Aborts an expression by causing an error (`TdiABORT`).
+
+```tdi
+# If _a is undefined or evaluating it causes an error
+TDI> if_error(_a, abort())
+%TDI Error in EVALUATE(_a)
+%TDI Error in ABORT()
+%TDI Error in EVALUATE(ABORT())
+%TDI Error in IF_ERROR(_a, ABORT())
+%TDI Error in EXECUTE("if_error(_a, abort())")
+```
 
 See also:
-* `abs1` and `abssq` for complex number to avoid a square root.
-* `arg` for the complex angle.
-[todo: links]
+* `IF_ERROR()`
+
+### `ABS` (Absolute Value)
+
+|||
+|-|-|
+|TDI Syntax   | `ABS(_X)` |
+|Python Syntax| `MDSplus.ABS(_x)` |
+|Opcode       | 32 (0x20)|
+
+Returns the absolute value of `_X`.
+
+`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+
+If `_X` contains complex numbers, the result will be the square root of the sum of the squares of the real and imaginary parts. The real and imaginary parts will be scaled to avoid overflow.
+
+Note: `BUILD_WITH_UNITS()` will be preserved.  
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> abs(-2)
+2
+
+TDI> abs(cmplx(-3.0, 4.0))
+5.
+
+TDI> abs([-1, 2, -3, 4])
+[1,2,3,4]
+
+TDI> abs([[-1, 2], [-3, 4]])
+[[1,2], [3,4]]
+
+TDI> abs(make_signal([-1, 2, -3], *))
+Build_Signal([1,2,3], *)
+
+TDI> abs(make_signal([[-1, 2], [-3, 4]], *))
+Build_Signal([[1,2], [3,4]], *)
+```
+
+See also:
+* `ABS1()` and `ABSSQ()` to avoid the square root for for complex numbers
 
 
 ### `ABS1` 
