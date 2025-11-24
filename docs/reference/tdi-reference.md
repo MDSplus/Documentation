@@ -1371,7 +1371,7 @@ The values of `_X` must be real and between [-1, 1], values outside this range w
 
 Use `ACOS()` to get the results in radians.
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
+Note: `BUILD_WITH_UNITS()` will be preserved, however the units will be replaced with '?'.  
 Note: `BUILD_WITH_ERROR()` will be discarded.
 
 ```tdi
@@ -1395,51 +1395,76 @@ See also:
 * [`COS()`](#cos-cosine)
 * [`ACOS()`](#acos-arccosine)
 
-### `ADD` 
+### `ADD` (Add)
 
 |||
 |-|-|
-|TDI Syntax| `_NUM1 + _NUM2` or `add(_NUM1, _NUM2)`|
-|Python Syntax| `MDSplus.add(_NUM1, _NUM2)`|
+|TDI Syntax| `_X + _Y` or `ADD(_X, _Y)`|
+|Python Syntax| `MDSplus.ADD(x, y)`|
 |Opcode|38|
 
-Adds two numbers.
+Returns the result of `_X` added to `_Y`.
 
-* Arguments must be numeric.
-* Integer overflow is ignored.
-* Ensure that arrays are the same length, otherwise, the function will truncate to the shorter one.
-* Signals are treated like arrays, and dimensions are ignored.
+`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
 
-Examples
+If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
 
-```
-TDI> add(3,4)
+If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
+
+If `_X` and `_Y` are both complex, the result will be a complex number with the real parts added and the imaginary parts added. If only one argument is complex, the real parts are added and the imaginary part is carried over.
+
+Integer overflows will be truncated.
+
+Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> 3 + 4
 7
 
-TDI> [2,3,4] + 5.0
-[7.0,8.0,9.0]
+TDI> [2, 3, 4] + 5
+[7,8,9]
 
-TDI> add(cmplx(3,4),5)
-Cmplx(8.,4.)
-
-TDI> add(cmplx(3,4),cmplx(5,6))
-Cmplx(8.,10.)
-
-TDI> add([1,2],[3,4])
+TDI> [1, 2] + [3, 4]
 [4,6]
 
-TDI> add([1,2,3,4],[5,6])
+TDI> [1, 2, 3, 4] + [5, 6]
 [6,8]
 
-_Signal0 = Build_Signal([1,2,3], *, Build_Dim(*, [-1,0,1]))
-_Signal1 = Build_Signal([3,4,5], *, Build_Dim(*, [0,1,2]))
+TDI> make_signal([[1, 2], [3, 4]], *) + 5
+Build_Signal([[6,7], [8,9]], *)
 
-TDI> add(_Signal0, _Signal1)
-[4,6,8]
+TDI> make_signal([[1, 2], [3, 4]], *) + make_signal([[5, 6], [7, 8]], *)
+[[6,8], [10,12]]
+
+TDI> cmplx(3, 4) + 5
+Cmplx(8.,4.)
+
+TDI> cmplx(3, 4) + cmplx(5, 6)
+Cmplx(8.,10.)
+
+# Overflow
+TDI> 255BU + 1BU
+0BU
+
+TDI> build_with_units(1, 'm') + 5
+Build_With_Units(6, "m")
+
+TDI> build_with_units(1, 'm') + build_with_units(5, 'm')
+Build_With_Units(6, "m")
+
+TDI> build_with_units(1, 'm') + build_with_units(5, 'ft')
+Build_With_Units(6, "?")
+
+TDI> build_with_error(1, 0.1) + 5
+6
+
+TDI> build_with_error(1, 0.1) + build_with_error(5, 0.2)
+6
 ```
 
-
-
+See also:
+* [`SUM()`](#sum-total-sum)
 
 ### `ADJUSTL` (Adjust to the Left)
 
@@ -3957,39 +3982,86 @@ TODO: Come back to this
 
 
 
-### `divide` (Opcode 129)
+### `DIVIDE` (Divide)
 
 |||
 |-|-|
-|TDI Syntax   | `DIVIDE(_NUM0,_NUM1) ` |
-|Python Syntax| `MDSplus.DIVIDE(_NUM0,_NUM1)` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+|TDI Syntax   | `_X / _Y` or `DIVIDE(_X, _Y)` |
+|Python Syntax| `MDSplus.DIVIDE(x, y)` |
+|Opcode|129|
 
+Returns the result of `_X` divided by `_Y`.
 
-The quotient of two numbers.
-* Usual Form: `X / Y`
-* Function Form: `DIVIDE(X,Y)`
-* Arguments X and Y must be numeric.
+`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
 
-|Signals      |Single signal or smaller data. 
-|Units        |X units with inverted Y units separated by a slash. 
-|Form         |The compatible form of X and Y.
-|Result       |
-Returns: 
-* The quotient without remainder of X/Y. 
-* If the result is real or complex there may be rounding. 
-* Integer division truncates. 
-* Complex division is `CMPLX((RX*RY-IX*IY)/DEN,(RY*IX-RX*IY)/DEN)` with `DEN=RY^2+RI^2`, where `RX=REAL(X)`, `IX=AIMAG(X)`, etc. The exponents are scaled to prevent overflow or underflow.
+If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
 
-* Warning: integer divide by zero is ignored.
-Examples. 
-* `5/3` returns `1`
-* `5/BUILD_WITH_UNITS(3,"s")` returns `BUILD_UNITS(1,"/s")`.
-`divide(10, 3)`  returns `3`
-`divide(10, 3.0)`  returns `3.33333`
+If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
 
+> TODO: Mark, help reword or improve
+If `_X` and `_Y` are both complex, the resullt will be `CMPLX((RX*RY-IX*IY)/DEN,(RY*IX-RX*IY)/DEN)` with `DEN=RY^2+RI^2`, where `RX=REAL(_X)`, `IX=AIMAG(_X)`, etc. The exponents are scaled to prevent overflow or underflow.
 
+> TODO: Rounding
+
+Integer division will result in truncation.
+
+Floating point division by zero will return `$ROPERAND`. Integer division by zero will return `0`.
+
+> TODO: Mark, help reword or improve
+Note: `BUILD_WITH_UNITS()` will be preserved, however:
+* If `_X` has units, but `_Y` does not, the units will be `UNITS_OF(_X)`.
+* If `_Y` has units, but `_X` does not, the units will be a '/' followed by `UNITS_OF(_Y)`.
+* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X)` and `UNITS_OF(_Y)`, separated by a '/'.
+
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> 3.0 / 4.0
+.75
+
+TDI> [2, 3, 4] / 5.0
+[.4,.6,.8]
+
+TDI> [1.0, 2.0] / [3, 4]
+[.333333,.5]
+
+TDI> [1, 2, 3, 4] / [5.0, 6.0]
+[.2,.333333]
+
+TDI> make_signal([[1, 2], [3, 4]], *) / 5.0
+Build_Signal([[.2,.4], [.6,.8]], *)
+
+TDI> make_signal([[1.0, 2.0], [3.0, 4.0]], *) / make_signal([[5, 6], [7, 8]], *)
+[[.2,.333333], [.428571,.5]]
+
+TDI> cmplx(3, 4) / 5
+Cmplx(.6,.8)
+
+TDI> cmplx(3, 4) / cmplx(5, 6)
+Cmplx(.639344,.0327869)
+
+# Integer division
+TDI> 3 / 4
+0
+
+TDI> build_with_units(1, 'm') / 5
+Build_With_Units(6, "m")
+
+TDI> 5 / build_with_units(1, 's')
+Build_With_Units(5, "/s")
+
+TDI> build_with_units(5, 'm') / build_with_units(1, 's')
+Build_With_Units(5, "m/s")
+
+TDI> build_with_error(1.0, 0.1) / 5.0
+.2
+
+TDI> build_with_error(1.0, 0.1) / build_with_error(5.0, 0.2)
+.2
+```
+
+See also:
+* [`MOD()`](#mod-modulus-remainder)
 
 ### `do` (Opcode 131)
 
@@ -7557,27 +7629,76 @@ ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and sha
 |Result       |The result without DIM is the minimum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the minimum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, +HUGE(ARRAY) is returned.
 Examples. MINVAL([1,2,3]) is 3. MINVAL(_C,,_C GT 0) finds the minimum positive element of C. If _B=[[1, 3, 5],[2, 4, 6]] MINVAL(_B,0) is [1,2] and MINVAL(_B,1) is [1,3,5].
 |See also     |MINLOC for the location.
-MOD
-### `MOD`
+
+### `MOD` (Modulus, Remainder)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 245
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: arg0 MOD arg1 
-|Native python|False|
+|TDI Syntax   | `_X % _Y` or `_X MOD _Y` or `MOD(_X, _Y)` |
+|Python Syntax| `MDSplus.MOD(x, y)` |
+|Opcode|245|
 
+Returns the remainder of `_X` divided by `_Y`.
 
-|Type         |F90 Numeric Elemental|
-Remainder.
-Usual Form A MOD P.
+`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+
+If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+
+If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
+
+The values of `_X` must be real, complex numbers will result in an error.
+
+Floating point division by zero will return `0`. Integer division by zero will result in a segfault.
+> TODO: Floating point / 0 should return `$ROPERAND` according to original docs
+> TODO: GitHub Issue # for segfault
+
+Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> 4 % 3
+1
+
+TDI> [5, 6, 7] % 5
+[0,1,2]
+
+TDI> [3, 4] % [2, 3]
+[1,1]
+
+TDI> [5, 6, 7, 8] % [2, 3]
+[1,0]
+
+TDI> make_signal([[4, 5], [6, 7]], *) % 2
+Build_Signal([[0,1], [0,1]], *)
+
+TDI> make_signal([[4, 5], [6, 7]], *) % make_signal([[2, 3], [4, 5]], *)
+[[0,2], [2,2]]
+
+TDI> build_with_units(4, 'm') % 3
+Build_With_Units(1, "m")
+
+TDI> build_with_units(4, 'm') % build_with_units(3, 'm')
+Build_With_Units(1, "m")
+
+TDI> build_with_units(4, 'm') % build_with_units(3, 'ft')
+Build_With_Units(1, "?")
+
+TDI> build_with_error(4, 0.1) % 3
+1
+
+TDI> build_with_error(4, 0.1) % build_with_error(3, 0.2)
+1
+```
+
+See also:
+* [`DIVIDE()`](#divide-divide)
+
 Arguments A and P must be integer or real. Complex numbers are an error.
 |Signals      |Single signal or smaller data. |Units        |Single or common units, else bad. |Form         |Compatible form of A and P.
 |Result       |If P NE 0, the result is A-INT(A/P)*P. If P==0, the result is the $ROPRAND for reals and undefined for integers.
 Examples. MOD(3.0,2.0) is 1.0. MOD(8,5) is 3. MOD(-8,5) is -3. MOD(8,-5) is -3. MOD(-8,-5) is -3.
-MODEL_OF
+
+
 ### `MODEL_OF`
 |||
 |-|-|
@@ -7593,26 +7714,85 @@ MODEL_OF
 |Return Type  |MDS Operation | Get the model field.
 |Arguments, Results|Descriptor as below.
 |Result       |A is searched for this: DSC$K_DTYPE_CONGLOM, the model field. Otherwise, an error.
-MULTIPLY
+
 ### `MULTIPLY`
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 247
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: arg0 * arg1 
-|Native python|False|
+|TDI Syntax   | `_X * _Y` or `MULTIPLY(_X, _Y)` |
+|Python Syntax| `MDSplus.MULTIPLY(x, y)` |
+|Opcode|247|
 
+Returns the result of `_X` multiplied by `_Y`.
 
-|Return Type  |Numeric Elemental |
-Multiplication.
-Usual Form X * Y. Function Form MULTIPLY(X,Y).
-Arguments X and Y must be numeric.
-|Signals      |Single signal or smaller data. |Units        |Those of X joined with those of Y by an asterisk. |Form         |Compatible form of X and Y.
-|Result       |Product of corresponding elements of X and Y. >>>>>>>>>WARNING, integer overflow is ignored.
-Examples. 3.0 * 2 is 6.0. BUILD_WITH_UNITS(3.0,"V")* BUILD_SIGNAL(BUILD_WITH_UNITS($VALUE*2,"s"),4)) is BUILD_SIGNAL(BUILD_WITH_UNITS(24.0,"V*s"),4).
+`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+
+If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+
+If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
+
+> TODO: Explain what happens when two complex numbers are multiplied, or avoid saying it. If we avoid it, we could simplify DIVIDE, ADD, SUBTRACT, and maybe even SIN/COS.
+> TODO: Mark, help reword
+If either `_X` or `_Y` is complex, but not both, then the result will be a complex number where the real and imaginary parts are both multiplied by the other argument.
+
+Integer overflows will be truncated.
+
+> TODO: Mark, help reword or improve
+Note: `BUILD_WITH_UNITS()` will be preserved, however:
+* If `_X` has units, but `_Y` does not, the units will be `UNITS_OF(_X)`.
+* If `_Y` has units, but `_X` does not, the units will be `UNITS_OF(_Y)`.
+* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X)` and `UNITS_OF(_Y)`, separated by a '*'.
+
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> 3 * 4
+12
+
+TDI> [2, 3, 4] * 5
+[10,15,20]
+
+TDI> [1, 2] * [3, 4]
+[3,8]
+
+TDI> [1, 2, 3, 4] * [5, 6]
+[5,12]
+
+TDI> make_signal([[1, 2], [3, 4]], *) * 5
+Build_Signal([[5,10], [15,20]], *)
+
+TDI> make_signal([[1, 2], [3, 4]], *) * make_signal([[5, 6], [7, 8]], *)
+[[5,12], [21,32]]
+
+TDI> cmplx(3, 4) * 5
+Cmplx(15.,20.)
+
+TDI> cmplx(3, 4) * cmplx(5, 6)
+Cmplx(-9.,38.)
+
+# Overflow
+TDI> 128BU * 2BU
+0BU
+
+TDI> build_with_units(1, 'm') * 5
+Build_With_Units(5, "m")
+
+TDI> build_with_units(1, 'm') * build_with_units(5, 'm')
+Build_With_Units(5, "m*m")
+
+TDI> build_with_units(1, 'm') * build_with_units(5, 'ft')
+Build_With_Units(5, "m*ft")
+
+TDI> build_with_error(1, 0.1) * 5
+6
+
+TDI> build_with_error(1, 0.1) * build_with_error(5, 0.2)
+6
+```
+
+See also:
+* [`PRODUCT()`](#product-total-product)
+
 NAME_OF
 ### `NAME_OF`
 |||
@@ -8233,7 +8413,7 @@ Get the procedure field.
 |Arguments, Results|Descriptor as below.
 |Result       |A is searched for this: DSC$K_DTYPE_PROCEDURE, the procedure field. Otherwise, an error.
 PRODUCT
-### `PRODUCT`
+### `PRODUCT` (Total Product)
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
@@ -9316,26 +9496,74 @@ exists and SUB is a explicit range without a delta, then all valid subscripts be
 Examples. [1,2,3][2] is 3. [1,2,3][3] is [] a null vector. Build_signal(1:100,*,build_dim(*,.01:1:.01))[.2:.25] is build_signal([20,21,22,23,24,25],*, [.2,.21,.22,.23,.24,.25]).
 |See also     |EXTEND to continue endpoint values to prevent culling. MAP to use offsets into the array X. NINT to round indices to the nearest integers.
 SUBTRACT
-### `SUBTRACT`
+
+### `SUBTRACT` (Subtract)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 336
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: SUBTRACT(arg0,arg1) 
-|Native python|False|
+|TDI Syntax   | `_X - _Y` or `SUBTRACT(_X, _Y)` |
+|Python Syntax| `MDSplus.SUBTRACT(x, y)` |
+|Opcode|336|
 
+Returns the result of `_Y` subtracted from `_X`.
 
-|Return Type  |Numeric Elemental |
-Subtract numbers.
-Usual Form A -B. Function Form SUBTRACT(A,B).
-Arguments A and B must be numeric.
-|Signals      |Single signal or smaller data. |Units        |Single or common units, else bad. |Form         |Compatible form of A and B.
-|Result       |The element-by-element difference of objects A and B. >>>>>>>>>WARNING, integer overflow is ignored.
-|Examples     |[2,3,4] -5.0 is [-3.0,-2.0,-1.0].
-SUM
+`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+
+If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+
+If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
+
+If `_X` and `_Y` are both complex, the result will be a complex number with the real parts subtracted and the imaginary parts subtracted. If only one argument is complex, the real parts are subtracted and the imaginary part is carried over.
+
+Integer underflows will be truncated.
+
+Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
+Note: `BUILD_WITH_ERROR()` will be discarded.
+
+```tdi
+TDI> 3 - 4
+-1
+
+TDI> [2, 3, 4] - 5
+[-3,-2,-1]
+
+TDI> [1, 2] - [3, 4]
+[-2,-2]
+
+TDI> [1, 2, 3, 4] - [5, 6]
+[-4,-4]
+
+TDI> make_signal([[1, 2], [3, 4]], *) - 5
+Build_Signal([[-4,-3], [-2,-1]], *)
+
+TDI> make_signal([[1, 2], [3, 4]], *) - make_signal([[5, 6], [7, 8]], *)
+[[-4,-4], [-4,-4]]
+
+TDI> cmplx(3, 4) - 5
+Cmplx(-2.,4.)
+
+TDI> cmplx(3, 4) - cmplx(5, 6)
+Cmplx(-2.,-2.)
+
+# Underflow
+TDI> 0BU - 1BU
+255BU
+
+TDI> build_with_units(1, 'm') - 5
+Build_With_Units(-4, "m")
+
+TDI> build_with_units(1, 'm') - build_with_units(5, 'm')
+Build_With_Units(-4, "m")
+
+TDI> build_with_units(1, 'm') - build_with_units(5, 'ft')
+Build_With_Units(-4, "?")
+
+TDI> build_with_error(1, 0.1) - 5
+-4
+
+TDI> build_with_error(1, 0.1) - build_with_error(5, 0.2)
+-4
+```
 
 ### `SUM` (Total Sum)
 
