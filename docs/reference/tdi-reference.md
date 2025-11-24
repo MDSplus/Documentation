@@ -8,11 +8,13 @@ e.g., the program lists $A0 as 52.9177E-12m, but the normal way to write that is
 
 TODO: make a table or something of all the different precision types of numbers you can have (F, G, H, D0 etc) and what they ultimately mean like how many bytes each ones takes up or whatever. the decimal precision is calculated by 1/(2^x) because of binary. plus all the functions to convert between them (like fs/ft_float, etc.)
 
-TODO: make a table or something of shortcuts 
+TODO: regroup entries by theme rather than one big alphabetical heap
 * bit-wise functions/operators (inor,inornot,inot)
 * build/make functions
-* fun with ascii (char, ichar, achar, iachar, etc)
-* 
+* text manip/fun with ascii (char, ichar, achar, iachar, etc)
+* bitwise functions
+* Trig functions(cos,sin,tan,all the variations)
+* array manipulatino
 
 TODO: remove references to what VAX returns
 
@@ -7259,8 +7261,8 @@ UNITS character string. See the primary section on "Units".
 ### `MAP`
 |||
 |-|-|
-|TDI Syntax   | `MAP(_ARRAY,_OFFSET)` |
-|Python Syntax| `MDSplus.MAP(_ARRAY,_OFFSET)` |
+|TDI Syntax   | `MAP(_ARRAY, _OFFSET)` |
+|Python Syntax| `MDSplus.MAP(_ARRAY, _OFFSET)` |
 |Min arguments| 2 |
 |Max arguments| 2 |
 |Opcode|394|
@@ -7270,8 +7272,9 @@ Element selection from an array. Basically, it lets you grab sub-samples from an
 Arguments
 * `_ARRAY` (A) an array of any type considered to be a vector.
 * `_OFFSET` (B) a list of offsets into the `_ARRAY`.  
-Values are from 0 to the number of elements in A less 1. Out-of-bounds values are considered to be at the limits.
+Values are from 0 to the number of elements in A less 1. Out-of-bounds values pull from the closest limit.
 
+> TODO: understand this
 |Signals      |Same as B. 
 |Units        |Same as A. 
 |Form         |Same type as A and same shape as B.
@@ -7281,14 +7284,21 @@ Values are from 0 to the number of elements in A less 1. Out-of-bounds values ar
 Examples
 
 ```tdi
- TDI> MAP(1:10,[20,-1,5])
- [10,1,6]
+TDI> map([1,2,3,4,5,6,7,8,9,10], [3, 2, 1, -1, 20, 5])
+[4,3,2,1,10,6]
+# 1, 2, 3, and 5 pull from the array at the offset
+# since 20 is out of bounds above the last offset it pulls the last element in the array
+# since -1 is out of bounds below the first offset it pulls the first element in the array
  
- _A=5:1:-1
- 
- TDI> MAP(_A,SORTI(_A))
- [1,2,3,4,5]
- # note that this is the same as SORT(5:1:-1).
+_A=5:1:-1
+
+TDI> MAP(_A,SORT(_A))
+[1,2,3,4,5]
+# note that this is the same as SORTVAL(_A).
+
+TDI> map(build_with_units([1, 2, 3, 4, 5, 6, 7, 8], 'm'), make_signal([[1, 2, 3], [3, 4, 5]], *))
+Build_Signal(Build_With_Units([[2,3,4], [4,5,6]], "m"), *)
+
 ```
 
 See also:
@@ -9124,7 +9134,9 @@ Make index list of ascending array.
 |Result       |The ascending order list of offsets, such that MAP(A,SORT(A))[j] <= MAP(A,SORT(A))[j+1]. >>>>>>>>>WARNING, equal values may not be in their original order. This is may be true for all n*log2(n) sorts.
 Examples. SORT([3,5,4,6]) is [0,2,1,3]. SORT(['abc','ab','b']) is [1,0,2]. _a=[3,5,4,6],MAP(_a,SORT(_a)) is [3,4,5,6].
 |See also     |SORTVAL to get sorted array without the index.
-SORTVAL
+
+
+
 ### `SORTVAL`
 |||
 |-|-|
@@ -9144,7 +9156,8 @@ Rearrange element to make an ascending array.
 |Result       |The ascending ordered list of values, such that SORTVAL(ARRAY)[j] <= SORTVAL(ARRAY)[j+1] for all j. This is the same as MAP(ARRAY,SORT(ARRAY)).
 Examples. SORTVAL([3,5,4,6]) is [3,4,5,6]. SORTVAL(['abc','ab','b']) is ['ab ','abc','b '].
 |See also     |SORT to sort index. That index may be use for several arrays. BSEARCH for a binary search.
-SPACING
+
+
 ### `SPACING`
 |||
 |-|-|
@@ -9190,7 +9203,7 @@ SPREAD
 (Opcode 328
 |Min arguments| 3
 |Max arguments| 3
-******Compiler syntax: SPREAD(arg0,arg1,arg2)
+******Compiler syntax: SPREAD(_ARRAY,_DIM,_COUNT)
 
 |Native python|False|
 
