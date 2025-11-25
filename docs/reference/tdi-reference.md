@@ -1,7 +1,7 @@
 # TDI Reference
 
-## Kind
-> TODO:
+
+
 
 TODO: Confirm whether to leave the scientific notation as it is in when you ping the program, or into standard:
 e.g., the program lists $A0 as 52.9177E-12m, but the normal way to write that is 5.29177E-11m
@@ -480,7 +480,7 @@ Build_With_Units(Build_With_Error(66.743E-12, 1500.02E-18), "m^3/s^2/kg")
 |Java mdsplus-api Syntax| `CONST.dGas()`|
 |Opcode|11 (0x0B)|
 
-The ideal gas constant: 8.31446 J/K/mol, with an error of 43.5899 x 10<sup>9</sup>
+The ideal gas constant (<em>R</em>): 8.31446 J/K/mol, with an error of 43.5899 x 10<sup>9</sup>
 
 ```tdi
 TDI> $gas
@@ -592,7 +592,7 @@ Build_With_Units(Build_With_Error(910.938E-33, 25.8874E-39), "kg")
 |Java mdsplus-api Syntax| `CONST.dMp()`|
 |Opcode|18 (0x12)|
 
-The mass of a proton (<em>p</em>): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
+The mass of a proton (<em>m<sub>p</sub></em>): 1672.62 x 10<sup>30</sup> kg, with an error of 85.2717 x 10<sup>36</sup>
 
 ```tdi
 TDI> $mp
@@ -717,7 +717,7 @@ Build_With_Units(Build_With_Error(2817.94E-18, 12.7156E-24), "m")
 |Java mdsplus-api Syntax| `CONST.dRydberg()`|
 |Opcode|26|
 
-The Rydberg constant (<em>R<sub>M</sub></em>): 10.9737 x 10<sup>6</sup> /m, with an error of 0.443876
+The Rydberg constant (<em>R<sub>∞</sub></em>): 10.9737 x 10<sup>6</sup> /m, with an error of 0.443876
 > TODO: Verify units should start with /
 
 ```tdi
@@ -1101,12 +1101,13 @@ See also:
 
 Returns the absolute value of `_X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` contains complex numbers, the result will be the square root of the sum of the squares of the real and imaginary parts. The real and imaginary parts will be scaled to avoid overflow. Use `ABS1()` or `ABSSQ()` to avoid the square root for for complex numbers.
+If `_X` contains [Complex Numbers](#complex-number), the result will be the square root of the sum of the squares of the real and imaginary parts. The real and imaginary parts will be scaled to avoid overflow. Use [`ABS1()`](#abs1-absolute-value-with-l1-norm) or [`ABSSQ()`](#abssq-absolute-value-squared) to avoid the square root for for complex numbers.
 
-Note: `BUILD_WITH_UNITS()` will be preserved.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> abs(-2)
@@ -1148,12 +1149,13 @@ See also:
 
 Returns the absolute value of the L<sup>1</sup> norm of `_X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` contains complex numbers, the result will be the sum of the absolute values of the real and imaginary parts; otherwise, this will behave the same as `ABS()`.
+If `_X` contains [Complex Numbers](#complex-number), the result will be the sum of the absolute values of the real and imaginary parts; otherwise, this will behave the same as [`ABS()`](#abs-absolute-value).
 
-Note: `BUILD_WITH_UNITS()` will be preserved.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> abs1(cmplx(-3.0, 4.0))
@@ -1190,12 +1192,13 @@ See also:
 
 Returns the absolute value of `_X * _X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` contains complex numbers, the result will be square of the sum of the real and imaginary parts.
+If `_X` contains [Complex Numbers](#complex-number), the result will be square of the sum of the real and imaginary parts.
 
-Note: `BUILD_WITH_UNITS()` will be preserved as `units*units`.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved as `UNITS_OF(_X) // "*" // UNITS_OF(_X)`.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```TDI
 TDI> abssq(cmplx(-3.0, 4.0))
@@ -1229,16 +1232,23 @@ See also:
 |Python Syntax| `MDSplus.ACCUMULATE(array, [dim], [mask])` |
 |Opcode|439|
 
-Returns a running sum of each element in `_ARRAY`, meaning each element will become the sum of itself and all previous elements.
+Returns a running sum of each element of `_ARRAY`, meaning each element will become the sum of itself and all previous elements.
 
-If `_DIM` is specified, then the elements of that dimension will be summed; otherwise the array will be treated as a flat array. If specified, `_DIM` must be an positive integer and must be within the range of `DIM_OF(_ARRAY)`.
+To get the total sum of an array, use [`SUM()`](#sum-total-sum) instead.
+
+`_ARRAY` must be [Numeric](#numeric) and should be an [Array](#array) or a [Signal](#signal). The result will be the same type as `_ARRAY`.
+
+If `_DIM` is specified, then the elements of that dimension will be summed; otherwise the array will be treated as a flat array. If specified, `_DIM` must be an positive integer and must be within the range of [0, `DIM_OF(_ARRAY)`].
 
 If `_MASK` is specified, only the elements where `_MASK` is true will be summed. If specified, `_MASK` must be a logical array with the same length as `_ARRAY`.
 
-To get the total sum of an array, use `SUM()` instead.
+Any `$ROPERAND` values of `_ARRAY` will not be included in the sum.
 
-Note: `$ROPERAND` values of `_ARRAY` will not be included in the sum.  
-Note: If no values are found, the result will be 0.
+If no values are found in `_ARRAY`, the result will be 0.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```TDI
 TDI> accumulate([1, 2, 3])
@@ -1295,9 +1305,9 @@ See also:
 
 Returns the equivalent ASCII character(s) of `_X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Optional [`_KIND`](#kind).
+Optional `_KIND`, see `Kind`](#kind).
 
 Note: This is equivalent to [`CHAR()`](#char-character-from-integer).
 
@@ -1308,8 +1318,8 @@ TDI> achar(42)
 TDI> achar([87, 111, 114, 108, 100, 33])
 ["W","o","r","l","d","!"]
 
-TDI> achar(97 .. 122)
-["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+TDI> achar(97 .. 103)
+["a","b","c","d","e","f","g"]
 ```
 
 See also:
@@ -1325,14 +1335,14 @@ See also:
 
 Returns the arccosine (inverse cosine) in radians of `_X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+Use [`ACOSD()`](#acosd-arccosine-degrees) to get the results in degrees.
 
-The values of `_X` must be real and between [-1, 1], values outside this range will return `$ROPRAND`.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Use `ACOSD()` to get the results in degrees.
+The value(s) of `_X` must be [Real](#real) and in the range of [-1, 1], values outside this range will return `$ROPRAND`.
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be replaced with '?'.  
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> acos(-1)
@@ -1365,14 +1375,14 @@ See also:
 
 Returns the arccosine (inverse cosine) in degrees of `_X`.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+Use [`ACOS()`](#acos-arccosine) to get the results in radians.
 
-The values of `_X` must be real and between [-1, 1], values outside this range will return `$ROPRAND`.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Use `ACOS()` to get the results in radians.
+The values of `_X` must be [Real](#real) and in the range of [-1, 1], values outside this range will return `$ROPRAND`.
 
-Note: `BUILD_WITH_UNITS()` will be preserved, however the units will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.  
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> acosd(-1)
@@ -1405,18 +1415,18 @@ See also:
 
 Returns the result of `_X` added to `_Y`.
 
-`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+`_X` and `_Y` must be [Numeric](#numeric). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
-
-If `_X` and `_Y` are both complex, the result will be a complex number with the real parts added and the imaginary parts added. If only one argument is complex, the real parts are added and the imaginary part is carried over.
+> TODO: Mark, help reword
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
 Integer overflows will be truncated.
 
-Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> 3 + 4
@@ -1425,17 +1435,14 @@ TDI> 3 + 4
 TDI> [2, 3, 4] + 5
 [7,8,9]
 
-TDI> [1, 2] + [3, 4]
-[4,6]
+TDI> [[1, 2], [3, 4]] + [[5, 6], [7, 8]]
+[[6,8], [10,12]]
 
 TDI> [1, 2, 3, 4] + [5, 6]
 [6,8]
 
-TDI> make_signal([[1, 2], [3, 4]], *) + 5
-Build_Signal([[6,7], [8,9]], *)
-
-TDI> make_signal([[1, 2], [3, 4]], *) + make_signal([[5, 6], [7, 8]], *)
-[[6,8], [10,12]]
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) + 5
+Build_Signal([6,7,8,9], *, [.1,.2,.3,.4])
 
 TDI> cmplx(3, 4) + 5
 Cmplx(8.,4.)
@@ -1459,8 +1466,6 @@ Build_With_Units(6, "?")
 TDI> build_with_error(1, 0.1) + 5
 6
 
-TDI> build_with_error(1, 0.1) + build_with_error(5, 0.2)
-6
 ```
 
 See also:
@@ -3116,7 +3121,7 @@ TDI> CLASS(_A)
 1BU (DSC$K_CLASS_S)
 ```
 
-### `CMPLX` 
+### `CMPLX` (Complex Number)
 |||
 |-|-|
 |TDI Syntax   | `CMPLX(_REALNUM, _IMAGINARYNUM, [_KIND])` |
@@ -3136,6 +3141,9 @@ Examples:
 TDI> cmplx(-3)` is `cmplx(-3.0,0.0)`. 
 TDI> cmplx(3,4,5d6)` is `cmplx(3d0,4d0)`.
 
+> TODO: When creating one with two different types, it breaks
+> TDI> cmplx(3.0, 4D0)
+> Cmplx(5325.712092559326D-318,0D0)
 
 
 ### `COMMA`
@@ -3369,22 +3377,24 @@ for( _i = 0; _i <= 5; ++_i)
 
 Returns the cosine of `_X` in radians.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` contains complex numbers, the result will be `COS(REAL(_X)) * COSH(AIMAG(_X)) - $I * SIN(REAL(_X)) * SINH(AIMAG(_X))`.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> cos(3.14159)
 -1.
 
+TDI> cos([3.1415, 6.283, 9.4245, 12.566])
+[-1.,1.,-1.,1.]
+
 TDI> cos(cmplx(1.0, 2.0))
 Cmplx(2.03272,-3.0519)
 
-TDI> cos(make_signal([[0.5, 1.0], [1.5, 2.0]], *))
-Build_Signal([[.877583,.540302], [.0707372,-.416147]], *)
+TDI> cos(make_signal([3.1415, 6.283, 9.4245, 12.566], *, [0.1, 0.2, 0.3, 0.4]))
+Build_Signal([-1.,1.,-1.,1.], *, [.1,.2,.3,.4])
 
 TDI> cos(build_with_units(3.14159, 'rad'))
 Build_With_Units(-1., "?")
@@ -3407,19 +3417,23 @@ See also:
 
 Returns the cosine of `_X` in degrees.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be real, complex numbers will result in an error.
+The values of `_X` must be [Real](#real).
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> cosd(180)
 -1.
 
-TDI> cosd(make_signal([[45, 90], [125, 180]], *))
-Build_Signal([[.707107,-43.2051E-9], [-.573577,-1.]], *)
+TDI> cosd([180, 360, 540, 720])
+[-1.,1.,-1.,1.]
+
+TDI> cosd(make_signal([180, 360, 540, 720], *, [0.1, 0.2, 0.3, 0.4]))
+Build_Signal([-1.,1.,-1.,1.], *, [.1,.2,.3,.4])
 
 TDI> cosd(build_with_units(180, 'deg'))
 Build_With_Units(-1., "?")
@@ -3441,12 +3455,21 @@ See also:
 
 Returns the hyperbolic cosine of `_X` in radians.
 
-The result is equivalent to `REAL(COS($I * _X))`.
+Use [`COS()`](#cos-cosine) to get the sine of a complex number.
 
-Use `COS()` to get the sine of a complex number.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+The values of `_X` must be [Real](#real).
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> cosh(3.14159)
+11.5919
+
+TDI> cosh(cmplx(1.0, 2.0))
 11.5919
 ```
 
@@ -3992,14 +4015,12 @@ TODO: Come back to this
 
 Returns the result of `_X` divided by `_Y`.
 
-`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+`_X` and `_Y` must be [Numeric](#numeric). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
-
-> TODO: Mark, help reword or improve
-If `_X` and `_Y` are both complex, the resullt will be `CMPLX((RX*RY-IX*IY)/DEN,(RY*IX-RX*IY)/DEN)` with `DEN=RY^2+RI^2`, where `RX=REAL(_X)`, `IX=AIMAG(_X)`, etc. The exponents are scaled to prevent overflow or underflow.
+> TODO: Mark, help reword
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
 > TODO: Rounding
 
@@ -4007,13 +4028,12 @@ Integer division will result in truncation.
 
 Floating point division by zero will return `$ROPERAND`. Integer division by zero will return `0`.
 
-> TODO: Mark, help reword or improve
-Note: `BUILD_WITH_UNITS()` will be preserved, however:
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however:
 * If `_X` has units, but `_Y` does not, the units will be `UNITS_OF(_X)`.
-* If `_Y` has units, but `_X` does not, the units will be a '/' followed by `UNITS_OF(_Y)`.
-* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X)` and `UNITS_OF(_Y)`, separated by a '/'.
+* If `_Y` has units, but `_X` does not, the units will be `"/" // UNITS_OF(_Y)`.
+* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X) // "/" // UNITS_OF(_Y)`.
 
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> 3.0 / 4.0
@@ -7640,20 +7660,22 @@ Examples. MINVAL([1,2,3]) is 3. MINVAL(_C,,_C GT 0) finds the minimum positive e
 
 Returns the remainder of `_X` divided by `_Y`.
 
-`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+`_X` and `_Y` must be [Numeric](#numeric). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
+> TODO: Mark, help reword
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
-The values of `_X` must be real, complex numbers will result in an error.
+The values of `_X` and `_Y` must be [Real](#real).
 
 Floating point division by zero will return `0`. Integer division by zero will result in a segfault.
 > TODO: Floating point / 0 should return `$ROPERAND` according to original docs
 > TODO: GitHub Issue # for segfault
 
-Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> 4 % 3
@@ -7662,17 +7684,14 @@ TDI> 4 % 3
 TDI> [5, 6, 7] % 5
 [0,1,2]
 
-TDI> [3, 4] % [2, 3]
-[1,1]
+TDI> [[5, 6], [7, 8]] % [[2, 3], [4, 5]]
+[[1,0], [3,3]]
 
 TDI> [5, 6, 7, 8] % [2, 3]
 [1,0]
 
-TDI> make_signal([[4, 5], [6, 7]], *) % 2
-Build_Signal([[0,1], [0,1]], *)
-
-TDI> make_signal([[4, 5], [6, 7]], *) % make_signal([[2, 3], [4, 5]], *)
-[[0,2], [2,2]]
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) % 2
+Build_Signal([1,0,1,0], *, [.1,.2,.3,.4])
 
 TDI> build_with_units(4, 'm') % 3
 Build_With_Units(1, "m")
@@ -7684,9 +7703,6 @@ TDI> build_with_units(4, 'm') % build_with_units(3, 'ft')
 Build_With_Units(1, "?")
 
 TDI> build_with_error(4, 0.1) % 3
-1
-
-TDI> build_with_error(4, 0.1) % build_with_error(3, 0.2)
 1
 ```
 
@@ -7725,25 +7741,21 @@ Examples. MOD(3.0,2.0) is 1.0. MOD(8,5) is 3. MOD(-8,5) is -3. MOD(8,-5) is -3. 
 
 Returns the result of `_X` multiplied by `_Y`.
 
-`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+`_X` and `_Y` must be [Numeric](#numeric). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
-
-> TODO: Explain what happens when two complex numbers are multiplied, or avoid saying it. If we avoid it, we could simplify DIVIDE, ADD, SUBTRACT, and maybe even SIN/COS.
 > TODO: Mark, help reword
-If either `_X` or `_Y` is complex, but not both, then the result will be a complex number where the real and imaginary parts are both multiplied by the other argument.
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
 Integer overflows will be truncated.
 
-> TODO: Mark, help reword or improve
-Note: `BUILD_WITH_UNITS()` will be preserved, however:
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however:
 * If `_X` has units, but `_Y` does not, the units will be `UNITS_OF(_X)`.
 * If `_Y` has units, but `_X` does not, the units will be `UNITS_OF(_Y)`.
-* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X)` and `UNITS_OF(_Y)`, separated by a '*'.
+* If `_X` and `_Y` both have units, the units will be `UNITS_OF(_X) // "*" // UNITS_OF(_Y)`.
 
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> 3 * 4
@@ -9146,22 +9158,26 @@ SIN
 
 Returns the sine of `_X` in radians.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+To use degrees, use [`SIND()`](#sind-sine-degrees).
 
-If `_X` contains complex numbers, the result will be `SIN(REAL(_X)) * COSH(AIMAG(_X)) - $I * COS(REAL(_X)) * SINH(AIMAG(_X))`.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> sin(1.5708)
 1.
 
+TDI> sin([1.5708, 4.7123, 7.8539, 10.9956])
+[1.,-1.,1.,-1.]
+
 TDI> sin(cmplx(1.0, 2.0))
 Cmplx(3.16578,1.9596)
 
-TDI> sin(make_signal([[0.5, 1.0], [1.5, 2.0]], *))
-Build_Signal([[.479426,.841471], [.997495,.909297]], *)
+TDI> sin(make_signal([1.5708, 4.7123, 7.8539, 10.9956], *, [0.1, 0.2, 0.3, 0.4]))
+Build_Signal([1.,-1.,1.,-1.], *, [.1,.2,.3,.4])
 
 TDI> sin(build_with_units(1.5708, 'rad'))
 Build_With_Units(1., "?")
@@ -9171,8 +9187,8 @@ TDI> sin(build_with_error(1.5708, 0.1))
 ```
 
 See also:
-* [`SIND`](#sind-sine-degrees)
-* [`SINH`](#sinh-hyperbolic-sine)
+* [`SIND()`](#sind-sine-degrees)
+* [`SINH()`](#sinh-hyperbolic-sine)
 
 ### `SIND` (Sine Degrees)
 
@@ -9184,29 +9200,32 @@ See also:
 
 Returns the sine of `_X` in degrees.
 
-`_X` must be numeric, and can be a scalar, array, or `Signal`. If `_X` is an array or `Signal`, the shape will be preserved.
+To use radians, use [`SIN()`](#sin-sine).
 
-The values of `_X` must be real, complex numbers will result in an error.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Note: `BUILD_WITH_UNITS()` will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+The values of `_X` must be [Real](#real).
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> sind(90)
 1.
 
-TDI> sind(make_signal([[45, 90], [125, 180]], *))
-Build_Signal([[.707107,1.], [.819152,-86.4102E-9]], *)
+TDI> sind([90, 270, 450, 630])
+[1.,-1.,1.,-1.]
+
+TDI> sind(make_signal([90, 270, 450, 630], *, [0.1, 0.2, 0.3, 0.4]))
+Build_Signal([1.,-1.,1.,-1.], *, [.1,.2,.3,.4])
 
 TDI> sind(build_with_units(90, 'deg'))
 Build_With_Units(1., "?")
-
-TDI> sind(build_with_error(90, 0.1))
-1.
 ```
 
 See also:
-* [`SIN`](#sin-sine)
+* [`SIN()`](#sin-sine)
 
 ### `SINH` (Hyperbolic Sine)
 
@@ -9218,10 +9237,15 @@ See also:
 
 Returns the hyperbolic sine of `_X` in radians.
 
-The result is equivalent to `AIMAG(SIN($I * _X))`.
-> TODO: Fernando says there should be a - sign
+Use [`SIN()`](#sin-sine) to get the sine of a complex number.
 
-Use `SIN()` to get the sine of a complex number.
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+The values of `_X` must be [Real](#real).
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> sinh(1.5708)
@@ -9507,18 +9531,18 @@ SUBTRACT
 
 Returns the result of `_Y` subtracted from `_X`.
 
-`_X` and `_Y` must be numeric, and either can be a scalar, array, or `Signal`. If `_X` or `_Y` are arrays or `Signal`s, the shape will be preserved.
+`_X` and `_Y` must be [Numeric](#numeric). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-If `_X` and `_Y` are both arrays or `Signal`s, but do not have the same length, the result will be truncated to the shorter one.
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-If `_X` and `_Y` are both `Signal`s, the result will be a scalar or array. If only one is a `Signal`, the result will be as well.
-
-If `_X` and `_Y` are both complex, the result will be a complex number with the real parts subtracted and the imaginary parts subtracted. If only one argument is complex, the real parts are subtracted and the imaginary part is carried over.
+> TODO: Mark, help reword
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
 Integer underflows will be truncated.
 
-Note: `BUILD_WITH_UNITS()` will be preserved, however mismatched units will be replaced with '?'.  
-Note: `BUILD_WITH_ERROR()` will be discarded.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> 3 - 4
@@ -9527,17 +9551,17 @@ TDI> 3 - 4
 TDI> [2, 3, 4] - 5
 [-3,-2,-1]
 
-TDI> [1, 2] - [3, 4]
-[-2,-2]
+TDI> [3, 4] - [2, 1]
+[1,3]
 
-TDI> [1, 2, 3, 4] - [5, 6]
-[-4,-4]
+TDI> [[4, 3], [2, 1]] - [[5, 6], [7, 8]]
+[[-1,-3], [-5,-7]]
 
-TDI> make_signal([[1, 2], [3, 4]], *) - 5
-Build_Signal([[-4,-3], [-2,-1]], *)
+TDI> [4, 3, 2, 1] - [5, 6]
+[-1,-3]
 
-TDI> make_signal([[1, 2], [3, 4]], *) - make_signal([[5, 6], [7, 8]], *)
-[[-4,-4], [-4,-4]]
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) - 5
+Build_Signal([-4,-3,-2,-1], *, [.1,.2,.3,.4])
 
 TDI> cmplx(3, 4) - 5
 Cmplx(-2.,4.)
@@ -9560,9 +9584,6 @@ Build_With_Units(-4, "?")
 
 TDI> build_with_error(1, 0.1) - 5
 -4
-
-TDI> build_with_error(1, 0.1) - build_with_error(5, 0.2)
--4
 ```
 
 ### `SUM` (Total Sum)
@@ -9575,16 +9596,21 @@ TDI> build_with_error(1, 0.1) - build_with_error(5, 0.2)
 
 Returns a total sum of the elements in `_ARRAY`.
 
-`_ARRAY` must be numeric, and can be a scalar, array, or `Signal`. If `_ARRAY` is an array or `Signal`, the shape will be preserved. If `_ARRAY` is a scalar, it will just be returned as-is.
+To get a running sum of an array, use [`ACCUMULATE()`](#accumulate-running-sum) instead.
 
-If `_DIM` is specified, then the elements of that dimension will be summed; otherwise the array will be treated as a flat array. If specified, `_DIM` must be an positive integer and must be within the range of `DIM_OF(_ARRAY)`.
+`_ARRAY` must be [Numeric](#numeric) and should be an [Array](#array) or a [Signal](#signal). The result will be the same type as `_ARRAY`.
+
+If `_DIM` is specified, then the elements of that dimension will be summed; otherwise the array will be treated as a flat array. If specified, `_DIM` must be an positive integer and must be within the range of [0, `DIM_OF(_ARRAY)`].
 
 If `_MASK` is specified, only the elements where `_MASK` is true will be summed. If specified, `_MASK` must be a logical array with the same length as `_ARRAY`.
 
-To get a running sum of an array, use `ACCUMULATE()` instead.
+Any `$ROPERAND` values of `_ARRAY` will not be included in the sum.
 
-Note: `$ROPERAND` values of `_ARRAY` will not be included in the sum.  
-Note: If no values are found, the result will be 0.
+If no values are found in `_ARRAY`, the result will be 0.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```TDI
 TDI> sum([1, 2, 3])
@@ -9629,10 +9655,8 @@ TDI> sum(_array, 2)
 [[6,8], [9,11]]
 ```
 
-
 See also:
 * [`ACCUMULATE()`](#accumulate-running-sum)
-
 
 
 |Return Type  |F90 Transformation |
@@ -10351,8 +10375,122 @@ If SHAPE is absent, the result is a scalar. If MOLD is absent, the result will b
 Total of 404 builtins of which 103 are implemented in Python
 
 
+## Glossary
 
+### Kind
 
+This is another way to refer to [DTypes](TODO link to Dtypes), or a unique ID for each data type.
+
+Use [`KIND_OF()`](#kind_of-opcode-437) to query the kind of a variable or constant.
+
+If a function has a `_KIND` argument, you may pass a value from the [DType table](TODO link) or from the `Kind` column in any of the tables below. This will cause the result of the function to be cast to that data type, if possible.
+
+### Numeric
+
+Refers to a numeric quantity.
+
+This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless otherwise specified.
+
+### Scalar
+
+Refers to a single value, which can be [Integer](#integer), [Floating Point](#floating-point), or [Complex Number](#complex-number), unless otherwise specified.
+
+### Array
+
+Refers to an array of values, which can be [Integer](#integer), [Floating Point](#floating-point), or [Complex Number](#complex-number), unless otherwise specified.
+
+Note: In most cases, a [Signal](#signal) can be used in place of an array.
+
+### Signal
+
+`build_signal`/`make_signal`
+`data` vs `value_of`/`raw_of`
+use as an Array proxy
+note that an operation involving two signals usually results in data, not a signal
+
+### Integer
+
+Refers to an integer (whole) number.
+
+Can be one of the following types. The type will be determined by the `Suffix` below, or you can use the `Function` below to explicitly cast.
+
+|Name   |Kind|Bits|Signed|Suffix     |Function                                   |
+|Int8   |6   |8   |Yes   |`B`        |[`Byte()`](#byte)                          |
+|Uint8  |2   |8   |No    |`BU`       |[`Byte_Unsigned()`](#byte_unsigned)        |
+|Int16  |7   |16  |Yes   |`W`        |[`Word()`](#word)                          |
+|Uint16 |3   |16  |No    |`WU`       |[`Word_Unsigned()`](#word_unsigned)        |
+|Int32  |8   |32  |Yes   |`L` or None|[`Long()`](#long)                          |
+|Uint32 |4   |32  |No    |`LU`       |[`Long_Unsigned()`](#long_unsigned)        |
+|Int64  |9   |64  |Yes   |`Q`        |[`Quadword()`](#quadword)                  |
+|Uint64 |5   |64  |No    |`QU`       |[`Quadword_Unsigned()`](#quadword_unsigned)|
+|Int128 |26  |128 |Yes   |`O`        |[`Octaword()`](#quadword)                  |
+|Uint128|25  |128 |No    |`OU`       |[`Octaword_Unsigned()`](#quadword_unsigned)|
+
+### Floating Point
+
+Refers to a floating point (fractional) number.
+
+Can be one of the following types. The type will be determined by the `Suffix` below, or you can use the `Function` below to explicitly cast.
+
+|Name           |Kind|Bits|Suffix      |Function                 |
+|IEEE-754 Float |52  |32  |`E0` or None|`FS_FLOAT()` or `FLOAT()`|
+|IEEE-754 Double|53  |64  |`D0`        |`FT_FLOAT()`             |
+
+Floating point numbers can also be expressed in scientific notation:
+
+```tdi
+# Float, same as 3.2 x 10^5
+TDI> 3.2E5
+320000.
+
+# Double, same as 3.2 x 10^5
+TDI> 3.2D5
+320000D0
+```
+
+The following types are deprecated, and should not be used, but might already be stored as data in trees. When used, they will naturally convert to the modern floating point types above.
+
+|Name          |Kind|Bits|Suffix|Function   |
+|VMS F-Floating|10  |32  |`F0`  |`F_FLOAT()`|
+|VMS D-Floating|11  |64  |`V0`  |`D_FLOAT()`|
+|VMS G-Floating|27  |64  |`G0`  |`G_FLOAT()`|
+|VMS H-Floating|28  |128 |`H0`  |`H_FLOAT()`|
+
+### Real Number
+
+This refers to any number that is not imaginary or complex.
+
+See [`Integer`](#integer) and [`Floating point`](#floating-point) for more information.
+
+### Complex Number
+
+Refers to a complex floating point number, containing both real and imaginary parts.
+
+Use [`REAL()`](#real) to access the real part, and [`AIMAG()`](#aimag-imaginary-part-of-a-complex-number) to access the imaginary part.
+
+See [`CMPLX()`](#cmplx-complex-number) and [`$I`](#i-imaginary) for more information.
+
+```tdi
+TDI> cmplx(3.0, 4.0)
+Cmplx(3.,4.)
+
+TDI> ($I * 4.0) + 3.0
+Cmplx(3.,4.)
+```
+
+Can be one of the following types. The type will be determined by the component types, or you can use the `Function` below to explicitly cast.
+
+|Name                   |Kind|Bits|Function|
+|IEEE-754 Complex Float |54  |64  |`FS_COMPLEX()`|
+|IEEE-754 Complex Double|55  |128 |`FT_COMPLEX()`|
+
+The following types are deprecated, and should not be used, but might already be stored as data in trees. When used, they will naturally convert to the modern floating point types above.
+
+|Name                  |Kind|Bits|Function   |
+|VMS Complex F-Floating|12  |64  |`F_COMPLEX()`|
+|VMS Complex D-Floating|13  |128 |`D_COMPLEX()`|
+|VMS Complex G-Floating|29  |128 |`G_COMPLEX()`|
+|VMS Complex H-Floating|30  |256 |`H_COMPLEX()` TODO: Segfault|
 
 
 
