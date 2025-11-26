@@ -41,11 +41,6 @@ TODO for Stephen
 * remove the word "examples" above the code blocks
 
 
-
-## Kind
-> TODO: Stephen/Tim/Fernando to investigate further
-`Kind` appears as a second argument for many different functions
-
 ## Contents
 Table of all the commands in each category, with symlinks to each heading
 
@@ -826,7 +821,7 @@ See also:
 
 Boolean constant for false: 0BU
 
-Note: Any expression that returns `$false` will display as 0BU
+Note: Any expression that returns `$FALSE` will display as `0BU`.
 
 ```tdi
 TDI> $false
@@ -1017,7 +1012,7 @@ See also:
 
 Boolean constant for true: 1BU
 
-Note: Any expression that returns `$true` will display as 1BU
+Note: Any expression that returns `$TRUE` will display as `1BU`.
 
 ```tdi
 TDI> $true
@@ -1380,7 +1375,7 @@ Use [`ACOS()`](#acos-arccosine) to get the results in radians.
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be [Real](#real) and in the range of [-1, 1], values outside this range will return `$ROPRAND`.
+The value(s) of `_X` must be [Real](#real) and in the range of [-1, 1], values outside this range will return `$ROPRAND`.
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.  
 [`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
@@ -1461,6 +1456,7 @@ Build_With_Units(6, "m")
 TDI> build_with_units(1, 'm') + build_with_units(5, 'm')
 Build_With_Units(6, "m")
 
+# The ? indicating a unit mismatch
 TDI> build_with_units(1, 'm') + build_with_units(5, 'ft')
 Build_With_Units(6, "?")
 
@@ -1608,8 +1604,8 @@ Arguments
 * [_DIM] optional: integer scalar from 0 to n-1, where n is rank of `_MASK`.
 
 Results
-* `ALL(_MASK)` returns `$TRUE` if all elements of `_MASK` are true or if MASK has size zero
-* `ALL(_MASK)` returns `$FALSE` if any element of `_MASK` is false.
+* `ALL(_MASK)` returns [`$TRUE`](#true-true-constant) if all elements of `_MASK` are true or if MASK has size zero
+* `ALL(_MASK)` returns [`$FALSE`](#false-false-constant) if any element of `_MASK` is false.
 * For a vector MASK, `ALL(_MASK, _DIM)` is equal to `ALL(_MASK)`. Otherwise, the value of an element of the result is `ALL()` of the elements of `_MASK` varying the `_DIM` subscript.
 
 Examples
@@ -1642,7 +1638,7 @@ See also:
 |Python Syntax| `MDSplus.ALLOCATED(_STRING)` |
 |Opcode|44|
 
-Returns `$TRUE` if a variable has been declared and is populated, else, returns `$FALSE`.
+Returns [`$TRUE`](#true-true-constant) if a variable has been declared and is populated, else, returns [`$FALSE`](#false-false-constant).
 * Argument expected is variable name or  text string.
 * ALLOCATED(_Not_in use) is $FALSE unless it has appeared on the left side of an assignment expression.
 
@@ -2203,7 +2199,7 @@ TDI> BEGIN_OF(1:10)
 See also: 
 * `end_of`
 
-### `BIT_SIZE` 
+### `BIT_SIZE` (Bit Size, Number of Bits)
 |||
 |-|-|
 |TDI Syntax   | `BIT_SIZE(_ARG)` |
@@ -3420,7 +3416,7 @@ Returns the cosine of `_X` in degrees.
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be [Real](#real).
+The value(s) of `_X` must be [Real](#real).
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
 
@@ -3460,7 +3456,7 @@ Use [`COS()`](#cos-cosine) to get the sine of a complex number.
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be [Real](#real).
+The value(s) of `_X` must be [Real](#real).
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
 
@@ -4503,41 +4499,82 @@ TODO: come back to this? looks like it always returns this constant regardless o
 
 
 
-### `eq` 
-(Opcode 151)
+### `EQ` (Equal To)
 
 |||
 |-|-|
-|TDI Syntax   | `_A eq _B` `_A == _B` `eq(_A, _B)`|
-|Min arguments| 2 |
-|Max arguments| 2 |
+|TDI Syntax   | `_X == _Y`, `_X EQ _Y` or `EQ(_X, _Y)`|
+|Python Syntax| `MDSplus.EQ(x, y)`|
+|Opcode|151|
 
+Returns [`$TRUE`](#true-true-constant) if `_X` is equal to `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
 
-Tests for equality of two values.
-Usual Forms `A == B`, `A EQ B`. 
-Function Form `EQ(A,B)`.
-* Arguments A and B must both be numeric or character.
-* Returns True if X and Y are the equal; otherwise, false. 
-* Units are lost if different
-* $ROPRAND is not equal to any value.
-* Warning: floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that `.1d0+.1==.2` is true. Integer values may be truncated when matched to floating numbers.
- 
-Examples
-* `2==2.0` is $TRUE.
-* `eq(build_with_units(2, "V"), build_with_units(2, "W"))` returns `Build_With_Units(1BU, "?")`
-* `eq(build_with_units(2, "V"), build_with_units(2, "V"))` returns `1BU`
+To assign a value to a variable, use [`EQUALS()`](#equals-variable-assignment).
 
-See also: `ge`, `gt`, `le`, `lt`, `ne`
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
 
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-### `equals` (Opcode 152)
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$FALSE`.
+
+Note: This can be used to create a `_MASK` argument for functions that take one.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 1 == 2
+0BU
+
+TDI> 2 == 2
+1BU
+
+TDI> 'a' == 'b'
+0BU
+
+TDI> 'a' == 'A'
+0BU
+
+TDI> 'this' == 'that'
+0BU
+
+TDI> [1, 2, 3, 4, 5] == 3
+Byte_Unsigned([0,0,1,0,0])
+
+TDI> [1, 2, 3] == [3, 2, 1]
+Byte_Unsigned([0,1,0])
+
+TDI> [1, 2, 3, 4] == [1, 0]
+Byte_Unsigned([1,0])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) == 2
+Build_Signal(Byte_Unsigned([0,1,0,0]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') == build_with_units(42, 'ft')
+Build_With_Units(1BU, "?")
+```
+
+See also:
+* [`NE()`](#ne-not-equal-to)
+* [`LT()`](#lt-less-than)
+* [`LE()`](#le-less-than-or-equal-to)
+* [`GT()`](#gt-greater-than)
+* [`GE()`](#ge-greater-than-or-equal-to)
+
+### `EQUALS` (Variable Assignment)
 
 |||
 |-|-|
 |TDI Syntax   | `_NAME = _VALUE ` |
-|Min arguments| 2
-|Max arguments| 2
+|Opcode|152|
+
+
+To check if two things are equal, use [`EQ()`](#eq-equal-to).
+
 
 Stores a value in a name variable.
 Usual Form: `_NAME = X` 
@@ -5483,28 +5520,69 @@ Examples
 * `F_FLOAT(12)`, `F_FLOAT(12.)`, and `F_FLOAT(12D0)` return `12F`.
 
 
-### `ge` (Opcode 174)
+### `GE` (Greater Than or Equal To)
 
 |||
 |-|-|
-|TDI Syntax   | `_X >= _Y` |
+|TDI Syntax   | `_X >= _Y`, `_X GE _Y` or `GE(_X, _Y)` |
 |Python Syntax| `MDSplus.GE(x, y)` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+|Opcode|174|
 
+Returns [`$TRUE`](#true-true-constant) if `_X` is greater than or equal to `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
 
-Tests for first greater than or equal to second.
-* Arguments must both be numeric or character. Complex numbers are result in error.
-* Returns True if X is greater than or equal to Y; otherwise,
-false. A reserved operand always returns false. Characters are compared in the processor collating sequence.
-* Warning: floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that `.1+.1>=.2` is true. Integer values may be truncated when matched to floating numbers.
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Examples
-* `2>=2.0` returns `$TRUE`.
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
 
-See also: `eq`, `gt`, `le`, `lt`, `ne`
-See [legacy syntax]()
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$FALSE`.
+
+Note: This can be used to create a `_MASK` argument for functions that take one.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 1 >= 2
+0BU
+
+TDI> 2 >= 1
+1BU
+
+TDI> 'a' >= 'b'
+0BU
+
+TDI> 'a' >= 'B'
+1BU
+
+TDI> 'this' >= 'that'
+1BU
+
+TDI> [1, 2, 3, 4, 5] >= 3
+Byte_Unsigned([0,0,1,1,1])
+
+TDI> [1, 2, 3] >= [1, 3, 2]
+Byte_Unsigned([1,0,1])
+
+TDI> [1, 2, 3, 4] >= [3, 2]
+Byte_Unsigned([0,1])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) >= 2
+Build_Signal(Byte_Unsigned([0,1,1,1]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') >= build_with_units(42, 'ft')
+Build_With_Units(1BU, "?")
+```
+
+See also:
+* [`EQ()`](#eq-equal-to)
+* [`NE()`](#ne-not-equal-to)
+* [`LT()`](#lt-less-than
+* [`LE()`](#le-less-than-or-equal-to)
+* [`GT()`](#gt-greater-than)
 
 ### `GETDBI` (Opcode 389)
 
@@ -5603,13 +5681,69 @@ Fun example_goto (_skip_number) {
 }
 ```
 
-### `gt` (Opcode 177)
+### `GT` (Greater Than)
 
 |||
 |-|-|
-|TDI Syntax   | `arg0 > arg1` or `arg0 gt arg1` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+|TDI Syntax   | `_X > _Y`, `_X GT _Y`, or `GT(_X, _Y)` |
+|Python Syntax| `MDSplus.GT(x, y)`|
+|Opcode|177|
+
+Returns [`$TRUE`](#true-true-constant) if `_X` is greater than `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
+
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
+
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
+
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$FALSE`.
+
+Note: This can be used to create a `_MASK` argument for functions that take one.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 1 > 2
+0BU
+
+TDI> 2 > 1
+1BU
+
+TDI> 'a' > 'b'
+0BU
+
+TDI> 'a' > 'B'
+1BU
+
+TDI> 'this' > 'that'
+1BU
+
+TDI> [1, 2, 3, 4, 5] > 3
+Byte_Unsigned([0,0,0,1,1])
+
+TDI> [1, 2, 3] > [1, 3, 2]
+Byte_Unsigned([0,0,1])
+
+TDI> [1, 2, 3, 4] > [1, 0]
+Byte_Unsigned([0,1])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) > 2
+Build_Signal(Byte_Unsigned([0,0,1,1]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') > build_with_units(42, 'ft')
+Build_With_Units(0BU, "?")
+```
+
+See also:
+* [`EQ()`](#eq-equal-to)
+* [`NE()`](#ne-not-equal-to)
+* [`LT()`](#lt-less-than)
+* [`LE()`](#le-less-than-or-equal-to)
+* [`GE()`](#ge-greater-than)
 
 
 Tests for first greater than second.
@@ -6487,53 +6621,109 @@ See also:
 * `ELBOUND` (alternate spelling, same function)
 
 
-### `le` (Opcode 216)
+### `LE` (Less Than or Equal To)
 
 |||
 |-|-|
 |TDI Syntax   | `_X <= _Y`, `_X le _Y`, or `le(_X,_Y)` |
 |Python Syntax| `MDSplus.le(_X, _Y)`|
-|Min arguments| 2 |
-|Max arguments| 2 |
+|Opcode|216|
 
-Tests for first argument less than or equal to second argument.
-* Arguments X and Y must both be numeric or character.
-* Complex numbers are an error.
+Returns [`$TRUE`](#true-true-constant) if `_X` is less than or equal to `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
 
-Returns True if X is less than or equal to Y; otherwise, false. * A reserved operand is always false.
-* Characters are compared in the processor collating sequence.
-* WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1<=.2 is true. Integer values may be truncated when matched to floating numbers.
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Examples
-* `2<=2.0` returns `$TRUE`
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
 
-See also: `eq`, `ge`, `gt`, `lt`, `ne`
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$FALSE`.
 
+Note: This can be used to create a `_MASK` argument for functions that take one.
 
-### `len` (Opcode 217)
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 1 <= 2
+1BU
+
+TDI> 2 <= 1
+0BU
+
+TDI> 'a' <= 'b'
+1BU
+
+TDI> 'a' <= 'B'
+0BU
+
+TDI> 'this' <= 'that'
+0BU
+
+TDI> [1, 2, 3, 4, 5] <= 3
+Byte_Unsigned([1,1,1,0,0])
+
+TDI> [1, 2, 3] <= [1, 3, 2]
+Byte_Unsigned([1,1,0])
+
+TDI> [1, 2, 3, 4] <= [0, 2]
+Byte_Unsigned([0,1])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) <= 2
+Build_Signal(Byte_Unsigned([1,1,0,0]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') <= build_with_units(42, 'ft')
+Build_With_Units(1BU, "?")
+```
+
+See also:
+* [`EQ()`](#eq-equal-to)
+* [`NE()`](#ne-not-equal-to)
+* [`LT()`](#lt-less-than
+* [`GT()`](#gt-greater-than)
+* [`GE()`](#ge-greater-than-or-equal-to)
+
+### `LEN` (Byte Size, String Length)
 
 |||
 |-|-|
-|TDI Syntax   | `len(_STRING) ` |
-|Python Syntax| `MDSplus.len(_STRING) ` |
-|Min arguments| 1
-|Max arguments| 1
+|TDI Syntax   | `LEN(_X) ` |
+|Python Syntax| `MDSplus.LEN(x) ` |
+|Opcode|217|
 
+Returns one of the following:
+* The size of `_X` in bytes, if it is a [Scalar](#scalar).
+* The size of an element of `_X` in bytes, if it is an [Array](#array) or [Signal](#signal).
+* The number of [Characters](#character) in `_X`, if it is a string.
 
+To get the number of elements in an [Array](#array), use [`SIZE()`](#size-number-of-elements).
 
-The length of a character entity or the number of bytes in numeric data (extension).  
-* Argument _STRING is a string/character array. <!-- An array may appear to work but currently always returns 4. -->  
-* Returns The number of characters in STRING if it is scalar or in an element of STRING if it is an array.  
+To get the size in bits, use [`BIT_SIZE()`](#bit_size-bit-size-number-of-bits).
 
-Examples  
-* LEN('abcdefghijk') returns 11.
+```tdi
+TDI> len(1BU)
+1
 
-> TODO: len for arrays appears to be broken  
-* `LEN([1,2,3, 4, 5, 6, 7, 8])` returns `4`
+TDI> len(1)
+4
 
+TDI> len(1Q)
+8
 
+TDI> len([1.0, 2.0])
+4
 
+TDI> len(Quadword([1, 2, 3]))
+8
+
+TDI> len('hello world')
+11
+```
+
+See also:
+* [`BIT_SIZE()`](#bit_size-bit-size-number-of-bits)
 
 ### `len_trim` (Opcode 218)
 
@@ -6802,67 +6992,69 @@ Examples
 * `long_unsigned(-1)` returns `4294967295LU`.
 
 
-### `lt` (Opcode 229) 
-
-> (option 1--original)
+### `LT` (Less Than)
 
 |||
 |-|-|
-|TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
-|Python Syntax| `MDSplus.LT(X,Y)` |
+|TDI Syntax   | `_X < _Y`, `_X LT _Y`, or `LT(_X, _Y)` |
+|Python Syntax| `MDSplus.LT(x, y)` |
+|Opcode|229|
 
+Returns [`$TRUE`](#true-true-constant) if `_X` is less than `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
 
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Tests for first argument less than second.
-* Arguments _X and _Y must both be numeric or character.
-* Complex numbers result in error.
-* Returns True if _X is less than _Y; otherwise, false.
-* A reserved operand is always false.
-* Characters are compared in the processor collating sequence.
-* WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1<=.2 is true. Integer values may be truncated when matched to floating numbers.
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
 
-Examples
-* `2<2.0` returns `$FALSE`.
-* `2 lt 2.1` returns `$TRUE`.
-* `lt(2.1, 2)` returns `$FALSE`
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-See also: `eq`, `ge`, `gt`, `le`, `ne`
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$FALSE`.
 
+Note: This can be used to create a `_MASK` argument for functions that take one.
 
-### `lt` (Less Than)
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
 
-> (option 2 gussied up)
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
-|||
-|-|-|
-|TDI Syntax   | `_X < _Y`, `_X LT _Y`, or function form `LT(_X, _Y)` |
-|Python Syntax| `MDSplus.LT(X,Y)` |
-|Opcode       |229 (0xFF) TODO |
-
-
-
-Tests for first argument less than second.
-* Arguments _X and _Y must both be numeric or character.
-* Complex numbers result in error.
-* Returns True if _X is less than _Y; otherwise, false.
-* A reserved operand is always false.
-* Characters are compared in the processor collating sequence.
-* WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1<=.2 is true. Integer values may be truncated when matched to floating numbers.
-
-Examples
 ```tdi
-TDI> 2 < 2.0
+TDI> 1 < 2
+1BU
+
+TDI> 2 < 1
 0BU
 
-TDI> 
+TDI> 'a' < 'b'
+1BU
+
+TDI> 'a' < 'B'
+0BU
+
+TDI> 'this' < 'that'
+0BU
+
+TDI> [1, 2, 3, 4, 5] < 3
+Byte_Unsigned([1,1,0,0,0])
+
+TDI> [1, 2, 3] < [1, 3, 2]
+Byte_Unsigned([0,1,0])
+
+TDI> [1, 2, 3, 4] < [1, 3]
+Byte_Unsigned([0,1])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) < 2
+Build_Signal(Byte_Unsigned([1,0,0,0]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') < build_with_units(42, 'ft')
+Build_With_Units(0BU, "?")
 ```
-* `2<2.0` returns `$FALSE`.
-* `2 lt 2.1` returns `$TRUE`.
-* `lt(2.1, 2)` returns `$FALSE`
 
-See also: `eq`, `ge`, `gt`, `le`, `ne`
-
-
+See also:
+* [`EQ()`](#eq-equal-to)
+* [`NE()`](#ne-not-equal-to)
+* [`LE()`](#le-less-than-or-equal-to)
+* [`GT()`](#gt-greater-than)
+* [`GE()`](#ge-greater-than-or-equal-to)
 
 ### `MAKE_ACTION`
 |||
@@ -7664,7 +7856,7 @@ If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not 
 > TODO: Mark, help reword
 If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
-The values of `_X` and `_Y` must be [Real](#real).
+The value(s) of `_X` and `_Y` must be [Real](#real).
 
 Floating point division by zero will return `0`. Integer division by zero will result in a segfault.
 
@@ -7698,6 +7890,7 @@ Build_With_Units(1, "m")
 TDI> build_with_units(4, 'm') % build_with_units(3, 'm')
 Build_With_Units(1, "m")
 
+# The ? indicating a unit mismatch
 TDI> build_with_units(4, 'm') % build_with_units(3, 'ft')
 Build_With_Units(1, "?")
 
@@ -7901,16 +8094,69 @@ The number of descriptors in an MDS record.
 Examples. NDESC_OF($VALUE) is 0. NDESC_OF(A+B) is 2.
 
 
-### `NE`
+### `NE` (Not Equal To)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 252
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: arg0 != arg1, arg0 <> arg1, arg0 NE arg1 
-|Native python|False|
+|TDI Syntax   | `_X != _Y`, `_X <> _Y`, `_X NE _Y` or `NE(_X, _Y)` |
+|Python Syntax| `MDSplus.NE(x, y)`|
+|Opcode|252|
+
+Returns [`$TRUE`](#true-true-constant) if `_X` is not equal to `_Y`, or [`$FALSE`](#false-false-constant) otherwise.
+
+`_X` and `_Y` must be [Numeric](#numeric) or [Character](#character). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+If `_X` or `_Y` are [Numeric](#numeric), the value(s) must be [Real](#real). If they are [Characters](#character), they will be compared by their ASCII values.
+
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
+
+Any `$ROPERAND` values of `_X` or `_Y` will result in `$TRUE`.
+
+Note: This can be used to create a `_MASK` argument for functions that take one.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded, however mismatched units will cause the units to be replaced with '?' instead.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 1 != 2
+1BU
+
+TDI> 2 != 2
+0BU
+
+TDI> 'a' != 'b'
+1BU
+
+TDI> 'a' != 'A'
+1BU
+
+TDI> 'this' != 'that'
+1BU
+
+TDI> [1, 2, 3, 4, 5] != 3
+Byte_Unsigned([1,1,0,1,1])
+
+TDI> [1, 2, 3] != [3, 2, 1]
+Byte_Unsigned([1,0,1])
+
+TDI> [1, 2, 3, 4] != [1, 0]
+Byte_Unsigned([0,1])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) != 2
+Build_Signal(Byte_Unsigned([1,0,1,1]), *, [.1,.2,.3,.4])
+
+# The ? indicating a unit mismatch
+TDI> build_with_units(42, 'm') != build_with_units(42, 'ft')
+Build_With_Units(0BU, "?")
+```
+
+See also:
+* [`EQ()`](#eq-equal-to)
+* [`LT()`](#lt-less-than)
+* [`LE()`](#le-less-than-or-equal-to)
+* [`GT()`](#gt-greater-than)
+* [`GE()`](#ge-greater-than-or-equal-to)
 
 
 Logical Elemental.
@@ -9203,7 +9449,7 @@ To use radians, use [`SIN()`](#sin-sine).
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be [Real](#real).
+The value(s) of `_X` must be [Real](#real).
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
 
@@ -9240,7 +9486,7 @@ Use [`SIN()`](#sin-sine) to get the sine of a complex number.
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-The values of `_X` must be [Real](#real).
+The value(s) of `_X` must be [Real](#real).
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however the units will be replaced with '?'.
 
@@ -9254,7 +9500,10 @@ TDI> sinh(1.5708)
 See also:
 * [`SIN`](#sin-sine)
 
-### `SIZE`
+### `SIZE` (Number of Elements)
+
+To get the length of a string, use [`LEN()`](#len-byte-size-string-length).
+
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
@@ -9578,6 +9827,7 @@ Build_With_Units(-4, "m")
 TDI> build_with_units(1, 'm') - build_with_units(5, 'm')
 Build_With_Units(-4, "m")
 
+# The ? indicating a unit mismatch
 TDI> build_with_units(1, 'm') - build_with_units(5, 'ft')
 Build_With_Units(-4, "?")
 
@@ -10390,6 +10640,12 @@ Refers to a numeric quantity.
 
 This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless otherwise specified.
 
+### Character
+
+Refers to a single ASCII character (letter, symbol, etc.) or string of ASCII characters (text).
+
+This can also refer to an [Array](#array) of characters or strings, unless otherwise specified.
+
 ### Scalar
 
 Refers to a single value, which can be [Integer](#integer), [Floating Point](#floating-point), or [Complex Number](#complex-number), unless otherwise specified.
@@ -10428,6 +10684,9 @@ Can be one of the following types. The type will be determined by the `Suffix` b
 ### Floating Point
 
 Refers to a floating point (fractional) number.
+
+> TODO: Possibly reword
+Note: Floating point comparisons and arithmetic may not match expectations due to floating point approximation.
 
 Can be one of the following types. The type will be determined by the `Suffix` below, or you can use the `Function` below to explicitly cast.
 
