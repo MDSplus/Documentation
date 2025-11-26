@@ -40,6 +40,27 @@ TODO for Stephen
 * move all the examples not in code blocks...into code blocks
 * remove the word "examples" above the code blocks
 
+TODO: section on type coersion: like, all the logical functions will always return BU regardless of input. Shouldn't be difficult, if two inputs mismatch, the output will match the bigger one
+
+TODO: section on constants / literals. If you say "0b1010" it's a binary number,  `0xABCD` is hex, `0o_____` for octal
+```
+TDI> 0o123
+83
+TDI> 0x123
+291
+TDI> 0b110
+6
+```
+
+TODO: section on using suffixes to control the type
+1D0 makes it a double float
+BU is byte unsigned, etc.
+```
+TDI> 0b1100BU
+12BU
+TDI> 0B1100BU
+12BU
+```
 
 ## Contents
 Table of all the commands in each category, with symlinks to each heading
@@ -1416,7 +1437,7 @@ Returns the result of `_X` added to `_Y`.
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
 > TODO: Mark, help reword
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
+If `_X` and `_Y` are both a [Signal](#signal), the result will not be; The data parts of the signal will be added together ignoring the time base. However, if only one is a [Signal](#signal), the result will be as well.
 
 Integer overflows will be truncated.
 
@@ -1879,6 +1900,23 @@ Generates an unitialized array. The values are not defined and will depend on pr
 Examples
 
 ```TDI
+TDI> array([2])
+[0.,0.]
+TDI> array([2, 2])
+[[0.,0.], [0.,0.]]
+TDI> array([2, 2, 2])
+[[[0.,0.], [0.,0.]], [[0.,0.], [0.,0.]]]
+
+
+TDI> array([1])
+[0.]
+TDI> array([1,2])
+[[0.], [0.]]
+TDI> array([1,2,3])
+[[[0.], [0.]], [[0.], [0.]], [[0.], [0.]]]
+
+
+
 # this makes an array of floats with of shape [3, 4, 6]
 
 TDI> array([3, 4, 6])
@@ -3649,7 +3687,6 @@ See also: `data`, `compile`
 
 * Returns the current/specified data and time as a text string.
 * Arguments (Optional): TIME must be a quadword (64-bit), VMS time stamp positive absolute time or negative delta time.
-date_time works fine
 
 |Signals      |None. 
 |Units        |None. 
@@ -5841,14 +5878,19 @@ See also
 
 |||
 |-|-|
-|TDI Syntax   | `huge(arg0)` |
-|Python Syntax| `MDSplus.huge(arg0)` |
+|TDI Syntax   | `huge(_X)` |
+|Python Syntax| `MDSplus.huge(_X)` |
 |Min arguments| 1 |
 |Max arguments| 1 |
 
-The largest number in the model representing numbers of the same type as the argument.
-Arguments X must be numeric scalar or array.
 
+
+Returns the largest possible [Number](#numeric) that can be stored in the type (See [integer](#integer), [floating point](#floating-point)).
+
+Argument:
+* `_X` must be numeric scalar or array.
+
+> TODO: come back to this
 The result is `r^q -1` if X is integer and `(1-(b^-p))b^emax` if X is real, where:
 * `r` is the integer base,
 * `q` is the number of digits,
@@ -5857,12 +5899,23 @@ The result is `r^q -1` if X is integer and `(1-(b^-p))b^emax` if X is real, wher
 * `emax` is the maximum exponent in model numbers like X.
 
 Examples
+```
+#TODO: Come back to this
+
+TDI> HUGE(1B)
+127B
+TDI> HUGE(1BU)
+255BU
+
+
 * HUGE(1.0) is (1-(2^-24))*2^127 and HUGE(0) is 2^31-1 on the VAX.
 * huge(1.0) returns `340.282E36`
 * huge(1) returns `2147483647`
 * huge(1F0) returns `170.141F36`
+```
 
-> TODO: come back to this for further investigation
+See also: [tiny()](#tiny) for the smallest possible value.
+
 
 
 ### `h_complex` (Opcode 182)
@@ -6218,6 +6271,8 @@ Examples
 
 The starting position of a substring within a string. Note the result is 1 less than for F90.
 
+TODO: test for arrays
+
 Arguments 
 * `_STRING` character. 
 * `_SUBSTRING` character. 
@@ -6302,7 +6357,7 @@ Example:
 
 
 
-### `INT` (Opcode number: 201)
+### `INT` (Opcode 201)
 
 |||
 |-|-|
@@ -6916,8 +6971,6 @@ TDI> log10(10.0)
 |-|-|
 |TDI Syntax   | `LOG2(_NUM)` |
 |Python Syntax| `MDSplus.LOG2(_NUM)` |
-|Min arguments| 1 |
-|Max arguments| 1 |
 
 Logarithm, base 2.
 * Argument `_NUM` must be real. Complex numbers result in error.
@@ -7612,10 +7665,18 @@ max([1, 2, 3],[4, -2, 1])
 
 The maximum exponent in the model representing numbers of the same type as the argument.
 
+TODO: Come back to this. Basically it just returns the numerical limit of the exponent part of a float. This and MAXEXPONENT() made more sense back when there were all different types of floats and they all had a different exp bias, but now that there are two standard floats, it will only ever return 127 for float or 1023 for double
+
+Inputs must be floating points, otherwise they will be converted to float. 
+If larger than float, it upcasts to a double
+
 Examples
 ```tdi
 MAXEXPONENT(1.0) is 127 on the VAX.
 ```
+
+See also: `minexponent`
+
 
 
 ### `MAXLOC`
@@ -7656,7 +7717,7 @@ maxloc([6,6,6])
 # example per original doc. but this is untrue
 _A=[1, -5, 8, -3]          # Arrays need commas
 TDI> MAXLOC(_A, _A < 6)
-[2,1]. [3 4-1 2][1 5 6-4]  # WHAT EVEN IS THIS???!?! 💩  (╯°□°）╯︵ ┻━┻ 
+[2,1]. [3 4-1 2][1 5 6-4]  # WHAT EVEN IS THIS???!?! 
 
 # This is what actually happens when you input the "correct" version of the above
 TDI> _A=[1, -5, 8, -3]
@@ -7677,167 +7738,328 @@ TDI> MAXLOC(_A, _A < 3)
 |-|-|
 |TDI Syntax   | `MAXVAL(_ARRAY, [_DIM], [_MASK])` |
 |Python Syntax| `MDSplus.MAXVAL(_ARRAY, [_DIM], [_MASK])` |
-|Min arguments| 1 |
-|Max arguments| 3 |
 |Opcode|236|
 
 Maximum value of the elements of `_ARRAY` along dimension `[_DIM]` corresponding to true elements of `[_MASK]`.
+
 Arguments
 * `_ARRAY` numeric array. 
 * `[_DIM]` optional: integer scalar from 0 to n-1, where n is rank of ARRAY. 
 * `[_MASK]` optional: logical and conformable to ARRAY.
 
-|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. |Units        |Same as ARRAY. |Form         |Same type as ARRAY. It is a scalar if DIM is absent or
-ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and shaped like ARRAY with DIM subscript omitted.
+Results
+* Without `_DIM` the result is the largest value in the `_ARRAY`, testing only those with true `_MASK` values and value not equal to the reserved operand (`$ROPRAND`). 
+* With `_DIM`, the value of an element of the result is the maximum of `ARRAY` elements with dimension `_DIM` fixed as the element number of the result. 
+* If no value matches the criteria, `-HUGE(_ARRAY)` is returned.
 
-The result without DIM is the maximum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the maximum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, -HUGE(ARRAY) is returned.
-Examples. MAXVAL([1,2,3]) is 3. MAXVAL(_C,,_C LT 0) finds the maximum negative element of C. If _B=[[1, 3, 5],[2, 4, 6]] MAXVAL(_B,0) is [5,6] and MAXVAL(_B,1) is [2,4,6].
-|See also     |MAXLOC for the location.
+|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. 
+|Units        |Same as ARRAY. 
+|Form         |Same type as ARRAY. It is a scalar if DIM is absent or ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and shaped like ARRAY with DIM subscript omitted.
+
+
+
+
+
+Examples
+```tdi
+TDI> maxval([1,2,3])
+3
+
+TDI> _A = [[1,9,2,8],[7,4,6,3]]
+[[1,9,2,8], [7,4,6,3]]
+TDI> maxval(_A, *, _A < 5)
+4
+TDI> maxval(_A, 0, _A < 5)
+[2,4]
+TDI> maxval(_A, 1, _A < 5)
+[1,4,2,3]
+
+
+# If no arguments fit the mask, the return is -HUGE()
+TDI> _A = [5,6,7]
+[5,6,7]
+TDI> maxval(_A, *, _A < 3)
+-2147483648
+
+
+```
+See also: `MAXLOC` for the location.
 
 
 ### `MEAN`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 237
-|Min arguments| 1
-|Max arguments| 3
-******Compiler syntax: MEAN(arg0,arg1,arg2) 
-|Native python|False|
+|TDI Syntax   | `MEAN(_ARRAY, [_DIM], [_MASK])` |
+|Python Syntax| `MDSplus.MEAN(_ARRAY, [_DIM], [_MASK])` |
+|Opcode|237|
 
+Average value of the elements of `_ARRAY` along dimension `_DIM` corresponding to the true elements of `_MASK`.
 
-|Return Type  |Transformation |
-Average value of the elements of ARRAY along dimension DIM corresponding to the true elements of MASK.
-Arguments Optional: DIM, MASK. ARRAY numeric array. DIM integer scalar from 0 to n-1, where n is rank of ARRAY. MASK logical and conformable to ARRAY.
-|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. |Units        |Same as ARRAY. |Form         |Same type as ARRAY. It is a scalar if DIM is absent or
+Arguments:
+* `_ARRAY` numeric array.
+* [`_DIM`] optional: integer scalar from 0 to n-1, where n is rank of ARRAY. 
+* [`_MASK`] optional: logical and conformable to ARRAY.
+
+|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. 
+|Units        |Same as ARRAY. 
+|Form         |Same type as ARRAY. It is a scalar if DIM is absent or
 ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and shaped like ARRAY with DIM subscript omitted.
-|Result       |The result without DIM is the mean value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the mean of ARRAY elements with dimension DIM fixed as the element number of the result. If no value is found, zero is given.
-Examples. MEAN([1,2,3]) is 2. MEAN(_C,,_C GT 0) finds the mean of positive element of C. If : _B=[[1, 3, 5],[2, 4, 6]] MEAN(_B,0) is [3,4] and MEAN(_B,1) is [1,3,5].
-MERGE
+
+TODO: Come back to this
+The result without DIM is the mean value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the mean of ARRAY elements with dimension DIM fixed as the element number of the result. If no value is found, zero is given.
+
+Examples
+```tdi
+TDI> mean([1,7,9])
+5
+
+TDI> mean([1.,7.,9.])
+5.66667
+
+# Here is how to use _DIM
+TDI> _A = [[1, 5, 3],[12, 11, 10]]
+[[1,5,3], [12,11,10]]
+TDI> mean(_A, *)
+7
+TDI> mean(_A, 0)
+[3,11]
+TDI> mean(_A, 1)
+[6,8,6]
+
+# Here is how to use _MASK
+TDI> _A = [1., -2., 7., -5., 9.]
+[1.,-2.,7.,-5.,9.]
+TDI> mean(_A, *, _A > 0)
+5.66667
+TDI> mean(_A, *, _A < 0)
+-3.5
+
+```
+
+
 ### `MERGE`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 239
-|Min arguments| 3
-|Max arguments| 3
-******Compiler syntax: MERGE(arg0,arg1,arg2) 
-|Native python|False|
+|TDI Syntax   | `MERGE(_TSOURCE, _FSOURCE, _MASK) ` |
+|Python Syntax| `MDSplus.MERGE(_TSOURCE, _FSOURCE, _MASK) ` |
+|Opcode|239|
 
 
-F90 Logical Elemental.
-Choose alternative value according to a mask.
-Arguments TSOURCE any type compatible with FSOURCE. FSOURCE any type compatible with TSOURCE. MASK logical, conformable with TSOURCE and FSOURCE.
-|Signals      |Single signal or smaller data. |Units        |Single or common units (excluding MASK), else bad. |Form         |The type is the compatible type of FSOURCE and TSOURCE.
+Choose alternative value according to a mask. If the mask is true, it'll take from array 1, if false it'll take from array 2.
+
+Arguments
+* `_TSOURCE` any type compatible with FSOURCE.
+* `_FSOURCE` any type compatible with TSOURCE.
+* `_MASK` logical, conformable with TSOURCE and FSOURCE.
+
+|Signals      |Single signal or smaller data. 
+|Units        |Single or common units (excluding MASK), else bad. 
+|Form         |The type is the compatible type of FSOURCE and TSOURCE.
 The shape conformable to FSOURCE, TSOURCE, and MASK.
 |Result       |If the MASK value is true, the TSOURCE value is use; otherwise, the FSOURCE value is use.
-Examples. MERGE([1,2,3],[4,5,6],[$TRUE,$FALSE,$TRUE]) is [1,5,3]. If TSOURCE is the array [1 6 5], FSOURCE is the array[24 6]
-[032] andMASK is[1 01], [748] [001]then MERGE(TSOURCE,FSOURCE,MASK) is[1 3 5].
-[7 4 6]
-|See also     |CONDITIONAL with form: MASK ? TSOURCE : FSOURCE, for scalar mask test.
-METHOD_OF
+
+Examples
+MERGE([1,2,3],[4,5,6],[$TRUE,$FALSE,$TRUE])
+[1,5,3].
+
+
+```tdi
+# Manual example showing how it works
+TDI> _array0 = [1,2,3,4]
+[1,2,3,4]
+TDI> _array1 = [5,6,7,8]
+[5,6,7,8]
+TDI> merge(_array0, _array1, [1,0,1,0])
+[1,6,3,8]
+
+# more applicable example
+TDI> _array0 = [1,6,3,8]
+[1,6,3,8]
+TDI> _array1 = [5,2,7,4]
+[5,2,7,4]
+TDI> merge(_array0, _array1, _array0 > _array1)
+[5,6,7,8]
+```
+
+See also: 
+CONDITIONAL with form: `MASK ? TSOURCE : FSOURCE`, for scalar mask test.
+
+
 ### `METHOD_OF`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 240
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: METHOD_OF(arg0)Native python: True
+|TDI Syntax   | `METHOD_OF(arg0)` |
+|Python Syntax| `MDSplus.METHOD_OF(arg0)` |
+|Opcode|240|
 
-|Return Type  |MDS Operation |
-Get the method field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this:
-DSC$K_DTYPE_METHOD, the method field.
+Get the method field: `DSC$K_DTYPE_METHOD`  
 Otherwise, an error.
-MIN
+
+
+
 ### `MIN`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
+|TDI Syntax   | `MIN(arg0,arg1,argn,...)` |
+|Python Syntax| `MDSplus.MIN(arg0,arg1,argn,...)`|
+|Opcode|241|
 
-(Opcode 241
-|Min arguments| 2
-|Max arguments| 254
-Compiler syntax: MIN(arg0,arg1,argn,...)
-
-|Native python|False|
-
-Description:
-|Type         |F90 Numeric Elemental|
 Minimum value.
-Arguments Integer or real. Complex numbers are an error.
+* Arguments: Integer or real. Complex numbers cause error.
+
+
 |Signals      |The single signal or the smallest.
 |Units        |The single or matching units, else bad.
 |Form         |The compatible form of all the arguments. Conversion is
 done pairwise.
-|Result       |The smallest |Arguments, Results|A reserved operand will dominate.
-|Examples     |MIN(-9.0,7.0,2.0) is -9.0.
-MINEXPONENT
+
+|Result       |The smallest 
+|Arguments, Results|A reserved operand will dominate.
+
+Examples
+```
+min(-9.0,7.0,2.0) 
+-9.
+
+TDI> min([1,2,3],[-1,-2,-3], [4,4,4]) 
+[-1,-2,-3]
+
+```
+
 ### `MINEXPONENT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 242
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: MINEXPONENT(arg0) 
-|Native python|False|
+|TDI Syntax   | `MINEXPONENT(arg0)` |
+|Python Syntax| `MDSplus.MINEXPONENT(arg0)` |
+|Opcode|242|
 
+TODO: Come back to this. Basically it just returns the numerical limit of the exponent part of a float. This and MAXEXPONENT() made more sense back when there were all different types of floats and they all had a different exp bias, but now that there are two standard floats, this is it!
 
-F90 Inquiry.
 The minimum exponent in the model representing numbers of the same type as the argument.
-|Arguments, Results|X must be real or complex, scalar or array.
-|Signals      |None. |Units        |None. |Form         |Integer scalar.
-|Result       |The number emin for the model of the same type as X.
-|Examples     |MINEXPONENT(1.0) is -127 on the VAX.
-MINLOC
+X must be real or complex, scalar or array.
+
+Inputs must be floating points, otherwise they will be converted to float. 
+If larger than float, it upcasts to a double
+
+
+Examples     
+```tdi
+TDI> minexponent(1)
+-127
+
+TDI> minexponent(1q)
+-1023
+
+TDI> minexponent(1.0)
+-127
+```
+
 ### `MINLOC`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 243
-|Min arguments| 1
-|Max arguments| 3
-******Compiler syntax: MINLOC(arg0,arg1,arg2)
-|Native python|False|
+|TDI Syntax   | `MINLOC(_ARRAY, [_MASK], [_arg3])` |
+|Python Syntax| `MDSplus.MINLOC(_ARRAY, [_MASK], [_arg3])` |
+|Opcode|243|
 
-
-|Return Type  |F90 Transformation |
 Determine the location of an element of ARRAY having the minimum value of the elements identified by MASK.
-Arguments Optional: MASK. ARRAY numeric array. MASK logical and conformable with ARRAY.
-|Signals      |None. |Units        |None. |Form         |Long vector of size equal to rank of ARRAY.
-|Result       |The result is the vector of subscripts of an element whose value equals the minimum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
+
+Arguments 
+`_ARRAY` numeric array.
+`_MASK` Optional: logical and conformable with ARRAY.
+`[arg3]`
+
+
+TODO: Come back to this after further investigation
+
+|Signals      |None. 
+|Units        |None. 
+|Form         |Long vector of size equal to rank of ARRAY.
+
+The result is the vector of subscripts of an element whose value equals the minimum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
+
 Examples. MINLOC([2,4,6]) is [0].
 For _A=[0 -5 8 -3], MINLOC(_A,_A GT -4) is [0,3]. [3 4-1 2][1 5 6-4]
 |See also     |MINVAL for the value.
-MINVAL
+
+
+Examples
+```
+TDI> minloc([5,4,6])
+1
+
+TDI> minloc([5,5,5])
+0
+
+TDI> _A=[1, -5, 8, -3] 
+[1,-5,8,-3]
+
+TDI> minloc(_A)
+1
+
+TDI> minloc(_A, _A > 0)
+%TDI Error in MINLOC(_A, _A > 0)
+%TDI Error in EXECUTE("minloc(_A, _A > 0)")
+
+```
+
+> TODO: Mask is broken and needs to be fixed along with maxloc
+
+
 ### `MINVAL`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 244
-|Min arguments| 1
-|Max arguments| 3
-******Compiler syntax: MINVAL(arg0,arg1,arg2)
+|TDI Syntax   | `MINVAL(_ARRAY, [_DIM], [_MASK])` |
+|Python Syntax| `MDSplus.MINVAL(_ARRAY, [_DIM], [_MASK])` |
+|Opcode|244|
 
-|Native python|False|
 
- |Return Type  |F90 Transformation |
 Minimum value of the elements of ARRAY alongdimension DIM corresponding to true elements of MASK.
-Arguments Optional: DIM, MASK. ARRAY numeric array. DIM integer scalar from 0 to n-1, where n is rank of ARRAY. MASK logical and conformable to ARRAY.
-|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. |Units        |Same as ARRAY. |Form         |Same type as ARRAY. It is a scalar if DIM is absent or
+
+Arguments
+* `_ARRAY` numeric array. 
+* `[_DIM]` optional: integer scalar from 0 to n-1, where n is rank of ARRAY. 
+* `[_MASK]` optional: logical and conformable to ARRAY.
+
+TODO: Come back to this after finishing maxval
+
+|Signals      |Same as ARRAY if DIM-th or all dimensions omitted. 
+|Units        |Same as ARRAY. 
+|Form         |Same type as ARRAY. It is a scalar if DIM is absent or
 ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and shaped like ARRAY with DIM subscript omitted.
-|Result       |The result without DIM is the minimum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the minimum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, +HUGE(ARRAY) is returned.
+
+The result without DIM is the minimum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the minimum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, +HUGE(ARRAY) is returned.
 Examples. MINVAL([1,2,3]) is 3. MINVAL(_C,,_C GT 0) finds the minimum positive element of C. If _B=[[1, 3, 5],[2, 4, 6]] MINVAL(_B,0) is [1,2] and MINVAL(_B,1) is [1,3,5].
 |See also     |MINLOC for the location.
+
+Examples
+```tdi
+TDI> minval([1,2,3])
+1
+
+# Mask
+TDI> _A = [[1,-6,3]]
+[[1,-6,3]]
+
+TDI> minval(_A, *, _A > 0)
+1
+
+# Out of bounds
+TDI> minval(_A, *, _A > 5)
+2147483647
+
+# Dimensions
+TDI> _A = [[1,9,2,8],[7,4,6,3]]
+[[1,9,2,8], [7,4,6,3]]
+
+TDI> minval(_A, *)
+1
+TDI> minval(_A, 0)
+[1,3]
+TDI> minval(_A, 1)
+[1,4,2,3]
+
+```
+
 
 ### `MOD` (Modulus, Remainder)
 
@@ -9263,9 +9485,21 @@ for subscript DIM of SOURCE. If no bounds were declared
 it is one less than the multiplier for subscript DIM of
 SOURCE. SHAPE(ARRAY) has value whose j-th component is
 equal to SHAPE(ARRAY,j) for each j, 0 to n-1.
-Examples. SHAPE(_A[2:5,-1:1]) is [4,3]. SHAPE(3) is [], a zero-length vector.
+Examples.
+SHAPE(_A[2:5,-1:1]) is [4,3]. SHAPE(3) is [], a zero-length vector.
 See also LBOUND for lower bound, UBOUND for upper bound, SIZE for total elements, and E... for signals.
-SHIFT_LEFT
+
+```TDI
+# Better example
+TDI> shape(array([1,2,3]))
+[1,2,3]
+
+#so basically:
+# [number_of_elements_in_each_subarray, number_of_columns, number_of_rows]
+```
+
+
+
 ### `SHIFT_LEFT`
 |||
 |-|-|
@@ -10655,6 +10889,72 @@ Refers to a single value, which can be [Integer](#integer), [Floating Point](#fl
 Refers to an array of values, which can be [Integer](#integer), [Floating Point](#floating-point), or [Complex Number](#complex-number), unless otherwise specified.
 
 Note: In most cases, a [Signal](#signal) can be used in place of an array.
+
+TODO: explain `_dim` and `_mask` since these often appear together with functions that deal with arrays
+
+`_DIM`: dimensions of sub array(s).
+* If (null): flat array--sub-dimension boundaries are ignored
+* If _DIM = 0, each sub-array is its own thing
+* If _DIM = 1, takes the first element of each sub-array
+* If _DIM = 2, takes the 
+
+```tdi
+
+# here is dimension null
+TDI> [[[1,2],[3,4]],[[5,6],[7,8]]][,,]
+[[[1,2], [3,4]], [[5,6], [7,8]]]
+
+/* or: [[[1,2], [3,4]],
+        [[5,6], [7,8]]]
+*/
+
+# here is dimension 0
+TDI> [[[1,2],[3,4]],[[5,6],[7,8]]][0,,]
+[[[1], [3]], [[5], [7]]]
+
+# here is dimension 1
+TDI> [[[1,2],[3,4]],[[5,6],[7,8]]][,0,]
+[[[1,2]], [[5,6]]]
+
+# Here is dimension 2
+TDI> [[[1,2],[3,4]],[[5,6],[7,8]]][,,0]
+[[1,2], [3,4]]
+```
+
+
+
+
+`_MASK`: essentially true/false, but other parameters possible
+
+Also you can request row/column of sub-arrays like this:
+
+```tdi
+TDI> [[11,2],[3,4]][0,0]
+11
+TDI> [[11,2],[3,4]][0,1]
+3
+TDI> [[11,2],[3,4]][1,0]
+2
+```
+
+```tdi
+TDI> [[11,2],[3,4]][0][0]
+[[11], [3]]
+```
+
+```tdi
+TDI> [[11,2],[3,4]][,0]
+[11,2]
+TDI> [[11,2],[3,4]][,1]
+[3,4]
+
+
+[[11,2],[3,4]][0]
+[[11], [3]]
+
+[[11], [3]][,0]
+[11]
+```
 
 ### Signal
 
