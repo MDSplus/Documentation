@@ -2,7 +2,6 @@
 
 
 
-
 TODO: Confirm whether to leave the scientific notation as it is in when you ping the program, or into standard:
 e.g., the program lists $A0 as 52.9177E-12m, but the normal way to write that is 5.29177E-11m
 
@@ -41,12 +40,14 @@ TODO for Stephen
 * move all the examples not in code blocks...into code blocks
 * remove the word "examples" above the code blocks
 
+
+
+## Kind
+> TODO: Stephen/Tim/Fernando to investigate further
+`Kind` appears as a second argument for many different functions
+
 ## Contents
 Table of all the commands in each category, with symlinks to each heading
-
-
-
-
 
 
 |Constants|||
@@ -3131,9 +3132,9 @@ TDI> CLASS(_A)
 |Opcode|97|
 
 Creates a complex number.
-* First argument is the real component. 
-* Second argument is the imaginary component. If function is called with only one argument, it is assumed that the second number will be zero. 
-* (Optional) third component is the Kind. TODO: Come back to this. If KIND is absent, it is ignored; otherwise, CMPLX(X,Y,KIND) has real part REAL(X,KIND) and imaginary part REAL(Y,KIND).
+* First argument is the real part. 
+* Second argument is the imaginary part. If function is called with only one argument, it is assumed that the second number will be zero. 
+* (Optional) third argument is the Kind. TODO: Come back to this. If KIND is absent, it is ignored; otherwise, CMPLX(X,Y,KIND) has real part REAL(X,KIND) and imaginary part REAL(Y,KIND).
 * Immediate at compilation.
 * WARNING: truncation does not cause an error.
 
@@ -3689,6 +3690,9 @@ Double the precision of a number.
 * Argument must be numeric and must not be octaword or H floating because they are already maximum precision.
 * Returns twice the precision of the argument:
 Byte becomes word, word becomes long, long becomes quadword, quadword becomes octaword, F floating becomes D, D or G floating becomes H. 
+
+Actually these are all deprecated. These all become double now.
+
 * Unsigned, signed, real, and complex types remain so.
 * Warning: F90 always converts to a double-precision real `D_FLOAT`.
 
@@ -4381,7 +4385,7 @@ See also `dble`
 |TDI Syntax   | `elbound(_ARRAY, [_DIM])` |
 |Python Syntax| `MDSplus.elbound(_ARRAY, [_DIM])` |
 |Min arguments| 1 |
-|Max arguments| 2 
+|Max arguments| 2 |
 
 Same as `LBOUND`. [link]
 
@@ -6118,46 +6122,38 @@ Examples
 
 
 
-### `inor_not` (Opcode 197)
+### `INOR_NOT` 
 
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
+|TDI Syntax   | `INOR_NOT(_I,_J) ` |
+|Python Syntax| `MDSplus.INOR_NOT(_I,_J)` |
 |Min arguments| 2
 |Max arguments| 2
-******Compiler syntax: INOR_NOT(arg0,arg1) 
-|Native python|False|
+|Opcode|197|
 
->TODO: Mark to clean up the formatting, as above
-
-Bit-wise Elemental.
-Complement of bit-by-bit union with the second complemented. Equivalant to IAND(NOT(I),J).
+Complement of bit-wise/bit-by-bit union with the second complemented. Equivalant to `IAND(NOT(I),J)`.
 Arguments I and J must be integers.
-|Signals      |Single signal or smaller data. |Units        |Single or common units, else bad. |Form         |Unsigned integer of compatible shape.
-|Result       |False for each bit of I true or of J false; otherwise, true.
-|Examples     |`INOR_NOT(3BU,5BU)` in binary is `0B00000100BU`.
+
+Result: False for each bit of I true or of J false; otherwise, true.
+
+Examples
+* `INOR_NOT(3BU,5BU)` in binary is `0B00000100BU`.
 
 
 ### `INOT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 198
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: ~arg0 
-|Native python|False|
+|TDI Syntax   | `INOT(_J)` |
+|Python Syntax| `MDSplus.INOT(_J)` |
+|Opcode|198|
 
-> TODO: Mark to clean up formatting, as per above bitwise functions
-
-Bit-wise Elemental.
-Complement bit-by-bit the argument.
+Complement bit-wise/bit-by-bit the argument.
 Usual Form ~ J. Function Form INOT(J).
-|Arguments, Results|J must be integer.
-|Signals      |Same as J. |Units        |Same as J. |Form         |Unsigned integer of same shape. |Result       |Each binary bit is negated. >>>>>>>>>WARNING, F90 calls this NOT, we cannot.
-|Examples     |`INOT(5BU)` in binary is `0B11111010`.
+Each binary bit is negated. 
+WARNING, F90 calls this NOT, we cannot.
+Examples
+* `INOT(5BU)` in binary is `0B11111010`.
 
 
 
@@ -6200,37 +6196,32 @@ Examples
 ### `INT_UNSIGNED`
 |||
 |-|-|
-|TDI Syntax   | `INT_UNSIGNED(arg0) ` |
-|Python Syntax| `MDSplus.INT_UNSIGNED(arg0) ` |
-(Opcode 205
-|Min arguments| 1
-|Max arguments| 1
+|TDI Syntax   | `INT_UNSIGNED(_NUM) ` |
+|Python Syntax| `MDSplus.INT_UNSIGNED(_NUM) ` |
+|Opcode|205|
 
-> TODO: Mark to ref
-
-Conversion Elemental.
 Convert to unsigned integer.
-Arguments A must numeric.
-|Signals      |Same as A. |Units        |Same as A. |Form         |The integer type with the same length. To get specific unsigned integer types use BYTE_UNSIGNED, WORD_UNSIGNED, LONG_UNSIGNED, QUADWORD_UNSIGNED, or OCTAWORD_UNSIGNED.
-|Result       |Immediate at compilation.
-(i)
+Argument must numeric.
+
 A is integer or real, the result is the truncated approximation to the low-order part of the integer.
-(ii)
-A is complex, the result is the approximation to the
-real part. >>>>>>>>>WARNING, truncation does not cause an error.
-|Examples     |`INT_UNSIGNED(2.783)` is `2LU`.
+A is complex, the result is the approximation to the real part. 
+WARNING: truncation does not cause an error.
+
+Examples
+* `INT_UNSIGNED(2.783)` is `2LU`.
+
+To get specific unsigned integer types see also:
+* `BYTE_UNSIGNED`, `WORD_UNSIGNED`, `LONG_UNSIGNED`, `QUADWORD_UNSIGNED`, or `OCTAWORD_UNSIGNED`.
 
 
-### `INTERRUPT_OF` (Opcode 443)
+
+### `INTERRUPT_OF` 
 
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: INTERRUPT_OF(arg0) 
-|Native python|False|
+|TDI Syntax   | `INTERRUPT_OF(arg0) ` |
+|Python Syntax| `MDSplus.INTERRUPT_OF(arg0) ` |
+|Opcode|443|
 
 > TODO: Come back to this for further investigation; we don't currently have any good examples with interrupts
 
@@ -6241,7 +6232,7 @@ Get the interrupt field.
 
 
 
-### `IOR` (Opcode 207)
+### `IOR`
 
 |||
 |-|-|
@@ -6249,8 +6240,7 @@ Get the interrupt field.
 |Python Syntax| `MDSplus.ior(_I, _J)` |
 |Min arguments| 2 |
 |Max arguments| 2 |
-
-> TODO: Mark to clean up formatting, as per above bit-wise functions
+|Opcode|207|
 
 Bit-by-bit inclusive OR.
 * Arguments `_I` and `_J` must be integers.
@@ -6261,7 +6251,7 @@ Examples
 
 
 
-### `ior_not` (Opcode 208)
+### `ior_not` 
 
 |||
 |-|-|
@@ -6269,6 +6259,7 @@ Examples
 |Python Syntax| `MDSplus.IOR_NOT(_I, _J)` |
 |Min arguments| 2 |
 |Max arguments| 2 |
+|Opcode|208|
 
 
 Bit-wise/bit-by-bit union with the second complemented.
@@ -6279,7 +6270,7 @@ Examples
 * `IOR_NOT(3BU,5BU)` in binary is `0B11111011BU`
 
 
-### `ishft` (Opcode 312)
+### `ishft` 
 
 |||
 |-|-|
@@ -6287,6 +6278,7 @@ Examples
 |Python Syntax| `MDSplus.ishft(_I,_SHIFT) ` |
 |Min arguments| 2 |
 |Max arguments| 2 |
+|Opcode|312|
 
 
 Logical bit-wise shift of an element.
@@ -6305,8 +6297,8 @@ Examples
 
 |||
 |-|-|
-|TDI Syntax   | `i_to_x(_DIMENSION,[_I])` |
-|Python Syntax| `MDSplus.i_to_x(_DIMENSION,[_I])` |
+|TDI Syntax   | `i_to_x(_DIMENSION, [_I])` |
+|Python Syntax| `MDSplus.i_to_x(_DIMENSION, [_I])` |
 |Min arguments| 1 |
 |Max arguments| 2 |
 
@@ -6314,7 +6306,7 @@ Examples
 Converts index into axis values.
 
 Arguments:
-* `DIMENSION` a dimension with optional window and required axis. If DIMENSION is missing, the unchanged I is returned.
+* `_DIMENSION` a dimension with optional window and required axis. If DIMENSION is missing, the unchanged I is returned.
 If the window of DIMENSION is missing, the first axis point is assigned an index of 0.
 * `[_I]` optional: scalar or array list of axis integer-like values. (For TDI$I_TO_X, the fake address of -1 for I, returns a 2-element vector with the axis bounds.)
 * Signals: Same as I.
@@ -7364,14 +7356,9 @@ Element selection from an array. Basically, it lets you grab sub-samples from an
 Arguments
 * `_ARRAY` (A) an array of any type considered to be a vector.
 * `_OFFSET` (B) a list of offsets into the `_ARRAY`.  
-Values are from 0 to the number of elements in A less 1. Out-of-bounds values pull from the closest limit.
-
-> TODO: understand this
-|Signals      |Same as B. 
-|Units        |Same as A. 
-|Form         |Same type as A and same shape as B.
-|Result       |Each value in B is used to look up a value in A. The value is copied into the result. This is the same as A(B) in IDL when B is a vector.
-* WARNING, multidimensional arrays referenced by bad offsets will likely be junk.
+    * Values in the offset should be in the range of `0` to `size(_ARRAY)-1`.  
+    * Out-of-bounds values pull from the closest limit.
+* Note: multidimensional arrays referenced by bad offsets will likely be junk.
 
 Examples
 
@@ -7384,44 +7371,44 @@ TDI> map([1,2,3,4,5,6,7,8,9,10], [3, 2, 1, -1, 20, 5])
  
 _A=5:1:-1
 
-TDI> MAP(_A,SORT(_A))
+TDI> map(_A,sort(_A))
 [1,2,3,4,5]
-# note that this is the same as SORTVAL(_A).
+# note that this is the same as sortval(_A).
 
 TDI> map(build_with_units([1, 2, 3, 4, 5, 6, 7, 8], 'm'), make_signal([[1, 2, 3], [3, 4, 5]], *))
 Build_Signal(Build_With_Units([[2,3,4], [4,5,6]], "m"), *)
-
 ```
 
 See also:
 
-* CULL to remove bad B values. 
-* SUBSCRIPT for dimensional indexing into signal and multiple index access to arrays.
+* `CULL` to remove bad B values. 
+* `SUBSCRIPT` for dimensional indexing into signal and multiple index access to arrays.
 
 
 
 ### `MAX`
 |||
 |-|-|
-|TDI Syntax   | `MAX(_NUM0, _NUM1, _NUM2,...)` |
-|Python Syntax| `MDSplus.MAX(_NUM0, _NUM1, _NUM2,...)` |
+|TDI Syntax   | `MAX(_NUM0, _NUM1, [_NUM2], ...)` |
+|Python Syntax| `MDSplus.MAX(_NUM0, _NUM1, [_NUM2], ...)` |
 |Min arguments| 2  |
 |Max arguments| 254|
 |Opcode|233|
 
-Returns the maximum (highest?) value.
+Returns the maximum (highest?) value from the arguments given.
 * Arguments must be integer or real. Complex numbers cause error.
-* Signals: The single signal or the smallest.
-* Units: The single or matching units, else bad. 
-* Form: The compatible form of all the arguments. Conversion is done pairwise.
-* Result: The largest 
-* Arguments, Results: A reserved operand will dominate.
 
 Examples
 
 ```tdi
-TDI> MAX(-9.0,7.0,2.0) 
+TDI> max(-9.0,7.0,2.0) 
 7.0
+
+max(make_signal([[-1, 7, 4], [12, 1, -2]], *),make_signal([[1, 2, 3], [3, 4, 5]], *))
+[[1,7,4], [12,4,5]]
+
+max([1, 2, 3],[4, -2, 1])
+[4,2,3]
 ```
 
 ### `MAXEXPONENT`
@@ -7431,13 +7418,7 @@ TDI> MAX(-9.0,7.0,2.0)
 |Python Syntax| `MDSplus.MAXEXPONENT(_NUM)` |
 |Opcode|234|
 
-
 The maximum exponent in the model representing numbers of the same type as the argument.
-|Arguments, Results|X is real, scalar or array.
-|Signals      |None. 
-|Units        |None. 
-|Form         |Integer scalar.
-|Result       |The number emax for the model of the same type as X. 
 
 Examples
 ```tdi
@@ -7445,16 +7426,13 @@ MAXEXPONENT(1.0) is 127 on the VAX.
 ```
 
 
-
 ### `MAXLOC`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
+|TDI Syntax   | `MAXLOC(_ARRAY, [_MASK], [_arg3])` |
+|Python Syntax| `MDSplus.MAXLOC(_ARRAY, [_MASK], [_arg3])` |
 |Min arguments| 1|
 |Max arguments| 3|
-******Compiler syntax: MAXLOC(_ARRAY, [_MASK], [_arg3])
-
 |Opcode|235|
 
 
@@ -7465,47 +7443,66 @@ Arguments
 * `[_MASK]` Optional: logical and conformable with ARRAY.
 * `[_arg3]`: TODO: investigate further 
 
-|Signals      |None. |Units        |None. |Form         |Long vector of size equal to rank of ARRAY.
-|Result       |The result is the vector of subscripts of an element whose value equals the maximum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
+> TODO: Come back for further investigation. We think this is what it's trying to say:
+
+This returns the location for the first instance of the highest element in an array
+
+> original description below
+
+The result is the vector of subscripts of an element whose value equals the maximum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
+
+>TODO: THere seems to be a bug with `[MASK]` parameter. The example given below (`TDI> MAXLOC(_A, _A < 6)`) does not return what it says it should
+
 Examples
 ```
-TDI> MAXLOC([2,4,6])
-[2]
+TDI> MAXLOC([4,6,5])
+1
 
-_A=[0 -5 8 -3]
-TDI> MAXLOC(_A,_A LT 6)
-[2,1]. [3 4-1 2][1 5 6-4]
-# TODO: investigate further
+maxloc([6,6,6])
+0
+
+# example per original doc. but this is untrue
+_A=[1, -5, 8, -3]          # Arrays need commas
+TDI> MAXLOC(_A, _A < 6)
+[2,1]. [3 4-1 2][1 5 6-4]  # WHAT EVEN IS THIS???!?! 💩  (╯°□°）╯︵ ┻━┻ 
+
+# This is what actually happens when you input the "correct" version of the above
+TDI> _A=[1, -5, 8, -3]
+[1,-5,8,-3]
+TDI> _A < 3
+Byte_Unsigned([1,1,0,1])
+TDI> MAXLOC(_A)
+2
+TDI> MAXLOC(_A, _A < 3)
+%TDI Error in MAXLOC(_A, _A < 3)
 ```
 
-
 |See also     |MAXVAL for the value.
-
-
 
 
 ### `MAXVAL`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 236
-|Min arguments| 1
-|Max arguments| 3
-******Compiler syntax: MAXVAL(arg0,arg1,arg2)
-|Native python|False|
+|TDI Syntax   | `MAXVAL(_ARRAY, [_DIM], [_MASK])` |
+|Python Syntax| `MDSplus.MAXVAL(_ARRAY, [_DIM], [_MASK])` |
+|Min arguments| 1 |
+|Max arguments| 3 |
+|Opcode|236|
 
+Maximum value of the elements of `_ARRAY` along dimension `[_DIM]` corresponding to true elements of `[_MASK]`.
+Arguments
+* `_ARRAY` numeric array. 
+* `[_DIM]` optional: integer scalar from 0 to n-1, where n is rank of ARRAY. 
+* `[_MASK]` optional: logical and conformable to ARRAY.
 
-|Return Type  |F90 Transformation |
-Maximum value of the elements of ARRAY along
-dimension DIM corresponding to true elements of MASK.
-Arguments Optional: DIM, MASK. ARRAY numeric array. DIM integer scalar from 0 to n-1, where n is rank of ARRAY. MASK logical and conformable to ARRAY.
 |Signals      |Same as ARRAY if DIM-th or all dimensions omitted. |Units        |Same as ARRAY. |Form         |Same type as ARRAY. It is a scalar if DIM is absent or
 ARRAY is scalar or vector. Otherwise, the result is an array of rank n-1 and shaped like ARRAY with DIM subscript omitted.
-|Result       |The result without DIM is the maximum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the maximum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, -HUGE(ARRAY) is returned.
+
+The result without DIM is the maximum value of the elements of ARRAY, testing only those with true MASK values and value not equal to the reserved operand ($ROPRAND). With DIM, the value of an element of the result is the maximum of ARRAY elements with DIM dimension fixed as the element number of the result. If no value is found, -HUGE(ARRAY) is returned.
 Examples. MAXVAL([1,2,3]) is 3. MAXVAL(_C,,_C LT 0) finds the maximum negative element of C. If _B=[[1, 3, 5],[2, 4, 6]] MAXVAL(_B,0) is [5,6] and MAXVAL(_B,1) is [2,4,6].
 |See also     |MAXLOC for the location.
-MEAN
+
+
 ### `MEAN`
 |||
 |-|-|
@@ -7670,7 +7667,9 @@ If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, 
 The values of `_X` and `_Y` must be [Real](#real).
 
 Floating point division by zero will return `0`. Integer division by zero will result in a segfault.
+
 > TODO: Floating point / 0 should return `$ROPERAND` according to original docs
+
 > TODO: GitHub Issue # for segfault
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
@@ -10884,9 +10883,15 @@ ZERO
 
 
 
+
+---
+
+
+
+
+
 ---
 ---
 > this is buffer text. for internal use only because vscode does weird things when multiple people are typing in the same doc
 
----so
-
+---
