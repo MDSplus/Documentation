@@ -1489,64 +1489,76 @@ TDI> build_with_error(1, 0.1) + 5
 See also:
 * [`SUM()`](#sum-total-sum)
 
-### `ADJUSTL` (Adjust to the Left)
+### `ADJUSTL` (Adjust to the Left, Left-Align Text)
 
 |||
 |-|-|
 |TDI Syntax   | `ADJUSTL(_STRING)` |
-|Python Syntax| `MDSplus.ADJUSTL(_STRING)` |
+|Python Syntax| `MDSplus.ADJUSTL(string)` |
 |Opcode|39|
 
-Adjust to the left, removing leading whitespace and inserting the same number of trailing spaces instead. Any input is treated as a string. Consumed TAB characters only count as a single space.
+Return `_STRING` adjusted/aligned to the left. This is done by removing any leading whitespace, and inserting the same number of trailing spaces instead.
 
+To adjust to the right, use [`ADJUSTR`](#adjustr-adjust-to-the-right-right-align-text).
 
+`_STRING` doesn't need to be [Character](#character), but any other types will be converted using [`TEXT`](#text-to-string). If `_STRING` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Examples
+Note: Consumed TAB (`\t`) characters will be replaced by single spaces.
 
 ```tdi
 TDI> adjustl("  word  ")
 "word    "
 
-TDI> adjustr("  word  ")
-"    word"
+TDI> adjustl(42)
+"42         "
 
-# Note: Leading TAB characters will be replaced with spaces at the end
+TDI> adjustl(["  hello  ", "  world  ","test"])
+["hello    ","world    ","test     "]
+
+# The leading '\t' is replaced by a trailing ' '
 TDI> adjustl("\tword\t")
 "word\t "
 ```
-
+0
 See also:
-* `adjustr`
-* `TRIM` (non-elemental) to remove trailing blanks and tabs.
+* [`ADJUSTR`](#adjustr-adjust-to-the-right-right-align-text)
+* [`TRIM`](#trim-remove-trailing-whitespace)
 
+### `ADJUSTR` (Adjust to the Right, Right-Align Text)
 
-### `ADJUSTR` 
 |||
 |-|-|
 |TDI Syntax   | `ADJUSTR(_STRING)` |
-|Python Syntax| `MDSplus.ADJUSTR(_STRING)` |
+|Python Syntax| `MDSplus.ADJUSTR(string)` |
 |Opcode|40|
 
-Adjust to the right, removing trailing whitespace and inserting the same number of leading blanks instead. Any input is treated as a string. Consumed TAB characters only count as a single space.
+Return `_STRING` adjusted/aligned to the right. This is done by removing any trailing whitespace, and inserting the same number of leading spaces instead.
 
-Examples
+To adjust to the left, use [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-text).
+
+`_STRING` doesn't need to be [Character](#character), but any other types will be converted using [`TEXT`](#text-to-string). If `_STRING` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+Note: Consumed TAB (`\t`) characters will be replaced by single spaces.
 
 ```tdi
-TDI> adjustl("  word  ")
-"word    "
-
 TDI> adjustr("  word  ")
 "    word"
 
-# Note: Trailing TAB characters will be replaced with spaces at the beginning
+# The same as TEXT(42)
+TDI> adjustr(42)
+"         42"
+
+TDI> adjustr(["  hello  ", "  world  ","test"])
+["    hello","    world","     test"]
+
+# The trailing '\t' is replaced by a leading ' '
 TDI> adjustr("\tword\t")
 " \tword"
 ```
 
 See also:
-* `adjustl`
-* `TRIM` (non-elemental) to remove trailing blanks and tabs.
-
+* [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-text)
+* [`TRIM`](#trim-remove-trailing-whitespace)
 
 ### `AIMAG` (Imaginary part of a complex number)
 
@@ -1685,7 +1697,8 @@ See also
 * `reset_private` or `reset_public` for more drastic actions.
 
 
-### `AND` 
+### `AND` (Boolean/Logical AND)
+
 |||
 |-|-|
 |TDI Syntax   | `_A && _B` or `AND(_A, _B)`|
@@ -1708,24 +1721,30 @@ See also
 
 
 
-### `AND_NOT`
+### `AND_NOT` (AND of the NOT)
+
 |||
 |-|-|
-|TDI Syntax   | `AND_NOT(_BOOL0, _BOOL1)` |
-|Python Syntax| `MDSplus.AND_NOT(_BOOL0, _BOOL1)` |
+|TDI Syntax   | `AND_NOT(_X, _Y)` |
+|Python Syntax| `MDSplus.AND_NOT(x, y)` |
 |Opcode|46|
 
+Returns the logical intersection of `_X` and the negation of `_Y`, equivalent to `_X && !_Y`.
 
-Logical intersection with negation of second. Returns true if A is true and B is false; otherwise, false.
+To get the bitwise AND of the NOT use [`IAND_NOT`](#iand_not-bitwise-and-of-the-not).
 
-Examples
+> TODO: Make a logical section in the glossary
+`_X` and `_Y` must be [Logical](#logical). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
 ```tdi
-TDI> and_not([0,0,1,1],[0,1,0,1])
-[0BU,0BU,1BU,0BU]
+TDI> and_not($TRUE, $FALSE)
+1BU
 
-TODO: Stephen
+TDI> and_not([0,0,1,1], [0,1,0,1])
+Byte_Unsigned([0,0,1,0])
 
+TDI> and_not([0,1], [1,0]) == ([0,1] && ![1,0])
+Byte_Unsigned([1,1])
 ```
 
 ### `ANINT`
@@ -5981,62 +6000,113 @@ TDI> iachar('*')
 TDI> iachar(["H", "e", "l", "l", "o"])
 Byte_Unsigned([72,101,108,108,111])
 
-TDI> iachar(["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"])
-Byte_Unsigned([97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122])
+TDI> iachar(["a","b","c","d","e","f","g"])
+Byte_Unsigned([97,98,99,100,101,102,103])
 ```
 
 See also:
 * [`ACHAR()`](#achar-ascii-character-from-integer)
 
-### `iand` (Opcode 185)
+### `IAND` (Bitwise AND)
 
 |||
 |-|-|
-|TDI Syntax   | `Arg0 & arg1 ` |
-|Python Syntax| `MDSplus.Arg0 & arg1 ` |
-|Min arguments| 2
-|Max arguments| 2
+|TDI Syntax   | `_X & _Y` or `IAND(_X, _Y)` |
+|Python Syntax| `MDSplus.IAND(x, y)` |
+|Opcode|185|
 
-Bitwise intersection.
-* Usual Form `I & J`. 
-* Function Form `IAND(I,J)`.
-* Arguments I and J must be integers.
-* Returns: True for each bit true in I and J; otherwise, false.
+Returns the bitwise AND of `_X` and `_Y`.
 
-|Signals      |Single signal or smaller data. |Units        |Single or common units, else bad. |Form         |Unsigned integer of compatible shape.
+To get the logical AND use [`AND`](#and-booleanlogical-and).
 
-Examples
-* `IAND(3,5)` returns `1`  
-   with 3 being `011`  
-   and  5 being `101`,  
-   this returns `001` or simply `1`.
+`_X` and `_Y` must be [Numeric](#numeric) and should be [Integers](#integer). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
+The return type will be the unsigned variant of the input type; `Long` would become `Long_Unsigned`.
 
-### `iand_not` (Opcode 186)
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
 
-|||
-|-|-|
-|TDI Syntax   | `iand_not(arg0,arg1) ` |
-|Python Syntax| `MDSplus.iand_not(arg0,arg1) ` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
-Bit-wise Elemental.
-Bit-by-bit intersection with the J complemented.
-* Arguments I and J must be integers.
-Returns True for each bit of I true and of J false; otherwise, false.
+```tdi
+TDI> 0b1110 & 0b0101
+4LU
 
-f compatible shape.
+TDI> 14 & 5
+4LU
 
-Examples
-* `IAND_NOT (3,5)` returns `2`  
-   with 3 being `011`  
-   and  5 being `101`,  
-   this returns `010` or simply `2`.
+# Byte -> Byte_Unsigned
+TDI> 5B & 1B
+1BU
+
+TDI> [3, 4, 5] & 1
+Long_Unsigned([1LU,0LU,1LU])
+
+TDI> [3, 4, 5, 6] & [1, 2]
+Long_Unsigned([1LU,0LU])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) & 1
+Build_Signal(Long_Unsigned([1LU,0LU,1LU,0LU]), *, [.1,.2,.3,.4])
+
+TDI> build_with_units(14, 'm') & 5
+Build_With_Units(4LU, "m")
+```
 
 See also:
-`iand`, `ior`
+* [`AND`](#and-booleanlogical-and)
+* [`IAND_NOT()`](#iand_not-bitwise-and-of-the-not)
+
+### `IAND_NOT` (Bitwise AND of the NOT)
+
+|||
+|-|-|
+|TDI Syntax   | `IAND_NOT(_X, _Y) ` |
+|Python Syntax| `MDSplus.IAND_NOT(x, y) ` |
+|Opcode|186|
+
+Returns the bitwise AND of `_X` and the NOT of `_Y`, equivalent to `_X & ~_Y`.
+
+To get the logical AND of the NOT use [`AND_NOT`](#and_not-and-of-the-not).
+
+`_X` and `_Y` must be [Numeric](#numeric) and should be [Integers](#integer). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
+
+The return type will be the unsigned variant of the input type; `Long` would become `Long_Unsigned`.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+> TODO: Improve examples
+```tdi
+TDI> iand_not(0b1110, 0b0101)
+10LU
+
+TDI> iand_not(14, 5)
+10LU
+
+# Byte -> Byte_Unsigned
+TDI> iand_not(5B, 1B)
+4BU
+
+TDI> iand_not([3, 4, 5], 1)
+Long_Unsigned([2LU,4LU,4LU])
+
+TDI> iand_not([3, 4, 5, 6], [1, 2])
+Long_Unsigned([2LU,4LU])
+
+TDI> iand_not(make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]), 1)
+Build_Signal(Long_Unsigned([0LU,2LU,2LU,4LU]), *, [.1,.2,.3,.4])
+
+TDI> iand_not(build_with_units(14, 'm'), 5)
+Build_With_Units(10LU, "m")
+```
+
+See also:
+* [`IAND`](#iand-bitwise-and)
+* [`AND_NOT()`](#and_not-and-of-the-not)
 
 
 ### `ibclr` (Opcode 63)
@@ -6421,43 +6491,105 @@ Get the interrupt field.
 
 
 
-### `IOR`
+### `IOR` (Bitwise OR)
 
 |||
 |-|-|
-|TDI Syntax   | `_I \| _J` or `ior(_I, _J)` |
-|Python Syntax| `MDSplus.ior(_I, _J)` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+|TDI Syntax   | `_X \| _Y` or `IOR(_X, _Y)` |
+|Python Syntax| `MDSplus.IOR(x, y)` |
 |Opcode|207|
 
-Bit-by-bit inclusive OR.
-* Arguments `_I` and `_J` must be integers.
-* Returns True for either bit true in `_I` and `_J`; otherwise, false. 
+Returns the bitwise inclusive OR of `_X` and `_Y`.
 
-Examples     
-`IOR(3BU,5BU)` returns `7BU`.
+To get the logical OR use [`OR`](#or-booleanlogical-or).
 
+`_X` and `_Y` must be [Numeric](#numeric) and should be [Integers](#integer). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-### `ior_not` 
+The return type will be the unsigned variant of the input type; `Long` would become `Long_Unsigned`.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> 0b1110 | 0b0101
+15LU
+
+TDI> 14 | 5
+15LU
+
+# Byte -> Byte_Unsigned
+TDI> 5B | 1B
+5BU
+
+TDI> [3, 4, 5] | 1
+Long_Unsigned([3LU,5LU,5LU])
+
+TDI> [3, 4, 5, 6] | [1, 2]
+Long_Unsigned([3LU,6LU])
+
+TDI> make_signal([1, 2, 3, 4], *, [0.1, 0.2, 0.3, 0.4]) | 1
+Build_Signal(Long_Unsigned([1LU,3LU,3LU,5LU]), *, [.1,.2,.3,.4])
+
+TDI> build_with_units(14, 'm') | 5
+Build_With_Units(15LU, "m")
+```
+
+See also:
+* [`OR`](#or-booleanlogical-or)
+* [`IOR_NOT()`](#ior_not-bitwise-or-of-the-not)
+
+### `IOR_NOT` (Bitwise OR of the NOT)
 
 |||
 |-|-|
-|TDI Syntax   | `ior_not(_I, _J)` |
-|Python Syntax| `MDSplus.IOR_NOT(_I, _J)` |
-|Min arguments| 2 |
-|Max arguments| 2 |
+|TDI Syntax   | `IOR_NOT(_X, _Y)` |
+|Python Syntax| `MDSplus.IOR_NOT(x, y)` |
 |Opcode|208|
 
+Returns the bitwise OR of `_X` and the NOT of `_Y`, equivalent to `_X | ~_Y`.
 
-Bit-wise/bit-by-bit union with the second complemented.
-* Arguments `_I` and `_J` must be integers.
-* Returns True for each bit of I true or of J false; otherwise, false.
+To get the logical OR of the NOT use [`OR_NOT`](#or_not-booleanlogical-or-of-the-not).
 
-Examples
-* `IOR_NOT(3BU,5BU)` in binary is `0B11111011BU`
+`_X` and `_Y` must be [Numeric](#numeric) and should be [Integers](#integer). If either argument is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
+If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
+
+The return type will be the unsigned variant of the input type; `Long` would become `Long_Unsigned`.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved, however mismatched units will be replaced with '?'.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+> TODO: Improve examples
+```tdi
+TDI> ior_not(0b1110, 0b0101)
+4294967294LU
+
+TDI> ior_not(14, 5)
+4294967294LU
+
+# Byte -> Byte_Unsigned
+TDI> ior_not(5B, 1B)
+255BU
+TDI> ior_not([3B, 4B, 5B], 1B)
+Byte_Unsigned([255,254,255])
+
+TDI> ior_not([3B, 4B, 5B, 6B], [1B, 2B])
+Byte_Unsigned([255,253])
+
+TDI> ior_not(make_signal(Byte([1, 2, 3, 4]), *, [0.1, 0.2, 0.3, 0.4]), 1B)
+Build_Signal(Byte_Unsigned([255,254,255,254]), *, [.1,.2,.3,.4])
+
+TDI> ior_not(build_with_units(14B, 'm'), 5B)
+Build_With_Units(254BU, "m")
+```
+
+See also:
+* [`IOR`](#ior-bitwise-or)
+* [`OR_NOT`](#or_not-booleanlogical-or-of-the-not)
 
 ### `ishft` 
 
@@ -6981,15 +7113,13 @@ Examples
 
 
 
-### `logical`
-(Opcode 226)
+### `LOGICAL` (Convert to Logical)
 
 |||
 |-|-|
 |TDI Syntax   | `LOGICAL(_NUM, [_KIND])` |
 |Python Syntax| `MDSplus.LOGICAL(_NUM, [_KIND])` |
-|Min arguments| 1
-|Max arguments| 2
+|Opcode|226|
 
 
 Converts to a logical. True is 1BU, False is 0BU.
@@ -8598,7 +8728,9 @@ OPTIONAL
 
 Used in FUN definitions to indicate argument is optional
 OR
-### `OR`
+
+### `OR` (Boolean/Logical OR)
+
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
@@ -8618,7 +8750,7 @@ Arguments L and M must be logical (lowest bit is 1 for true).
 |Result       |True if either is true; otherwise, false. >>>>>>>>>WARNING, do not confuse with | which is bit-wise IOR.
 |Examples     |[0,0,1,1] || [0,1,0,1] is [$FALSE,$TRUE,$TRUE,$TRUE].
 OR_NOT
-### `OR_NOT`
+### `OR_NOT` (Boolean/Logical OR of the NOT)
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
@@ -10244,17 +10376,14 @@ Get the task field.
 |Arguments, Results|Descriptor as below.
 |Result       |A is searched for these: DSC$K_DTYPE_ACTION, the task field. DSC$K_DTYPE_PROCEDURE, unchanged.. DSC$K_DTYPE_PROGRAM, unchanged.. DSC$K_DTYPE_ROUTINE, unchanged.. DSC$K_DTYPE_METHOD, unchanged.. Otherwise, an error.
 TEXT
-### `TEXT`
+
+### `TEXT` (To String)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-
-(Opcode 344
-|Min arguments| 1
-|Max arguments| 2
-******Compiler syntax: TEXT(arg0,arg1)
-|Native python|False|
-
+|TDI Syntax   | `TEXT(_X, [_LENGTH])` |
+|Python Syntax| `MDSplus.TEXT(_X, [length])` |
+|Opcode|344|
 
 Conversion Elemental.
 Convert to text of given length.
@@ -10318,16 +10447,23 @@ Arguments STRING character. TRANSLATION character. MATCH character.
 |Result       |For each character of STRING found in MATCH the corresponding character in TRANSLATION replaces it.
 |Examples     |TRANSLATE('ABCDEF','135','ACE') is "1B3D5F".
 TRIM
-### `TRIM`
+### `TRIM` (Remove Trailing Whitespace)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
+|TDI Syntax   | `TRIM(_)` |
 |Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
 (Opcode 349
 |Min arguments| 1
 |Max arguments| 1
 ******Compiler syntax: TRIM(arg0) 
 |Native python|False|
+
+To remove leading and trailing whitespace, use `adjustl` and `trim`.
+```tdi
+TDI> trim(text(adjustl(42)))
+"42"
+```
 
 
 |Return Type  |F90 Transformation |
@@ -10871,6 +11007,15 @@ If a function has a `_KIND` argument, you may pass a value from the [DType table
 ### Numeric
 
 Refers to a numeric quantity.
+
+This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless otherwise specified.
+
+### Logical
+
+Refers to a logical (boolean) quantity, which can be either 0 for [`$FALSE`](#false-false-constant) or 1 for [`$TRUE`](#true-true-constant).
+
+> TODO: Check and Improve
+The type should be `Unsigned_Byte()`, but any [`Integer`](#integer) type should work.
 
 This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless otherwise specified.
 
