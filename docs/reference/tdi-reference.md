@@ -1671,46 +1671,66 @@ See also:
 * [`NINT`](#nint-nearest-integer-rounded-integer-cast)
 * [`INT`](#int-integer-cast)
 
-### `ALL` 
+### `ALL` (All True)
+
 |||
 |-|-|
-|TDI Syntax   | `ALL(_MASK, [_DIM])` |
-|Python Syntax| `MDSplus.ALL(_MASK, [_DIM])` |
+|TDI Syntax   | `ALL(_ARRAY, [_DIM])` |
+|Python Syntax| `MDSplus.ALL(mask, [dim])` |
 |Opcode|43|
 
-Determine if all values are true in `_MASK` along dimension `_DIM`.
+> TODO: Link to dimension explanation
+Returns [`$TRUE`](#true-true-constant) if all values in `_ARRAY` are [`$TRUE`](#true-true-constant). If `_DIM` is present, each element of that dimension (link) will be checked independently.
 
-Arguments 
-* `_MASK`: a logical array.
-* [_DIM] optional: integer scalar from 0 to n-1, where n is rank of `_MASK`.
+To check if any value is [`$TRUE`](#true-true-constant), use [`ANY`](#any-any-true). To count the number of [`$TRUE`](#true-true-constant) values, use [`COUNT`](#count-number-of-true-values).
 
-Results
-* `ALL(_MASK)` returns [`$TRUE`](#true-true-constant) if all elements of `_MASK` are true or if MASK has size zero
-* `ALL(_MASK)` returns [`$FALSE`](#false-false-constant) if any element of `_MASK` is false.
-* For a vector MASK, `ALL(_MASK, _DIM)` is equal to `ALL(_MASK)`. Otherwise, the value of an element of the result is `ALL()` of the elements of `_MASK` varying the `_DIM` subscript.
+`_ARRAY` must be a [Logical](#logical), and should be an [Array](#array) or a [Signal](#signal).
 
-Examples
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
-TDI> ALL([$TRUE,$FALSE,$TRUE])
-$FALSE
+TDI> all([$true, $true, $true])
+1BU
+TDI> all([1, 1, 1])
+1BU
 
+TDI> all([$true, $false, $true])
+0BU
+TDI> all([1, 0, 1])
+0BU
 
-_B=[[1, 3, 5],[2, 4, 6]]
-_C=[[0, 3, 5],[2, 4, 6],[7, 4, 8]]
+TDI> _array = [1, 2, 3] != [4, 5, 6]
+Byte_Unsigned([1,1,1])
+TDI> all(_array)
+1BU
 
-TDI> ALL(_B NE _C,0)
-[$FALSE,$FALSE,$FALSE]
+TDI> _array = [1, 2, 3] == [3, 2, 1]
+Byte_Unsigned([0,1,0])
+TDI> all(_array)
+0BU
 
-TDI> ALL(_B NE _C,1)
-[$FALSE,$FALSE]
+# Equivalent to all([0, 0, 1, 1, 0, 1, 0, 1])
+TDI> all([[0,0,1,1], [0,1,0,1]])
+0BU
+
+# Equivalent to [all([0,0,1,1]), all([0,1,0,1])]
+TDI> all([[0,0,1,1], [0,1,0,1]], 0)
+Byte_Unsigned([0,0])
+
+# Equivalent to [all([1,1]), all([0,0])]
+TDI> all([[1,1], [0,0]], 0)
+Byte_Unsigned([1,0])
+
+# Equivalent to [all([0,0]), all([0,1]), all([1,0]), all([1,1])]
+TDI> all([[0,0,1,1], [0,1,0,1]], 1)
+Byte_Unsigned([0,0,0,1])
 ```
 
 See also:
-* `ANY` for logical. 
-* `COUNT` for the number of trues.
-
-
+* [`ANY`](#any-any-true)
+* [`COUNT`](#count-number-of-true-values)
 
 ### `ALLOCATED`
 |||
@@ -1843,45 +1863,61 @@ See also:
 * [`NINT`](#nint-nearest-integer-rounded-integer-cast)
 * [`INT`](#int-integer-cast)
 
-### `ANY` 
+### `ANY` (Any True)
+
 |||
 |-|-|
-|TDI Syntax   | `ANY(_MASK, [_DIM])` |
-|Python Syntax| `MDSplus.ANY(_MASK, [_DIM])` |
+|TDI Syntax   | `ANY(_ARRAY, [_DIM])` |
+|Python Syntax| `MDSplus.ANY(mask, [dim])` |
 |Opcode|48|
 
-Matching function. Returns true if any element matches the condition described in the mask along the dimension. This can compare an array to a single element or two arrays to each other. Not providing a `_DIM` will flatten the array. `_DIM` must be an integer of n-1 of sub-arrays.
+> TODO: Link to dimension explanation
+Returns [`$TRUE`](#true-true-constant) if any value in `_ARRAY` is [`$TRUE`](#true-true-constant). If `_DIM` is present, each element of that dimension (link) will be checked independently.
 
-Examples
-* With:   
-`_arr1 = [[1, 2, 3], [4, 5, 6]]`  
-`_arr2 = [[3, 2, 1], [6, 4, 5]]`
+To check if all values are [`$TRUE`](#true-true-constant), use [`ALL`](#all-all-true). To count the number of [`$TRUE`](#true-true-constant) values, use [`COUNT`](#count-number-of-true-values).
 
-* `any(_arr1 == _arr2)`  
-`1BU` aka `[$TRUE]`
+`_ARRAY` must be a [Logical](#logical), and should be an [Array](#array) or a [Signal](#signal).
 
-* `any(_arr1 == _arr2,0)`  
-`Byte_Unsigned([1,0])` aka `[[$TRUE], [$FALSE]]`
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded.
 
-* `any(_arr1 == _arr2,1)`  
-`Byte_Unsigned([0,1,0])` aka `[[$FALSE], [$TRUE], [$FALSE]]`
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
-See also
-* `ALL` for logical and
-* `COUNT` for the number of trues.
+```tdi
+TDI> any([$true, $false, $true])
+1BU
+TDI> any([1, 0, 1])
+1BU
 
-TODO: Come back to the old examples
-OLD EXAMPLES (these use != instead of ==)
-* `ANY([$TRUE,$FALSE,$TRUE])` returns `$TRUE`.
-* With `_B=[[1, 3, 5],[2, 4, 6]]` and  
-`_C=[[0, 3, 5],[7, 4, 8]]`  
-`ANY(_B NE _C)` returns `[$TRUE]`
-`ANY(_B NE _C,0)` returns `[$TRUE,$TRUE]`.  
-`ANY(_B NE _C,1)` returns `[$TRUE,$FALSE,$TRUE]`.
+TDI> any([$false, $false, $false])
+0BU
+TDI> any([0, 0, 0])
+0BU
 
+TDI> _array = [1, 2, 3] == [3, 2, 1]
+Byte_Unsigned([0,1,0])
+TDI> any(_array)
+1BU
 
+# Equivalent to any([0, 0, 1, 1, 0, 1, 0, 1])
+TDI> any([[0,0,1,1], [0,1,0,1]])
+1BU
 
+# Equivalent to [any([0,0,1,1]), any([0,1,0,1])]
+TDI> any([[0,0,1,1], [0,1,0,1]], 0)
+Byte_Unsigned([1,1])
 
+# Equivalent to [any([1,1]), any([0,0])]
+TDI> any([[1,1], [0,0]], 0)
+Byte_Unsigned([1,0])
+
+# Equivalent to [any([0,0]), any([0,1]), any([1,0]), any([1,1])]
+TDI> any([[0,0,1,1], [0,1,0,1]], 1)
+Byte_Unsigned([0,1,1,1])
+```
+
+See also:
+* [`ALL`](#all-all-true)
+* [`COUNT`](#count-number-of-true-values)
 
 ### `ARG` (Complex number to radians)
 
@@ -3601,38 +3637,51 @@ TDI> cosh(cmplx(1.0, 2.0))
 See also:
 * [`COS`](#cos-cosine)
 
-### `count`
+### `COUNT` (Number of True Values)
+
 |||
 |-|-|
 |TDI Syntax   | `COUNT(_MASK, [_DIM])` |
-|Python Syntax| `MDSplus.COUNT(_MASK, [_DIM])` |
+|Python Syntax| `MDSplus.COUNT(mask, [dim])` |
 |Opcode|109|
 
-Counts the number of true elements in `_MASK` along dimension `_DIM`.
+Returns the number of [`$TRUE`](#true-true-constant) values in `_MASK`. If `_DIM` is present, each element of that dimension (link) will be checked independently.
 
-Arguments
-* `_MASK` or logical array. 
-* `_DIM`(optional)  or integer scalar from 0 to n-1, where n is rank of MASK.
-* form: Integer. It is scalar if DIM is absent or MASK is a vector; otherwise, the result is an array of rank n-1 and of shape like MASK's with DIM subscript omitted.
+To check if all values are [`$TRUE`](#true-true-constant), use [`ALL`](#all-all-true). To check if any value is [`$TRUE`](#true-true-constant), use [`ANY`](#any-any-true). 
 
-Results
-* COUNT(MASK) is equal to the number of true elements of MASK and is 0 if no element of MASK is true or MASK is size zero.
-* For a vector MASK, COUNT(MASK,DIM) is equal to COUNT(MASK). For higher dimensional cases, the value of an element of the result is COUNT of elements of MASK varying the DIM subscript.
+`_ARRAY` must be a [Logical](#logical), and should be an [Array](#array) or a [Signal](#signal).
 
-Examples.
+[`BUILD_WITH_UNITS()`](#build_with_units) will be discarded.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
-TDI> count([$TRUE,$FALSE,$TRUE])
+TDI> count([$true, $false, $true])
+2
+TDI> count([1, 0, 1])
 2
 
+TDI> _array = [1, 2, 3] == [3, 2, 1]
+Byte_Unsigned([0,1,0])
+TDI> count(_array)
+1
 
-    `_B=[[1,3,5,7], [2,4,6,8], [0,0,0,0]]` and  
-    `_C=[[0,3,5,6], [7,4,8,8], [1,1,1,1]]`  
-    * `count(_B == _C)` returns `4`
-    * `count(_B == _C,0)` returns `[2,2,0]`
-    * `count(_B == _C,1)` returns `[0,2,1,1]`
+# Equivalent to count([0, 0, 1, 1, 0, 1, 0, 1])
+TDI> count([[0,0,1,1], [0,1,0,1]])
+4
+
+# Equivalent to [count([0,0,0,1]), count([0,1,1,1])]
+TDI> count([[0,0,0,1], [0,1,1,1]], 0)
+[1,3]
+
+# Equivalent to [count([0,0]), count([0,1]), count([1,0]), count([1,1])]
+TDI> count([[0,0,1,1], [0,1,0,1]], 1)
+[0,1,1,2]
 ```
 
+See also:
+* [`ALL`](#all-all-true)
+* [`ANY`](#any-any-true)
 
 ### `CULL` (Opcode 390)
 
