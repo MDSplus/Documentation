@@ -1336,7 +1336,7 @@ Returns the equivalent ASCII character(s) of `_X`.
 
 `_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Optional `_KIND`, see `Kind`](#kind).
+Optional `_KIND`, see [`Kind`](#kind).
 
 Note: This is equivalent to [`CHAR()`](#char-character-from-integer).
 
@@ -1515,7 +1515,11 @@ To adjust to the right, use [`ADJUSTR`](#adjustr-adjust-to-the-right-right-align
 
 `_STRING` doesn't need to be [Character](#character), but any other types will be converted using [`TEXT`](#text-to-string). If `_STRING` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Note: Consumed TAB (`\t`) characters will be replaced by single spaces.
+Note: Consumed tab (`\t`) characters will be replaced by single spaces.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> adjustl("  word  ")
@@ -1531,7 +1535,7 @@ TDI> adjustl(["  hello  ", "  world  ","test"])
 TDI> adjustl("\tword\t")
 "word\t "
 ```
-0
+
 See also:
 * [`ADJUSTR`](#adjustr-adjust-to-the-right-right-align-text)
 * [`TRIM`](#trim-remove-trailing-whitespace)
@@ -1550,7 +1554,11 @@ To adjust to the left, use [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-te
 
 `_STRING` doesn't need to be [Character](#character), but any other types will be converted using [`TEXT`](#text-to-string). If `_STRING` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-Note: Consumed TAB (`\t`) characters will be replaced by single spaces.
+Note: Consumed tab (`\t`) characters will be replaced by single spaces.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> adjustr("  word  ")
@@ -1572,68 +1580,95 @@ See also:
 * [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-text)
 * [`TRIM`](#trim-remove-trailing-whitespace)
 
-### `AIMAG` (Imaginary part of a complex number)
+### `AIMAG` (Imaginary Part of Complex Number)
 
 |||
 |-|-|
-|TDI Syntax   | `AIMAG(_NUM)` |
-|Python Syntax| `MDSplus.AIMAG(_NUM)` |
+|TDI Syntax   | `AIMAG(_COMPLEX)` |
+|Python Syntax| `MDSplus.AIMAG(complex)` |
 |Opcode|41|
 
+Returns the imaginary part of a `_COMPLEX`.
 
-Returns the imaginary part of a complex number, in the same shape as the input.
+To get the real part, use [`REAL`](#real-real-part-of-complex-number).
 
-Examples
+`_COMPLEX` must be [Numeric](#numeric), and should be a [Complex Number](#complex-number). If `_COMPLEX` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+> TODO: Mark, help reword, "if complex is not complex"
+If `_COMPLEX` is a [Real Number](#real-number), the result will be 0.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
 ```tdi
-TDI> aimag(cmplx(3,4))
-4
+TDI> aimag($I)
+1.
 
-_IArray = [cmplx(1,2),cmplx(3,4), cmplx(5,6)]
+TDI> aimag(cmplx(3, 4))
+4.
 
-TDI> aimag(_IArray)
+TDI> aimag([cmplx(1, 2), cmplx(3, 4), cmplx(5, 6)])
 [2.,4.,6.]
 
-_IArray2 = [[cmplx(1,2),cmplx(3,4)], [cmplx(5,6), cmplx(7,8)]]
-
-TDI> aimag(_IArray2)
+TDI> aimag([[cmplx(1, 2), cmplx(3, 4)], [cmplx(5, 6), cmplx(7, 8)]])
 [[2.,4.], [6.,8.]]
 ```
 
+See also:
+* [`REAL`](#real-real-part-of-complex-number)
+* [`CMPLX`](#cmplx-complex-number)
 
-### `AINT` 
+### `AINT` (Truncate Floating Point Number)
+
 |||
 |-|-|
-|TDI Syntax   | `AINT(_NUM, [_KIND])` |
-|Python Syntax| `MDSplus.AINT(_NUM, [_KIND])` |
+|TDI Syntax   | `AINT(_X)` |
+|Python Syntax| `MDSplus.AINT(x)` |
 |Opcode|42|
 
+Returns `_X`, with all numbers after the decimal point removed (not rounded), and converted to a [Floating Point Number](#floating-point).
 
-Truncates a real number to a whole number.
-* Note: this function only removes numbers after the decimal point; it does not round.
+> TODO: Mark, check/reword all of these references.
 
-Arguments
-* `_NUM` must be real. Complex numbers result in error.
-* [_KIND] (optional): Type is `KIND` if it is present, else that of `_NUM`. Scalar integer type number, for example, KIND(1d0).
+To round, use [`ANINT`](#anint-nearest-integer-round-floating-point-number). To round up, use [`CEILING`](#ceiling-round-up). To round down, use [`FLOOR`](#floor-round-down).
 
+To round and convert to an integer, use [`NINT`](#nint-nearest-integer-rounded-integer-cast).
 
-Examples
+To truncate and convert to an integer, use [`INT`](#int-integer-cast) or any of the [Integer](#integer) constructors.
+
+`_X` must be [`Real`](#real-number). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+> TODO: Kind seems to be broken
+Optional `_KIND`, see [`Kind`](#kind).
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
 
 ```tdi
 TDI> aint(-4.5)
--4
+-4.
+
+TDI> aint(0.999)
+0.
 
 TDI> aint($PI)
 3D0
 
-TDI> aint(0.999)
-0
+TDI> aint([1.1, 2.2, 3.3])
+[1.,2.,3.]
+
+TDI> aint(42)
+42.
 ```
 
 See also:
-* `int` for integer result and `byte`, `word`, `long`, `quadword`, `octaword`, and `unsigned_byte`, etc., for specific forms. 
-* `anint` and `nint` for rounded integral value.
-* `floor` and `ceiling`.
-
+* [`ANINT`](#anint-nearest-integer-round-floating-point-number)
+* [`CEILING`](#ceiling-round-up)
+* [`FLOOR`](#floor-round-down)
+* [`NINT`](#nint-nearest-integer-rounded-integer-cast)
+* [`INT`](#int-integer-cast)
 
 ### `ALL` 
 |||
@@ -1759,31 +1794,53 @@ TDI> and_not([0,1], [1,0]) == ([0,1] && ![1,0])
 Byte_Unsigned([1,1])
 ```
 
-### `ANINT`
+### `ANINT` (Nearest Integer, Round Floating Point Number)
+
 |||
 |-|-|
-|TDI Syntax   | `ANINT(_NUM, [_KIND])` |
-|Python Syntax| `MDSplus.ANINT(_NUM, [_KIND])` |
+|TDI Syntax   | `ANINT(_X)` |
+|Python Syntax| `MDSplus.ANINT(x)` |
 |Opcode|47|
 
-Rounds to the nearest whole number.
-* `_NUM` Must be a real number; complex numbers result in error.
-* [`_KIND`] Optional: KIND scalar integer type number, for example, KIND(1d0).
-* Type is KIND if it is present, else that of A.
+Returns `_X` rounded to the nearest whole number, and converted to a [Floating Point Number](#floating-point).
 
-Examples
+> TODO: Mark, check/reword all of these references.
+
+To round up, use [`CEILING`](#ceiling-round-up). To round down, use [`FLOOR`](#floor-round-down). To truncate, use [`AINT`](#aint-truncate-floating-point-number).
+
+To round and convert to an integer, use [`NINT`](#nint-nearest-integer-rounded-integer-cast).
+
+To truncate and convert to an integer, use [`INT`](#int-integer-cast) or any of the [Integer](#integer) constructors.
+
+`_X` must be [`Real`](#real-number). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
 ```tdi
-TDI> ANINT(2.783)
-3.0
+TDI> anint(-4.5)
+-5.
 
-TDI> ANINT(-2.783)
--3.0
+TDI> anint(0.999)
+1.
+
+TDI> anint($PI)
+3D0
+
+TDI> anint([1.1, 5.5, 9.9])
+[1.,6.,10.]
+
+TDI> anint(42)
+42.
 ```
 
-See also: 
-* `NINT` for integer
-* `INT` and `AINT` for truncated results.
-
+See also:
+* [`AINT`](#aint-truncate-floating-point-number)
+* [`CEILING`](#ceiling-round-up)
+* [`FLOOR`](#floor-round-down)
+* [`NINT`](#nint-nearest-integer-rounded-integer-cast)
+* [`INT`](#int-integer-cast)
 
 ### `ANY` 
 |||
@@ -3094,7 +3151,8 @@ SWITCH (_k) {
 
 See also `default`, `switch`
 
-### `CEILING` 
+### `CEILING` (Round Up)
+
 |||
 |-|-|
 |TDI Syntax   | `CEILING(_NUM)` |
@@ -5200,14 +5258,13 @@ Examples
 <!-- Commenting this out because normal people shouldn't need to know this, but for internal purposes: This is done in TDISHR as REAL(Z). In F90, REAL(Z) sets the default floating point size. -->
 
 
-### `floor` (Opcode 168)
+### `FLOOR` (Round Down)
 
 |||
 |-|-|
 |TDI Syntax   | `floor(_NUM) ` |
 |Python Syntax| `MDSplus.floor(_NUM) ` |
-|Min arguments| 1 |
-|Max arguments| 1 |
+|Opcode|168|
 
 Takes a number and rounds down to the nearest whole number
 * Argument must be real. Complex numbers cause an error.
@@ -6439,7 +6496,7 @@ Example:
 
 
 
-### `INT` (Opcode 201)
+### `INT` (Integer Cast)
 
 |||
 |-|-|
@@ -7148,7 +7205,7 @@ Examples
 `logical(5)` is `1BU`
 
 
-### `long` (Opcode 227)
+### `LONG` (32-bit Signed Integer Cast)
 
 |||
 |-|-|
@@ -8578,16 +8635,54 @@ TDI> [0, 0, 1, 1] && [0,1,0,1] neqv [0,0,1,1] || [0,1,0,1]
 Byte_Unsigned([0,1,1,0])
 ```
 
-### `NINT`
+Logical Elemental.
+Test that logical values are unequal.
+Arguments L and M must be logical (lowest bit is 1 for true).
+|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape. |Result       |True if exactly one of X and Y are true;
+otherwise, false.
+|Examples     |2>3 NEQV 3>4 is $FALSE.
+NINT
+
+### `NINT` (Nearest Integer, Rounded Integer Cast)
+
 |||
 |-|-|
-|TDI Syntax   | `NINT(_NUM, [KIND])` |
-|Python Syntax| `MDSplus.NINT(_NUM, [KIND])` |
+|TDI Syntax   | `NINT(_X)` |
+|Python Syntax| `MDSplus.NINT(x)` |
 |Opcode|255|
 
-Rounds to the nearest integer.
-* if argument is complex, returns the the real part rounded to the nearest whole number
-* [`KIND`] optional: scalar integer type number, for example, KIND(1). (Today. Ignored, always returns LONG.)
+Returns `_X` rounded to the nearest whole number, and converted to an [Integer](#integer).
+
+If `_X` is already an [Integer](#integer) type, the type will be preserved. Otherwise, the result will be converted to a [`LONG`](#long-32-bit-signed-integer-cast).
+
+To round up, use [`CEILING`](#ceiling-round-up). To round down, use [`FLOOR`](#floor-round-down). To truncate, use [`AINT`](#aint-truncate-floating-point-number).
+
+To round and convert to an integer, use [`NINT`](#nint-nearest-integer-rounded-integer-cast).
+
+To truncate and convert to an integer, use [`INT`](#int-integer-cast) or any of the [Integer](#integer) constructors.
+
+`_X` must be [`Real`](#real-number). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> nint(-4.5)
+-5
+
+TDI> nint(0.999)
+1
+
+TDI> nint($PI)
+3
+
+TDI> nint([1.1, 5.5, 9.9])
+[1,6,10]
+
+TDI> nint(42)
+42
+```
 
 Examples. NINT(2.783) is 3. NINT(-2.783) is -3.
 
@@ -8968,16 +9063,31 @@ The decimal precision in the model representing numbers of the argument type.
 |Result       |INT((p-1)*LOG10(b))+k, where p is the number of fraction digits, b is the digit size, and k is 1 if b is an integral power of ten and 0 otherwise.
 |Examples     |PRECISION(1.0) is INT((24-1)*LOG10(2))=INT(6.92)=6 on the VAX.
 PRESENT
-### `PRESENT`
+
+### `PRESENT` (Optional Argument Present)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 275
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: PRESENT(arg0) 
-|Native python|False|
+|TDI Syntax   | `PRESENT(_ARGUMENT)` |
+|Opcode|275|
+
+```tdi
+public fun say_hello(optional in _name, optional in _excited)
+{
+    if (present(_name)) {
+        _name = "world";
+    }
+
+    _message = "Hello, " // _name;
+
+    if (present(arg2)) {
+        write(*, _message);
+    }
+    else {
+        write(*, _message, "!");
+    }
+}
+```
 
 
 F90 Variable Inquiry.
@@ -9302,32 +9412,48 @@ Get the raw field.
 |Result       |A is searched for this: DSC$K_DTYPE_SIGNAL, the raw field. All others DATA(A).
 |Examples     |RAW_OF(BUILD_SIGNAL(6*$VALUE,42)) is 42.
 |See also     |$VALUE and $THIS for use of this within a signal.
-REAL
-### `REAL`
+
+### `REAL` (Real Part of Complex Number)
+
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 296
-|Min arguments| 1
-|Max arguments| 2
-******Compiler syntax: REAL(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `REAL(_COMPLEX)` |
+|Python Syntax| `MDSplus.REAL(complex)` |
+|Opcode|296|
 
-NOTE: using the second arg (kind) causes core dump.
+Returns the real part of `_COMPLEX`.
 
-Conversion Elemental.
-Convert to real.
-Arguments Optional: KIND. A numeric. KIND scalar integer type number, for example, KIND(1d0).
-|Signals      |Same as A. |Units        |Same as A. |Form         |If KIND present, the type KIND; otherwise, the real
-type with the same length. To get F, D, G, or H floating result use F_FLOAT, etc.
-|Result       |Immediate at compilation.
-(i)
-A is integer or real, the result is the truncated approximation.
-(ii)
-A is complex, the result is the approximation to the real part.
-Examples. REAL(-3) is -3.0. REAL(Z,Z) is real part of the complex. This is done in TDISHR as REAL(Z). In F90, REAL(Z) sets the default floating point size.
-REF
+To get the imaginary part, use [`AIMAG`](#aimag-imaginary-part-of-complex-number).
+
+`_COMPLEX` must be [Numeric](#numeric), and should be a [Complex Number](#complex-number). If `_COMPLEX` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+> TODO: Mark, help reword, "if complex is not complex"
+If `_COMPLEX` is a [Real Number](#real-number), it will be converted [Floating Point](#floating-point) and returned.
+
+Note: Passing a second argument to this will cause a segmentation fault.
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
+```tdi
+TDI> real($I)
+0.
+
+TDI> real(cmplx(3, 4))
+3.
+
+TDI> real([cmplx(1, 2), cmplx(3, 4), cmplx(5, 6)])
+[1.,3.,5.]
+
+TDI> real([[cmplx(1, 2), cmplx(3, 4)], [cmplx(5, 6), cmplx(7, 8)]])
+[[1.,3.], [5.,7.]]
+```
+
+See also:
+* [`AIMAG`](#aimag-imaginary-part-of-complex-number)
+* [`CMPLX`](#cmplx-complex-number)
+
 ### `REF`
 |||
 |-|-|
@@ -10423,8 +10549,18 @@ TEXT
 |||
 |-|-|
 |TDI Syntax   | `TEXT(_X, [_LENGTH])` |
-|Python Syntax| `MDSplus.TEXT(_X, [length])` |
+|Python Syntax| `MDSplus.TEXT(x, [length])` |
 |Opcode|344|
+
+Converts and returns `_X` as a [Character](#character) string.
+
+`_X` must be [Numeric](#numeric). If `_X` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+```tdi
+TDI> text([1,2,3],1)
+["1","2","3"]
+```
+
 
 Conversion Elemental.
 Convert to text of given length.
@@ -10487,35 +10623,47 @@ Arguments STRING character. TRANSLATION character. MATCH character.
 |Signals      |That of dominant shape. |Units        |Same as STRING. |Form         |Character of compatible shape.
 |Result       |For each character of STRING found in MATCH the corresponding character in TRANSLATION replaces it.
 |Examples     |TRANSLATE('ABCDEF','135','ACE') is "1B3D5F".
-TRIM
+
 ### `TRIM` (Remove Trailing Whitespace)
 
 |||
 |-|-|
-|TDI Syntax   | `TRIM(_)` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 349
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: TRIM(arg0) 
-|Native python|False|
+|TDI Syntax   | `TRIM(_STRING)` |
+|Python Syntax| `MDSplus.TRIM(string)` |
+|Opcode|349|
 
-To remove leading and trailing whitespace, use `adjustl` and `trim`.
+Return `_STRING` with the trailing whitespace removed.
+
+To remove both leading and trailing whitespace, use [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-text) and `TRIM` together.
+
+`_STRING` doesn't need to be [Character](#character), but any other types will be converted using [`TEXT`](#text-to-string). If `_STRING` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
+
+Note: This does not remove newlines (`\n`) or carriage returns (`\r`).
+
+[`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.
+
+[`BUILD_WITH_ERROR()`](#build_with_error) will be discarded.
+
 ```tdi
-TDI> trim(text(adjustl(42)))
-"42"
+TDI> trim("  word  ")
+"  word"
+
+TDI> trim("\tword\t")
+"\tword"
+
+TDI> trim("line\n")
+"line\n"
+
+# Remove leading and trailing spaces
+TDI> trim(adjustl("  hello  "))
+"hello"
 ```
 
+See also:
+* [`ADJUSTL`](#adjustl-adjust-to-the-left-left-align-text)
+* [`ADJUSTR`](#adjustr-adjust-to-the-right-right-align-text)
+* [`TRIM`](#trim-remove-trailing-whitespace)
 
-|Return Type  |F90 Transformation |
-The argument with trailing blank characters removed, including tabs.
-|Arguments, Results|STRING is character scalar.
-|Signals      |Same as STRING. |Units        |Same as STRING. |Form         |Character with a length that is the length less the
-number of trailing blanks (and tabs) in STRING.
-|Result       |Same as STRING except any trailing blanks are removed. If STRING contains no nonblank characters, the result has zero length.
-|Examples     |TRIM(' A B ') is " A B".
-|See also     |ADJUSTL and ADJUSTR to justify strings.
-UBOUND
 ### `UBOUND`
 |||
 |-|-|
@@ -11201,6 +11349,8 @@ The following types are deprecated, and should not be used, but might already be
 |VMS H-Floating|28  |128 |`H0`  |`H_FLOAT()`|
 
 ### Real Number
+
+> Note: This usually refers to floating point numbers, should we differentiate?
 
 This refers to any number that is not imaginary or complex.
 
