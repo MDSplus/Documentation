@@ -18,13 +18,25 @@ TODO: regroup entries by theme rather than one big alphabetical heap
 TODO: remove references to what VAX returns
 
 TODO for Mark:
-* remove min arguments/max arguments unless it's "interesting" (not interesting: min-max 1, min1-max2)
-* change arg0, arg1 (etc) to more useful things like `_NUM`, or [_NUM] if optional. use backticks
+* ~~remove min arguments/max arguments unless it's "interesting" (not interesting: min-max 1, min1-max2)~~ (stephen will do this via script)
+* ~~change arg0, arg1 (etc) to more useful things like `_NUM`, or [_NUM] if optional. use backticks~~ (we'll do that piecemeal)
 * examples should be rewritten as triple backtick (```) code blocks
 * DONE! ~~remove c syntax from all the entries (should not be called by a human)~~
 * move opcode, use natural language headings--try options for each. use LT and log10 as examples
 * global explanation of mismatched units (if they don't match, it just returns `?`)
 * move all the deprecated/broken/unimplemented to their own section
+* read through the glossary for clarity 
+* back burner consideration: generic variable name. strictly a readability thing
+    * generic variable (_X)
+    * generic variable pairs (_X, _Y)
+    * generic text (_STRING)
+    * generic array (_ARRAY)
+    * MASK and DIM (_MASK, _DIM)
+    * KIND (_KIND...replace with dtype?)
+    * generic signal (_SIGNAL)
+    * trig (angle or theta instead of x/y?)
+    * complex? 
+
 
 
 
@@ -8091,12 +8103,12 @@ TDI> minexponent(1.0)
 |Python Syntax| `MDSplus.MINLOC(_ARRAY, [_MASK], [_arg3])` |
 |Opcode|243|
 
-Determine the location of an element of ARRAY having the minimum value of the elements identified by MASK.
+Determine the location of an element of `_ARRAY` having the minimum value of the elements identified by `_MASK`.
 
 Arguments 
 `_ARRAY` numeric array.
 `_MASK` Optional: logical and conformable with ARRAY.
-`[arg3]`
+`[arg3]` optional: probably `KIND`
 
 
 TODO: Come back to this after further investigation
@@ -8107,8 +8119,12 @@ TODO: Come back to this after further investigation
 
 The result is the vector of subscripts of an element whose value equals the minimum of all elements of ARRAY or all elements for which MASK is true. Reserved operands ($ROPRAND) are ignored. Each subscript will be in the extent of its dimension. For zero size, no true elements in MASK, or all $ROPRAND the result is undefined. If more than one element has the maximum value the result is the first in array order. The result is an offset vector even if there is a lower bound.
 
-Examples. MINLOC([2,4,6]) is [0].
-For _A=[0 -5 8 -3], MINLOC(_A,_A GT -4) is [0,3]. [3 4-1 2][1 5 6-4]
+Examples. 
+MINLOC([2,4,6]) is [0].
+
+For _A=[0 -5 8 -3]
+MINLOC(_A,_A GT -4) is [0,3].
+[3 4-1 2][1 5 6-4]
 |See also     |MINVAL for the value.
 
 
@@ -8205,8 +8221,7 @@ Returns the remainder of `_X` divided by `_Y`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
+If `_X` and `_Y` are both [Signal](#signal)s, the result will not be. However, if only one is a [Signal](#signal), the result will be a [Signal](#signal).
 
 The value(s) of `_X` and `_Y` must be [Real](#real).
 
@@ -8253,27 +8268,19 @@ TDI> build_with_error(4, 0.1) % 3
 See also:
 * [`DIVIDE()`](#divide-divide)
 
-Arguments A and P must be integer or real. Complex numbers are an error.
-|Signals      |Single signal or smaller data. |Units        |Single or common units, else bad. |Form         |Compatible form of A and P.
-|Result       |If P NE 0, the result is A-INT(A/P)*P. If P==0, the result is the $ROPRAND for reals and undefined for integers.
-Examples. MOD(3.0,2.0) is 1.0. MOD(8,5) is 3. MOD(-8,5) is -3. MOD(8,-5) is -3. MOD(-8,-5) is -3.
-
 
 ### `MODEL_OF`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 246
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: MODEL_OF(arg0)
-|Native python|False|
+|TDI Syntax   | `MODEL_OF(arg0)` |
+|Python Syntax| `MDSplus.MODEL_OF(arg0)` |
+|Opcode|246|
 
 
-|Return Type  |MDS Operation | Get the model field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this: DSC$K_DTYPE_CONGLOM, the model field. Otherwise, an error.
+Get the method field: `DSC$K_DTYPE_CONGLOM`
+Otherwise, an error.
+
+
 
 ### `MULTIPLY`
 
@@ -8289,7 +8296,7 @@ Returns the result of `_X` multiplied by `_Y`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword
+> TODO: Mark, help reword // I think this is fine!
 If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
 
 Integer overflows will be truncated.
@@ -8349,101 +8356,120 @@ TDI> build_with_error(1, 0.1) * build_with_error(5, 0.2)
 See also:
 * [`PRODUCT()`](#product-total-product)
 
-NAME_OF
+
 ### `NAME_OF`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 248
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: NAME_OF(arg0) 
-|Native python|False|
+|TDI Syntax   | `NAME_OF(arg0) ` |
+|Python Syntax| `MDSplus.NAME_OF(arg0) ` |
+|Opcode|248|
 
 
-|Return Type  |MDS Operation |
-Get the name field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this: DSC$K_DTYPE_CONGLOM, the name field. Otherwise, an error.
-NAND
-### `NAND`
+Gets the name field if it exists from `DSC$K_DTYPE_CONGLOM`
+Otherwise, an error.
+
+
+
+### `NAND` (NOT AND)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 249
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: NAND(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `NAND(_A, _B)`, or  `_A NAND _B` |
+|Python Syntax| `MDSplus.NAND(_A, _B)` |
+|Opcode|249|
+
+Returns False if both are true; otherwise, true.
+* Equivalent to `NOT AND`, or `NOT (A AND B)`
+* Negation of [logical](#logical) intersection of elements. 
+* `_A` and `_B` must be boolean.
 
 
-Logical Elemental.
-Negation of logical intersection of elements.
-Usual Forms L NAND M.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match.
-|Form         |Logical of compatible shape.
-|Result       |False if both are true; otherwise, true.
-|Examples     |[0,0,1,1] && [0,1,0,1] is [$TRUE,$TRUE,$TRUE,$FALSE].
-NAND_NOT
-### `NAND_NOT`
+_A and _B must be boolean.
+
+Examples
+```tdi
+TDI> [0,0,1,1] nand [0,1,0,1]
+Byte_Unsigned([1,1,1,0])
+```
+
+
+### `NAND_NOT` (NOT AND NOT)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 250
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: NAND_NOT(arg0,arg1) 
-|Native python|False|
+|TDI Syntax   | `NAND_NOT(_A, _B)` or `_A NAND_NOT _B`|
+|Python Syntax| `MDSplus.NAND_NOT(_A, _B)` |
+|Opcode|250|
+
+If A is true and B is false, returns false, otherwise true.
+* Equivalent to `NOT(_A and NOT(_B))`
+* Negation of [logical](#logical) intersection of first with negation of second.
+* `_A` and `_B` must be boolean.
+
+Examples
+
+```tdi
+TDI> [0,0,1,1] NAND_NOT [0,1,0,1]
+Byte_Unsigned([1,1,0,1])
+```
 
 
-Logical Elemental.
-Negation of logical intersection of first with negation of second. Logically equivalent to NOT(L) OR M.
-Accepted Form. L NAND_NOT M.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
-|Result       |True if L is false or M is true; otherwise, false. |Examples     |[0,0,1,1] NAND_NOT [0,1,0,1] is [$TRUE,$TRUE,$FALSE,$TRUE].
-NDESC
-### `NDESC`
+### `NDESC` (Number of Descriptors, TODO)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 251
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: NDESC(arg0) 
-|Native python|False|
+|TDI Syntax   | `NDESC(arg0) ` |
+|Python Syntax| `MDSplus.NDESC(arg0) ` |
+|Opcode|251|
+
+Returns the number of descriptors in the class-R descriptor of an MDS record.
+* Argument must be an MDS class-R descriptor.
+* Descriptor data types (`DSC$K_DTYPE_DSC`) are removed.
+* Use `NDESC` for count without NID, PATH, or variable. 
+* Use `NDESC_OF` for count including them.
+
+Examples (TODO...)
+```tdi
+NDESC($VALUE) is 0. 
+
+# Correct syntax
+TDI> _sum = make_function(builtin_opcode("add"),3, 4)
+3 + 4
+TDI> ndesc(_sum)
+2BU
+
+# This syntax will cause an error; use the above example or NDESC_OF.
+TDI> ndesc(4+5)
+%TDI Error in NDESC(4 + 5)
+%TDI Error in EXECUTE("ndesc(4+5)")
+```
 
 
-MDS Information.
-The number of descriptors in an MDS record.
-|Arguments, Results|A must be an MDS class-R descriptor.
-|Signals      |None. |Units        |None. |Form         |Byte unsigned scalar. |Result       |The number of descriptors in the class-R descriptor.
-Descriptor data types (DSC$K_DTYPE_DSC) are removed. Use NDESC for count without NID, PATH, or variable. Use NDESC_OF for count including them.
-Examples. NDESC($VALUE) is 0. NDESC(A+B) may be error.
-NDESC_OF
-### `NDESC_OF`
+### `NDESC_OF` (Number of Descriptors of, TODO)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 438
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: NDESC_OF(arg0)
-|Native python|False|
+|TDI Syntax   | `NDESC_OF(arg0)` |
+|Python Syntax| `MDSplus.NDESC_OF(arg0)` |
+|Opcode|438|
 
+Returns the number of descriptors in the class-R descriptor of an MDS record.
+* Argument must be an MDS class-R descriptor.
+* Descriptor data types (`DSC$K_DTYPE_DSC`) are removed.
+* Use `NDESC` for count without NID, PATH, or variable. 
+* Use `NDESC_OF` for count including them.
 
-MDS Information.
-The number of descriptors in an MDS record.
-|Arguments, Results|A must be an MDS class-R descriptor.
-|Signals      |None. |Units        |None. |Form         |Byte unsigned scalar.
-|Result       |The number of descriptors in the class-R descriptor. Descriptor data types (DSC$K_DTYPE_DSC) are removed. Use NDESC for count without NID, PATH, or variable. Use NDESC_OF for count including them.
-Examples. NDESC_OF($VALUE) is 0. NDESC_OF(A+B) is 2.
+Examples
+
+```tdi
+TDI> NDESC_OF($VALUE)
+0BU
+
+TDI> NDESC_OF(4+5)
+2BU
+
+TDI> _sum = make_function(builtin_opcode("add"),3, 4)
+3 + 4
+TDI> NDESC_OF(_sum)
+%TDI Error in NDESC_OF(_sum)
+%TDI Error in EXECUTE("NDESC_OF(_sum)")
+```
 
 
 ### `NE` (Not Equal To)
@@ -8517,7 +8543,7 @@ Usual Forms X != Y, X <> Y, X NE Y. F90 form /= is not allowed. Function Form NE
 Arguments X and Y must both be numeric or character.
 |Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
 |Result       |True if X and Y are the unequal; otherwise, false. $ROPRAND is not unequal to any value, thus gives false.
->>>>>>>>>WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1!=.2 will be false.
+* WARNING, floating point operations may not match an exact calculation for nonterminating binary fractions. You cannot predict that .1+.1!=.2 will be false.
 |Examples     |2<>2. is $FALSE.
 
 See also: `eq`, `ge`, `gt`, `le`, `lt`
@@ -8528,40 +8554,54 @@ See also: `eq`, `ge`, `gt`, `le`, `lt`
 ### `NEQV`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 254
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: NEQV(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `NEQV(_A, _B)` |
+|Python Syntax| `MDSplus.NEQV(_A, _B)` |
+|Opcode|254|
 
+True if exactly one of `_A` and `_B` are true; otherwise, false.
+* equivalent to exclusive-OR, i.e., `XOR`
+* For bit-wise equivalent, see `ieor`
+* `_A` and `_B` must be boolean.
 
-Logical Elemental.
-Test that logical values are unequal.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape. |Result       |True if exactly one of X and Y are true;
-otherwise, false.
-|Examples     |2>3 NEQV 3>4 is $FALSE.
-NINT
+Examples 
+
+2>3 NEQV 3>4 is $FALSE.
+```
+TDI> $true && $false neqv $false || $false
+0BU
+TDI> $true && $false neqv $false || $true
+1BU
+TDI> $true && $true neqv $false || $true
+0BU
+
+TDI> [0, 0, 1, 1] && [0,1,0,1] neqv [0,0,1,1] || [0,1,0,1]
+Byte_Unsigned([0,1,1,0])
+```
+
 ### `NINT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 255
-|Min arguments| 1
-|Max arguments| 2
-******Compiler syntax: NINT(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `NINT(_NUM, [KIND])` |
+|Python Syntax| `MDSplus.NINT(_NUM, [KIND])` |
+|Opcode|255|
 
-Description: |Type         |F90 Numeric Elemental|
-Nearest integer.
-|Arguments, Results|Optional: KIND. A real. Complex numbers are an error. Integers are passed. KIND scalar integer type number, for example, KIND(1). (Today. Ignored, always returns LONG.)
-|Signals      |Same as A. |Units        |Same as A. |Form         |Integer.
-|Result       |If A>0, NINT(A) is INT(A+0.5); else it is INT(A-0.5).
+Rounds to the nearest integer.
+* if argument is complex, returns the the real part rounded to the nearest whole number
+* [`KIND`] optional: scalar integer type number, for example, KIND(1). (Today. Ignored, always returns LONG.)
+
 Examples. NINT(2.783) is 3. NINT(-2.783) is -3.
-NOR
+
+```tdi
+TDI> nint(cmplx(2.5, 4.5))
+3
+
+TDI> nint(1:3:.3333)
+[1,1,2,2,2,3,3]
+
+```
+
+
+
 ### `NOR`
 |||
 |-|-|
@@ -8581,6 +8621,7 @@ Arguments L and M must be logical (lowest bit is 1 for true).
 |Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
 |Result       |False if either is true; otherwise, true.
 |Examples     |[0,0,1,1] && [0,1,0,1] is [$TRUE,$FALSE,$FALSE,$FALSE].
+
 NOR_NOT
 ### `NOR_NOT`
 |||
@@ -11000,9 +11041,9 @@ Total of 404 builtins of which 103 are implemented in Python
 
 This is another way to refer to [DTypes](TODO link to Dtypes), or a unique ID for each data type.
 
-Use [`KIND_OF()`](#kind_of-opcode-437) to query the kind of a variable or constant.
+Use [`KIND_OF()`](#kind_of-opcode-437) to query the `kind` of a variable or constant.
 
-If a function has a `_KIND` argument, you may pass a value from the [DType table](TODO link) or from the `Kind` column in any of the tables below. This will cause the result of the function to be cast to that data type, if possible.
+If a function has a `_KIND` argument, you may pass a value from the [DType table](TODO:link) or from the `Kind` column in any of the tables below. This will cause the result of the function to be cast to that data type, if possible.
 
 ### Numeric
 
@@ -11014,7 +11055,7 @@ This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless o
 
 Refers to a logical (boolean) quantity, which can be either 0 for [`$FALSE`](#false-false-constant) or 1 for [`$TRUE`](#true-true-constant).
 
-> TODO: Check and Improve
+> TODO: Check and Improve. Should "type" say "kind" instead?
 The type should be `Unsigned_Byte()`, but any [`Integer`](#integer) type should work.
 
 This can be a [Scalar](#scalar), [Array](#array), or [Signal](#signal), unless otherwise specified.
