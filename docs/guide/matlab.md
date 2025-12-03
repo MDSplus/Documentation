@@ -12,9 +12,13 @@ For Java and Python, the full MDSplus suite must be installed on your computer, 
 
 ## Setup
 
-As long as `setup.sh` is sourced, the following should work. You can also set `MATLABPATH` or configure the matlab search path manually (see the section on [troubleshooting](#troubleshooting) for more information).
+As long as `setup.sh` is sourced, the following should work. You can also set `MATLABPATH` or configure the MatLab search path manually. See the section on [troubleshooting](#troubleshooting) for more information).
 
-> TODO: explain `MATLABPATH`
+> TODO: explain `MATLABPATH`? Mark W. found these documentation pieces on the MATLAB site, which we can list to
+
+For more about `MATLABPATH`, please see the documentation on the MATLAB site: 
+https://www.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html
+https://www.mathworks.com/help/matlab/ref/path.html
 
 ### Testing
 
@@ -88,6 +92,9 @@ mdsput('\data_node', data_read)
 
 ## Troubleshooting
 
+Many issues can be explained by compatibility between different versions of software. ~~In all cases, be sure to check both version of the server and the client.~~ (TODO: Tim thinks we need to say something about this, but not necessarily this.) See below for other specific issues.
+
+
 ### Manually Configuring the MATLAB Search Path
 
 The commands used to read/write data from MDSplus trees are provided as MATLAB script files (`.m`), which are located in `$MDSPLUS_DIR/matlab`. You must add this folder to your MATLAB search path using the `Set Path` option from the File menu or using these commands:
@@ -101,21 +108,21 @@ Relevant reference articles from the MATLAB Help Center:
 * [What is the MATLAB Search Path?](https://www.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html)
 * More on the [`addpath` command](https://www.mathworks.com/help/matlab/ref/addpath.html)
 * Use the [`path` command](https://www.mathworks.com/help/matlab/ref/path.html) for additional troubleshooting
-
+ 
 
 ###  Java Bridge Troubleshooting
 
-Please refer to the [MathWorks documentation](https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html) for using Java with MATLAB as needed.
+For reference, please also see to the [MathWorks documentation](https://www.mathworks.com/help/matlab/matlab_external/configure-your-system-to-use-java.html) for using Java with MATLAB as needed.
 
 #### Java Compatability
 
 Ensure that your version of Java is compatible with MDSplus. Search for "compatible OpenJDK" on the MATLAB website (or try [this link](https://www.mathworks.com/support/requirements/openjdk.html)).
 
-#### Java ClassPath
+#### Java `ClassPath`
 
 ##### For Personal Computers
 
-Setting the Java class path can be done many ways: see all options in [this table](https://www.mathworks.com/help/matlab/matlab_external/java-class-path.html).
+Setting the Java class path can be done many ways; see all options in [this table](https://www.mathworks.com/help/matlab/matlab_external/java-class-path.html).
 * For permanent configuration, we recommend the [Static Path](https://www.mathworks.com/help/matlab/matlab_external/static-path-of-java-class-path.html).
 * For temporary configuration, using the [javaddpath](https://www.mathworks.com/help/matlab/ref/javaaddpath.html) will also work.
 * For either method, you will need the following information:
@@ -133,16 +140,40 @@ If your organization runs MATLAB from a computing cluster, it will likely have m
 
 ### Python Bridge Troubleshooting
 
-Ensure you can `import MDSplus` from a python prompt in the same terminal where you're launching MATLAB.
+* Ensure that MATLAB is using the expected version of Python with:
+    ```m
+    pyversion()
+    % TODO: Stephen to add output and example here
+    ```
 
-Ensure that MATLAB is using the version of python you expect with
-```m
-py()
-% TODO: Stephen to add output and example here
-```
+* Ensure you can `import MDSplus` from a Python prompt in the same terminal where you are launching MATLAB.
+
+* Sourcing `setup.sh` doesn't always work when using the Python bridge. Depending on how MDSplus was installed, the `.pth` file might not be present. If it is missing, then one must make sure that the $PYTHONPATH environment variable includes `$MDSPLUS_DIR/python`.
+
+* If on a cluster and MATLAB is using the wrong Python version, the user will likely have to use the `module` command to select a compatible Python before starting MATLAB.   
+
 
 ### mdsthin Bridge Troubleshooting
 
-Ensure you can `import mdsthin` from a python prompt in the same terminal where you're launching MATLAB.
+* Ensure you can `import mdsthin` from a python prompt in the same terminal where you're launching MATLAB.
 
-Follow steps for troubleshooting Python bridge above ^
+* Follow steps for troubleshooting Python bridge in the previous section.
+
+* If using mdsthin, the `matlab.tgz` file must also be installed (it is available on [GitHub in the Releases](https://github.com/MDSplus/mdsplus/releases) section).
+
+### Reading Data: Troubleshooting
+
+Occasionally, the API will return MDSplus status codes. These are usually large numbers indicating that a specific status message applies. Even numbers indicate a failure of some sort (basically the lowest bit is set to false, and that indicates a failure...but this may be too much info)
+
+Example: the large number shown in the following output indicates that a `TreeFAILURE` condition occurred because the user does not have write permissions on the specified archive.
+
+    ```
+    >> mdsvalue('tcl($)', 'set current cmod 1090909009') 
+    ans =
+
+    int32
+
+    265392034
+    ```
+
+TODO: link to a table or method of getting the status codes that can appear.
