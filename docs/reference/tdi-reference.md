@@ -51,6 +51,7 @@ TODO for Stephen
 * See [legacy syntax]() section at the end for all the fortran, etc. stuff
 * move all the examples not in code blocks...into code blocks
 * remove the word "examples" above the code blocks
+* all the "..._OF" functions
 
 TODO: section on type coersion: like, all the logical functions will always return BU regardless of input. Shouldn't be difficult, if two inputs mismatch, the output will match the bigger one
 
@@ -4965,19 +4966,18 @@ Examples
 See also: `compile`, `decompile`
 
 
-### `exp` (Opcode 160)
+### `exp` 
 
 |||
 |-|-|
 |TDI Syntax   | `exp(arg0) ` |
 |Python Syntax| `MDSplus.exp(arg0)` |
-|Min arguments| 1
-|Max arguments| 1
+|Opcode|160|
 
 Exponential
 Arguments can be real or complex.
-Returns processor approximation to e^X. 
-If X is complex, the imaginary part is in radians.
+Returns processor approximation to `e^X`. 
+If `_X` is complex, the imaginary part is in radians.
 
 Example:
 * `EXP(1.0)` returns `2.71828`, approximately.
@@ -6742,6 +6742,10 @@ Examples
 * `KIND(1.2)` is `52BU` (`DTYPE_F`).
 * `KIND(_X)` is the kind of the value in variable `_X`, `kind(_X = 3)` = `8BU`.
 
+Note: 
+* `KIND` runs at runtime.
+* `KIND_OF` runs at compile time.
+
 See also: `kind_of`
 
 ### `KIND_OF` (Opcode 437)
@@ -6764,6 +6768,10 @@ Result:
 * Descriptor data types (`DTYPE_DSC`) are removed. 
 * Use KIND for data type without `NID`, `PATH`, or `variable`. 
 * Use KIND_OF for data type including them.
+
+Note: 
+* `KIND` runs at runtime.
+* `KIND_OF` runs at compile time.
 
 Examples
 * KIND_OF(3) is 8 (DTYPE_L).
@@ -8696,354 +8704,426 @@ TDI> nint(1:3:.3333)
 ```
 
 
-
 ### `NOR`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 256
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: NOR(arg0,arg1)
-|Native python|False|
+|TDI Syntax   | `NOR(_A, _B)` |
+|Python Syntax| `MDSplus.NOR(_A, _B)` |
+|Opcode|256|
+
+Returns True if both are false, otherwise, false, i.e., false unless both are false
+* `_A` and `_B` must be boolean.
+
+```tdi
+TDI> $false nor $false
+1BU
+
+TDI> [0,0,1,1] nor [0,1,0,1]
+Byte_Unsigned([1,0,0,0])
+```
 
 
-Logical Elemental.
-Negation of logical union of elements.
-Usual Forms L NOR M.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
-|Result       |False if either is true; otherwise, true.
-|Examples     |[0,0,1,1] && [0,1,0,1] is [$TRUE,$FALSE,$FALSE,$FALSE].
-
-NOR_NOT
 ### `NOR_NOT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 257
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: NOR_NOT(arg0,arg1) 
-|Native python|False|
+|TDI Syntax   | `NOR_NOT(_A, _B)` |
+|Python Syntax| `MDSplus.NOR_NOT(_A, _B)` |
+|Opcode|257|
+
+True if `_A` is false and `_B` is true; otherwise, false.
+* Logically equivalent to NOT(L) AND M.
+* Negation of logical union of first with negation of second.
+* `_A` and `_B` must be boolean.
+
+```tdi
+TDI> $false nor_not $true
+1BU
+
+TDI> [0,0,1,1] nor_not [0,1,0,1]
+Byte_Unsigned([0,1,0,0])
+```
 
 
-Logical Elemental.
-Negation of logical union of first with negation of second. Logically equivalent to NOT(L) AND M.
-Accepted Form. L NOR_NOT M.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
-|Result       |True if L is false and M is true; otherwise, false.
-|Examples     |[0,0,1,1] NOR_NOT [0,1,0,1] is [$FALSE,$TRUE,$FALSE,$FALSE].
-NOT
 ### `NOT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 258
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: NOT(arg0) 
-|Native python|False|
+|TDI Syntax   | `!_A` or `NOT _A` or `NOT(_A)` |
+|Python Syntax| `MDSplus.NOT(_A)` |
+|Opcode|258|
+
+Negates a logical. True is 1BU, False is 0BU.
+* For bit-wise operator see [INOT](#inot). 
+* Argument should be [logical](#logical)
+* Returns the opposite
+
+TODO: Stephen and Tim 
+
+Examples
+```tdi
+TDI> !$false
+1BU
+TDI> not $true
+0BU
+TDI> not [0,0,1,1]
+Byte_Unsigned([1,1,0,0])
+
+TDI> not [1,2,3]
+Byte_Unsigned([0,1,0])
+
+if (!$false) { write(*, "help"); }
+TODO: Stephen & Tim
+
+```
 
 
-Logical Elemental.
-Negate a logical. True is 1BU, False is 0BU.
-Usual Form ! L or NOT L. Function Form NOT(L).
-|Arguments, Results|L must be logical.
-|Signals      |Same as L. |Units        |Same as L. |Form         |Logical.
-|Result       |True if lowest bit of converted integer is off. >>>>>>>>>WARNING, do not confuse this with the bit-wise INOT(J). What F90 calls NOT, we call INOT.
-|Examples     |NOT([1,2,3]) is [$FALSE,$TRUE,$FALSE]).
-OBJECT_OF
+
 ### `OBJECT_OF`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 259
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OBJECT_OF(arg0)
-|Native python|False|
+|TDI Syntax   | `OBJECT_OF(_METHOD)` |
+|Python Syntax| `MDSplus.OBJECT_OF(_METHOD)` |
+|Opcode|259|
+
+Gets the object field from `DSC$K_DTYPE_METHOD`
 
 
-|Return Type  |MDS Operation |
-Get the object field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this:
-DSC$K_DTYPE_METHOD, the object field. Otherwise, an error.
-OCTAWORD
 ### `OCTAWORD`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 260
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OCTAWORD(arg0)
-|Native python|False|
+|TDI Syntax   | `OCTAWORD(_NUM)` |
+|Python Syntax| `MDSplus.OCTAWORD(_NUM)` |
+|Opcode|260|
+
+Converts to octaword (16-byte) [integer](#integer).
+* Argument must be numeric.
+* Any decimals will be truncated.
+* Truncation does not cause an error.
+
+Examples
+```tdi
+# that's a letter O at the end, y'all
+TDI> octaword(123)
+123O
+TDI> octaword(65537.4)
+65537O
+TDI> octaword(-1)
+-1O
+
+```
 
 
-Conversion Elemental.
-Convert to octaword (16-byte) integer.
-|Arguments, Results|A must be numeric.
-|Signals      |Same as A. |Units        |Same as A. |Form         |Octaword-length integer.
-|Result       |The truncated whole part of A. Immediate at compilation. >>>>>>>>>WARNING, truncation does not cause an error.
-Examples. OCTAWORD(123) is 123O. OCTAWORD(65537) is 65537O.
-OCTAWORD_UNSIGNED
 ### `OCTAWORD_UNSIGNED`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 261
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OCTAWORD_UNSIGNED(arg0)
-|Native python|False|
+|TDI Syntax   | `OCTAWORD_UNSIGNED(_NUM)` |
+|Python Syntax| `MDSplus.OCTAWORD_UNSIGNED(_NUM)` |
+|Opcode|261|
 
 
-Conversion Elemental.
-Convert to octaword (16-byte) unsigned integer.
-|Arguments, Results|A must be numeric.
-|Signals      |Same as A. |Units        |Same as A. |Form         |Octaword-length unsigned integer.
-|Result       |The truncated whole part of A.
-Immediate at compilation. >>>>>>>>>WARNING, truncation does not cause an error. |Examples     |OCTAWORD_UNSIGNED(123) is 123oU.
-OPCODE_BUILTIN
+Converts to octaword (16-byte) unsigned [integer](#integer).
+* Argument must be numeric.
+* Any decimals will be truncated.
+* Truncation does not cause an error.
+* Negative numbers cause integer overflow.
+
+
+Examples
+```tdi
+TDI> octaword_unsigned(123)
+123OU
+TDI> octaword_unsigned(65537.4)
+65537OU
+TDI> octaword_unsigned(-1)
+340282366920938463463374607431768211455OU
+```
+
+
 ### `OPCODE_BUILTIN`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 263
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OPCODE_BUILTIN(arg0) 
-|Native python|False|
+|TDI Syntax   | `OPCODE_BUILTIN(_NUM) ` |
+|Python Syntax| `MDSplus.OPCODE_BUILTIN(_NUM) ` |
+|Opcode|263|
+
+Returns the string name (in uppercase) of a builtin's opcode.
+* Argument must be an unsigned word [scalar](#scalar) of an existing opcode.
+* For the reverse, see [`builtin_opcode`](#builtin_opcode)
+
+TODO: how is this different from `opcode_string`?
 
 
-MDS Information.
-The string name of a builtin's opcode.
-|Arguments, Results|I must be an unsigned word scalar. It must be from 0 to the number of defined opcodes less one.
-|Signals      |Same as I. |Units        |Same as I. |Form         |Character scalar of same shape. |Result       |The uppercase name for the opcode.
-|Examples     |OPCODE_BUILTIN(0) is "$".
-OPCODE_STRING
+```tdi
+TDI> opcode_builtin(0)
+"$"
+TDI> opcode_builtin(263)
+"OPCODE_BUILTIN"
+
+TDI> opcode_builtin(1000)
+%TDI Error in OPCODE_BUILTIN(1000)
+%TDI Error in EXECUTE("opcode_builtin(1000)")
+```
+
+
 ### `OPCODE_STRING`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-(Opcode 264
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OPCODE_STRING(arg0) 
-|Native python|False|
+|TDI Syntax   | `OPCODE_STRING(_NUM)` |
+|Python Syntax| `MDSplus.OPCODE_STRING(_NUM)`|
+|Opcode|264|
+
+Returns the string name (in uppercase) of an opcode.
+Argument must be an unsigned word [scalar](#scalar) of an existing opcode.
+
+TODO: how is this different from `opcode_builtin`?
+
+```tdi
+TDI> opcode_string(0)
+"OPC$$"
+TDI> opcode_string(264)
+"OPC$OPCODE_STRING"
+```
 
 
-MDS Information.
-The string name of an opcode.
-|Arguments, Results|I must be an unsigned word scalar. It must be from 0 to the number of defined opcodes less one.
-|Signals      |Same as I. |Units        |Same as I. |Form         |Character scalar of same shape.
-|Result       |The uppercase name for the opcode.
-|Examples     |OPCODE_STRING(0) is "OPC$$".
-OPTIONAL
 ### `OPTIONAL`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 266
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OPTIONAL _arg
-|Native python|False|
-
+|TDI Syntax   | `OPTIONAL _arg` |
+|Opcode|266|
 
 Used in FUN definitions to indicate argument is optional
-OR
+
+
 
 ### `OR` (Boolean/Logical OR)
-
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 267
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: arg0 || arg1, arg0 OR arg1 
-|Native python|False|
+|TDI Syntax   | ``_A \|\| _B` or `_A OR _B` or `OR(_A, _B)`` |
+|Python Syntax| `MDSplus.or` |
+|Opcode|267|
 
 
-Logical Elemental.
-Logical union of elements.
-Usual Forms L || M, L OR M. Function Form OR(L,M).
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
-|Result       |True if either is true; otherwise, false. >>>>>>>>>WARNING, do not confuse with | which is bit-wise IOR.
-|Examples     |[0,0,1,1] || [0,1,0,1] is [$FALSE,$TRUE,$TRUE,$TRUE].
-OR_NOT
+Returns true if either is true; otherwise, false. 
+* _A and _B must be [logical](#logical)
+* Note: do not confuse with | which is bit-wise `IOR`.
+
+Examples
+```tdi
+[0,0,1,1] || [0,1,0,1] is [$FALSE,$TRUE,$TRUE,$TRUE].
+```
+
+
 ### `OR_NOT` (Boolean/Logical OR of the NOT)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 268
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: OR_NOT(arg0,arg1) 
-|Native python|False|
+|TDI Syntax   | `OR_NOT(_A, _B) ` |
+|Python Syntax| `MDSplus.OR_NOT(_A, _B) ` |
+|Opcode|268|
+
+Returns True if A is true or B is false; otherwise, false.
+* _A and _B must be [logical](#logical)
+* Logical union of first with negation of second.
+
+Examples
+```tdi
+[0,0,1,1] OR_NOT [0,1,0,1] is [$TRUE,$FALSE,$TRUE,$TRUE].
+```
 
 
-Logical Elemental.
-Logical union of first with negation of second.
-Accepted Form. L OR_NOT M.
-Arguments L and M must be logical (lowest bit is 1 for true).
-|Signals      |Single signal or smaller data. |Units        |None unless both have units and they don't match. |Form         |Logical of compatible shape.
-|Result       |True if L is true or M is false; otherwise, false.
-|Examples     |[0,0,1,1] OR_NOT [0,1,0,1] is [$TRUE,$FALSE,$TRUE,$TRUE].
-OUT
+
 ### `OUT`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 269
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: OUT _arg
-|Native python|False|
-
+|TDI Syntax   | `OUT _arg` |
+|Opcode|269|
 
 Used in FUN definitions to indicate argument is an output argument
-PACK
+
+
 ### `PACK`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 270
-|Min arguments| 2
-|Max arguments| 3
-******Compiler syntax: PACK(arg0,arg1,arg2) 
-|Native python|False|
+|TDI Syntax   | `PACK(_ARRAY, _MASK, [_VECTOR])` |
+|Python Syntax| `MDSplus.PACK(_ARRAY, _MASK, [_VECTOR])` |
+|Opcode|270|
 
-
-|Return Type  |F90 Transformation |
 Pack an array into a vector under control of a mask.
-Arguments Optional: VECTOR. ARRAY any type. MASK logical conformable to ARRAY. VECTOR ARRAY's type, length at least equal to last true element
-of MASK.
-|Signals      |The single signal or the smallest. |Units        |The single or matching units, else bad. |Form         |The type is from ARRAY, ARRAY. The shape is rank one
-equal to the number of trues if no VECTOR or the shape of VECTOR if present. If no VECTOR and MASK is a scalar true, the result is ARRAY shaped.
-|Result       |The elements as selected by MASK from ARRAY. The remaining elements are filled from VECTOR.
-Examples. Gather the nonzero elements of M = [0,0,0]. [9,0,0][0,0,7]
-PACK(M,M NE 0) is [9,7] and PACK(M,M NE 0,[2,4,6,8,10,12]) is [9,7,6,8,10,12].
-PERFORMANCE_OF
+* The elements as selected by `_MASK` from `_ARRAY`. The remaining elements are filled from `_VECTOR`.
+
+Arguments 
+* `_ARRAY` any type.
+* `_MASK` [logical](#logical) conformable to `_ARRAY`.
+* `_VECTOR` Optional: ARRAY's type, length at least equal to last true element of MASK.
+
+
+Examples
+```tdi
+TDI> _A = [1,2,3,4,5,6]
+[1,2,3,4,5,6]
+TDI> _B = [9,9,9,9,9,9,9,9]
+[9,9,9,9,9,9,9,9]
+
+TDI> pack(_A, _A % 2 == 0)
+[2,4,6]
+
+TDI> pack(_A, _A % 2 == 0, _A)
+[2,4,6,4,5,6]
+TDI> pack(_A, _A % 2 == 0, _B)
+[2,4,6,9,9,9,9,9]
+```
+
 ### `PERFORMANCE_OF`
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
 |Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 399
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: PERFORMANCE_OF(arg0) 
-|Native python|False|
+|Opcode|399|
 
 
-|Return Type  |MDS Operation |
-Get the performance field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this: DSC$K_DTYPE_ACTION, the performance statistics field. Otherwise, an error.
-PHASE_OF
+Get the performance statistics field from DSC$K_DTYPE_ACTION
+
+
 ### `PHASE_OF`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 271
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: PHASE_OF(arg0)
-|Native python|False|
+|TDI Syntax   | `PHASE_OF(arg0)` |
+|Python Syntax| `MDSplus.PHASE_OF(arg0)` |
+|Opcode|271|
+
+Get the phase field from DSC$K_DTYPE_DISPATCH.
 
 
-|Return Type  |MDS Operation |
-Get the phase field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this: DSC$K_DTYPE_DISPATCH, the phase field.
-Otherwise, an error.
-POST_DEC
-### `POST_DEC`
+
+### `POST_DEC` (Decrement After)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 272
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: _var-
-|Native python|False|
+|TDI Syntax   | `_VAR--` or `POST_DEC(_VAR)`|
+|Python Syntax| `MDSplus._VAR--` |
+|Opcode|272|
 
+Evaluates the expression with the current value then decreases the value by 1.
+* Equivalent to `_VAR--`
+* argument _VAR must be a variable with numeric value or operator on variable.
 
-Variable Elemental.
-Decrement variable but give old value.
-Usual Form NAME--. Function Form POST_DEC(NAME).
-|Arguments, Results|NAME must be a variable with numeric value or operator on variable.
-|Signals      |Same as NAME. |Units        |Same as NAME. |Form         |Same as NAME.
-|Result       |Old value of NAME.
+Result: Old value of NAME.
 Side Effect. NAME is now one less than before.
-|Examples     |For _A=6, A--is 6 and _A is now 5.
-POST_INC
-### `POST_INC`
+
+Examples
+```tdi
+TDI> _A = 5
+5
+TDI> write(*, _A)
+          5
+12
+TDI> write(*, _A--) /* _A is decremented after the function is evaluated. */
+          5
+12
+TDI> _A
+4
+
+TDI> _A = 5.5
+5.5
+TDI> --_A
+4.5
+
+--5 /* This is an error, argument must contain a variable to write back into */
+
+```
+
+see also: `pre_dec` for pre, `post_inc` for increment
+
+
+### `POST_INC` (Increment After)
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 273
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: _var++ 
-|Native python|False|
+|TDI Syntax   | `_VAR++` |
+|Opcode|273|
+
+Evaluates the expression with the current value then increases the value by 1.
+* Equivalent to `_VAR++`
+* argument _VAR must be a variable with numeric value or operator on variable.
 
 
-Variable Elemental.
-Increment variable but give old value.
-Usual Form NAME++. Function Form POST_INC(NAME).
-|Arguments, Results|NAME must be a variable with numeric value or operator on variable.
-|Signals      |Same as NAME. |Units        |Same as NAME. |Form         |Same as NAME.
-|Result       |Old value of NAME.
-Side Effect. NAME is now one more than before.
-|Examples     |For _A=6, A++ is 6 and _A is now 7.
-POWER
+```tdi
+TDI> _A = 5
+5
+TDI> write(*, _A)
+          5
+12
+TDI> write(*, _A++) /* _A is incremented after the function is evaluated */
+          5
+12
+TDI> _A
+6
+
+TDI> _A = 5.5
+5.5
+TDI> ++_A
+6.5
+
+```
+
+
+
 ### `POWER`
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
+|TDI Syntax   | `_A ^ _B` or `_A ** _B` or `POWER(_A, _B)`|
 |Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 274
-|Min arguments| 2
-|Max arguments| 2
-******Compiler syntax: arg0 ^ arg1, arg0 ** arg1 
-|Native python|False|
+|Opcode|274|
+
+Raise number to a power. Converts integer exponents to long and takes integral power.
+* Arguments A and B must be [numeric](#numeric).
+* Warning, long unsigned and longer [integer](#integer) types are truncated.
+* Warning, quad-precision complex `HC^HC` is truncated to `GC^GC`.
+* Warning, `0.0^0` is not detected as an error and results in 1.0.
+* Warning, do not use `-X^2.` aka `(-X)^2.0`, when you mean `-(X^2)`, because it will bomb. Note that negation binds tighter than power.
+* Warning, use integer exponents when you mean that. For example, `X^2.0` is an order of magnitude slower than `X^2`.
+
+TODO: ...what...?
+* For real numbers, or complex powers gives `EXP(LOG(X)*Y)`. This will be `$ROPRAND` if `X` is not positive.
 
 
-|Return Type  |Numeric Elemental |
-Raise number to a power.
-Usual Forms X^Y, X**Y. Function Form POWER(X,Y).
-Arguments X and Y must be numeric.
-|Signals      |Single signal or smaller data. |Units        |None, bad if X or Y have units. |Form         |The compatible form of X and Y if both are byte, word,
-or long or both are real or complex; otherwise, the type
-of X. >>>>>>>>>WARNING, long unsigned and longer integer types are truncated. >>>>>>>>>WARNING, quad-precision complex--HC^HC is truncated to GC^GC.
-|Result       |Converts integer exponents to long and takes integral power. For real, or complex powers gives EXP(LOG(X)*Y). This will be $ROPRAND if X is not positive.
->>>>>>>>>WARNING, 0.0^0 is not detected as an error and results in 1.0.
->>>>>>>>>WARNING, do not use -X^2., which is (-X)^2.0, when you mean -(X^2), because it will bomb. Note that negation binds tighter than power.
->>>>>>>>>WARNING, use integer exponents when you mean that. For example, X^2.0 is an order of magnitude slower than X^2.
-Examples. 2^3 is 8. 2**0.5 is 1.41428, approximately, and is better written as SQRT(2).
-PRECISION
+```tdi
+
+TDI> 9 ** .5
+3.
+
+TDI> 2 ^ 4
+16
+
+# better written as SQRT(2)
+TDI> 2 ** .5
+1.41421
+
+TDI> _x = 5
+5
+
+TDI> -_x^2
+25
+
+TDI> -(_x^2)
+-25
+
+TDI> (-_x)^2
+25
+
+TDI> cmplx(3,4)^2
+Cmplx(-7.,24.)
+
+TDI> EXP(LOG(2)*4) # TODO: ...what...?
+16.
+
+TDI> cmplx(0,1)^2
+Cmplx(-1.,0.)
+
+TDI> cmplx(0,1)^3
+Cmplx(0.,-1.)
+
+TDI> cmplx(0,1)^4
+Cmplx(1.,0.)
+
+```
+
 ### `PRECISION`
 |||
 |-|-|
@@ -10179,7 +10259,10 @@ Arguments. Optional: COMMAND, INPUT, OUTPUT COMMAND character scalar of command 
 |Signals      |None. |Units        |None. |Form         |Status returned.
 |Result       |None.
 >>>>>>>>>WARNING, side effects.
-SPREAD
+
+TODO: Stephen and Tim. `!bash`
+
+
 ### `SPREAD`
 |||
 |-|-|
