@@ -3043,38 +3043,7 @@ _A0 = Build_With_Error(52.9177E-12, 2400E-21)
 
 ### `BUILD_WITH_UNITS` 
 
-|||
-|-|-|
-|TDI syntax | `BUILD_WITH_UNITS(arg0,arg1)` |
-|Python Syntax | `MDSplus.BUILD_WITH_UNITS(arg0,arg1)` TODO: Confirm |
-|Min Arguments | 2 |
-|Max arguments | 2 |
-|Opcode 88|
-
-|DATA | any expression that DATA(this) will be valid. |
-|UNITS | character string. See the primary section on "Units".|
-|Result | Class-R descriptor. <BR> Use `BUILD_xxx` for immediate structure building. <BR> Use `MAKE_xxx` in FUNs for evaluated non-PUBLIC variables.|
-
-|Return Type  |MDS Operation |
-Make a describe data with units.
-Arguments
-DATA any expression that DATA(this) will be valid.
-UNITS character string. See the primary section on "Units".
-|Result       |Class-R descriptor.
-Use BUILD_xxx for immediate structure building.
-Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
-|Examples     |_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2') can be used in a
-BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V')
-or similar. Note this could also have been
-BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6,
-BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2').
-
-
-
-Example: `_S = BUILD_WITH_UNITS($VALUE*6,'m/s^2')` can be used in a `BUILD_SIGNAL(_S,BUILD_WITH_UNITS(5./1024*raw_node,'V'`) or similar. Note this could also have been `BUILD_WITH_UNITS(BUILD_SIGNAL($VALUE*6, BUILD_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2')`. |
-
-
-
+> Moved
 
 ### `builtin_opcode`
 |||
@@ -5754,70 +5723,17 @@ Build_With_Units(1BU, "?")
 See also:
 * [`EQ()`](#eq-equal-to)
 * [`NE()`](#ne-not-equal-to)
-* [`LT()`](#lt-less-than
+* [`LT()`](#lt-less-than)
 * [`LE()`](#le-less-than-or-equal-to)
 * [`GT()`](#gt-greater-than)
 
-### `GETDBI` (Opcode 389)
+### `GETDBI`
 
-|||
-|-|-|
-|TDI Syntax   | `getdbi(arg0,arg1)` |
-|Python Syntax| `MDSplus.getdbi(arg0,arg1)` |
-|Min arguments| 1 |
-|Max arguments| 2 |
+> Moved
 
-> TODO: Come back to this after we do tree stuff and write proper examples
+### `GETNCI
 
-Get database information.
-Arguments 
- STRING character scalar. The string may be abbreviated in upper or lower case to any unique form.
-Logical OPEN_FOR_EDIT modifiable MODIFIED changes made
-Long SHOTID shot number NUMBER_OPENED database pointers active MAX_OPEN database pointers allowed
-Character NAME experiment name DEFAULT default/current node
-INDEX integer scalar less than MAX_OPEN value. Determines which tree location is reported. The default value of 0 is the current tree.
-|Result       |Depends on the experiment, shot number, and history.
-|See also     |$DEFAULT, $EXPT, $SHOT, and $SHOTNAME constants.
-
-
-### `GETNCI` (Opcode 175)
-
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-|Min arguments| 2
-|Max arguments| 3
-******Compiler syntax: GETNCI(arg0,arg1,arg2)
-|Native python|False|
-
-> TODO: Come back to this after we do tree stuff and write proper examples
-
-|Return Type  |MDS Operation |
-Get node characteristic information about tree elements. Arguments Optional: NODE and USAGE.
-NODE a NID or long node identifier or a PATH or character form of the path of a tree element--child or member, or a wildcarded path. May be an array. Default is current position in tree.
-* WARNING, path names are case-sensitive. STRING character scalar. The string may be abbreviate in upper or lower case to any unique form. Case-insensitive.
-USAGE character scalar or vector. This limits the search of NODE names. It must be a valid usage name like "ALL", "ANY", or "TEXT".
-The STRING names by returned type follow. Byte unsigned CLASS storage classification DTYPE storage data type USAGE allowed data type Character FULLPATH path from top of tree MINPATH shortest relative path NODE_NAME last part of pathname ORIGINAL_PART_NAME Original node name in device PATH path from top or tagLogicals COMPRESSIBLE has arrays COMPRESS_ON_PUT use comprssion on put DO_NOT_COMPRESS no compression allowed ESSENTIAL node is essential IS_CHILD parent relationshipIS_MEMBER parent relationshipNID_REFERENCE contains nid references NO_WRITE_MODEL write to model disabled NO_WRITE_SHOT write to shot disabled PARENT_STATE parent on or off PATH_REFERENCE contains path references SETUP_INFORMATION has setup operations STATE on or off USAGE_ACTION allows only action USAGE_ANY allows any data USAGE_AXIS allows only axis USAGE_COMPOUND_DATA allows only compound_data USAGE_DEVICE allows only conglomerate USAGE_DISPATCH allows only dispatch USAGE_NUMERIC allows VMS data USAGE_SIGNAL allows only signal USAGE_STRUCTURE allows no data, was NONE USAGE_SUBTREE allows only subtree USAGE_TASK allows only task USAGE_TEXT allows only text USAGE_WINDOW allows only window WRITE_ONCE change only once Long DEPTH tree parents above LENGTH data size NID_NUMBER tree logical offset NUMBER_OF_CHILDREN number of child nodes NUMBER_OF_MEMBERS number of member nodes PARENT_RELATIONSHIP child or member Long unsigned GET_FLAGS bit flags OWNER ID rights identifier
-_
-STATUS
-status
-NID
-BROTHER
-next child or member
-CHILD
-first child
-MEMBER
-first member
-PARENT the one above in tree NID arrays CHILDREN_NIDS list of children CONGLOMERATE_NIDS MEMBER_NIDS list of members Quadword unsigned TIME_INSERTED VMS date and time Word unsigned CONGLOMERATE_ELT number of elements Node data RECORD actual data
-|Signals      |None, except for RECORD. |Units        |None, except for RECORD. |Form         |VECTOR concatenation of all elements found for the list
-of NIDs and PATHs. Scalar for non-array results of single input. All data types are the same for one request except possibly for RECORD. Character names varyin length except for NODE_NAME, which has length 12.
-|Result       |A scalar or simple vector list of results. RECORD may not be able to VECTOR the results of a list of NIDs/PATHs. Logicals allow easy testing of bit or value.
->>>>>>>>>WARNING, only GETNCI can handle arrays of NIDs/PATHs.
->>>>>>>>>WARNING, a NID/PATH result used in an expression will have its data taken--just as if the node name had been used. Thus GETNCI(\TOP.XRAY,"MEMBER")//" Z" might be "Xray diagnostic Z" if the first member were the description.
-|Examples     |GETNCI(\TOP.XRAY,"PARENT") is \TOP as is GETNCI("\TOP.XRAY","par").
-
-
+> Moved
 
 ### `GOTO`(Opcode 176)
 
@@ -7821,27 +7737,8 @@ Example:
 _A0 = Build_With_Error(52.9177E-12, 2400E-21)
 MAKE_WITH_UNITS
 ### `MAKE_WITH_UNITS`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 433
-|Min arguments| 2
-|Max arguments| 2
-Compiler syntax: MAKE_WITH_UNITS(arg0,arg1)
 
-|Native python|False|
-
-Description:
-|Return Type  |MDS Operation |
-Make a describe data with units.
-Arguments
-DATA any expression that DATA(this) will be valid.
-UNITS character string. See the primary section on "Units".
-|Result       |Class-R descriptor. Use BUILD_xxx for immediate structure building. Use MAKE_xxx in FUNs for evaluated non-PUBLIC variables.
-|Examples     |_S = MAKE_WITH_UNITS($VALUE*6,'m/s^2') can be used in a MAKE_SIGNAL(_S,MAKE_WITH_UNITS(5./1024*raw_node,'V') or similar. Note this could also have been MAKE_WITH_UNITS(MAKE_SIGNAL($VALUE*6, MAKE_WITH_UNITS(5./1024*raw_node,'V')),'m/s^2').
-
-
+> Moved
 
 ### `MAP`
 |||
@@ -10895,26 +10792,7 @@ Get the data of the units field or a blank.
 |Result       |DSC$K_DTYPE_DIMENSION, UNITS(axis field). DSC$K_DTYPE_RANGE, combined UNITS of the fields. DSC$K_DTYPE_SLOPE, combined UNITS of the fields. DSC$K_DTYPE_WINDOW, UNITS(value_at_idx0 field). DSC$K_DTYPE_WITH_UNITS, DATA(units field). else removing SIGNAL, PARAM, and such. Otherwise, a single blank is returned, an empty string cannot be used by IDL. This recursive definition will find the first WITH_UNITS field available.
 >>>>>>>>>WARNING, types for which DATA is undefined give an error.
 |Examples     |Let _A=BUILD_WITH_UNITS(42,'m'//'/s'), then UNITS(_A) is "m/s".
-UNITS_OF
-### `UNITS_OF`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 354
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: UNITS_OF(arg0)
-|Native python|False|
 
-
-|Return Type  |MDS Operation |
-Get the units field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for this: DSC$K_DTYPE_WITH_UNITS, the units field. Otherwise, a single blank is returned.
-Examples. UNITS_OF(BUILD_WITH_UNITS(42.,"V")) is "V".
-UNITS_OF(42) is " ".
-UNSIGNED
 ### `UNSIGNED`
 |||
 |-|-|
@@ -10933,26 +10811,11 @@ Convert to unsigned integer.
 |Signals      |Same as A. |Units        |Same as A. |Form         |Unsigned integer of same length as real part of A. |Result       |The truncated integer.
 Immediate at compilation. >>>>>>>>>WARNING, truncation does not cause an error.
 |Examples     |UNSIGNED(2.783) is 2LU.
-UPCASE
+
 ### `UPCASE`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 383
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: UPCASE(arg0) 
-|Native python|False|
 
+> Moved
 
-Character Elemental.
-Change all alphabetics to uppercase.
-|Arguments, Results|STRING must be character.
-|Signals      |Same as STRING. |Units        |Same as STRING. |Form         |Same as STRING.
-|Result       |The same as STRING with all lower case alphabetics replaced by the corresponding uppercase character.
-|Examples     |UPCASE('Name') is "NAME".
-USING
 ### `USING`
 |||
 |-|-|
@@ -11031,26 +10894,8 @@ Get the validation field.
 Otherwise, an error.
 >>>>>>>>>WARNING, because the validation field is likely to use $VALUE or $THIS, DATA(VALIDATION_OF(parmeter)) will not work. Use VALIDATION(parameter) for the correct result.
 |Examples     |VALIDATION_OF(BUILD_PARAM(42,"the answer",$VALUE>6)) is $VALUE>6, which cannot be evaluated.
-VALUE_OF
-### `VALUE_OF`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 359
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: VALUE_OF(arg0)
-|Native python|False|
 
 
-|Return Type  |MDS Operation |
-Get the value field.
-|Arguments, Results|Descriptor as below.
-|Result       |A is searched for these: DSC$K_DTYPE_DIMENSION, VALUE_OF(window field). DSC$K_DTYPE_PARAM, the value field. DSC$K_DTYPE_SIGNAL, the data field. DSC$K_DTYPE_WINDOW, the value_at_idx0 field. DSC$K_DTYPE_WITH_UNITS, the data field. Otherwise, DATA(A).
->>>>>>>>>WARNING, because the data field of a signal is likely to use $VALUE, DATA(VALUE_OF(signal)) may not work. Use DATA(signal) instead.
-|Examples     |VALUE_OF(BUILD_PARAM(42,"the answer",$VALUE>6)) is 42.
-VAR
 ### `VAR`
 |||
 |-|-|
