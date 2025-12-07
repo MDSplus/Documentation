@@ -1,5 +1,122 @@
 
-### `GETDBI` (Get Tree/DataBase Information)
+# Trees
+
+## `$DEFAULT` (Default Node Path)
+
+|||
+|-|-|
+|TDI Syntax   | `$DEFAULT` |
+|Python Syntax| `MDSplus.dDEFAULT()` |
+|Java mdsplus-api Syntax| `CONST.dDefault()`|
+|Opcode|386|
+
+The path to the current default tree node.
+
+Same as `getdbi('DEFAULT')`.
+
+```tdi
+# With a tree open
+TDI> $default
+"\\MAIN::TOP"
+
+# Without a tree open
+TDI> $default
+%TDI Error in $DEFAULT()
+%TDI Error in EXECUTE("$DEFAULT")
+```
+
+See also
+* `GETDBI()`
+
+## `$EXPT` (Tree/Experiment Name)
+
+|||
+|-|-|
+|TDI Syntax   | `$EXPT` |
+|Python Syntax| `MDSplus.dEXPT()` |
+|Java mdsplus-api Syntax| `CONST.dExpt()`|
+|Opcode|387|
+
+The name of the current tree.
+
+Same as `getdbi('NAME')`.
+
+```tdi
+# With a tree open
+TDI> $expt
+"MAIN"
+
+# Without a tree open
+TDI> $expt
+%TDI Error in $EXPT()
+%TDI Error in EXECUTE("$EXPT")
+```
+
+See also:
+* `GETDBI()`
+
+## `$SHOT` (Current Shot Number)
+|Opcode|388|
+|||
+|-|-|
+|TDI Syntax   | `$SHOT` |
+|Python Syntax| `MDSplus.dSHOT()` |
+|Java mdsplus-api Syntax| `CONST.dShot()`|
+
+The shot number of the current tree.
+
+Same as `getdbi('shot')` or `getdbi('shotid')`.
+
+```tdi
+# With a tree open
+TDI> $shot
+12345
+
+# With a model tree open
+TDI> $shot
+-1
+
+# Without a tree open
+TDI> $shot
+%TDI Error in $SHOT()
+%TDI Error in EXECUTE("$shot")
+```
+
+See also:
+* `$SHOTNAME`
+* `GETDBI()`
+
+## `$SHOTNAME` (Current Shot Number String)
+
+|||
+|-|-|
+|TDI Syntax   | `$SHOTNAME` |
+|Python Syntax| `MDSplus.dshotname` |
+|Java mdsplus-api Syntax| `CONST.dShotname()`|
+|Opcode|444|
+
+The shot number of the current tree as a string, or "MODEL" for shot -1.
+
+```tdi
+# With a tree open
+TDI> $shotname
+"12345"
+
+# With a model tree open
+TDI> $shotname
+"MODEL"
+
+# Without a tree open
+TDI> $shotname
+%TDI Error in $SHOTNAME()
+%TDI Error in EXECUTE("$shotname")
+```
+
+See also:
+* `$SHOT`
+
+
+## `GETDBI` (Get Tree/DataBase Information)
 
 |||
 |-|-|
@@ -19,7 +136,7 @@ INDEX integer scalar less than MAX_OPEN value. Determines which tree location is
 |Result       |Depends on the experiment, shot number, and history.
 |See also     |$DEFAULT, $EXPT, $SHOT, and $SHOTNAME constants.
 
-### `GETNCI` (Get Node Characteristic Information)
+## `GETNCI` (Get Node Characteristic Information)
 
 |||
 |-|-|
@@ -56,7 +173,7 @@ of NIDs and PATHs. Scalar for non-array results of single input. All data types 
 
 
 
-### `TreeOpen` (Open Tree)
+## `TreeOpen` (Open Tree)
 
 |||
 |-|-|
@@ -64,3 +181,43 @@ of NIDs and PATHs. Scalar for non-array results of single input. All data types 
 |Filepath  | [`tdi/treeshr/TreeOpen.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpen.fun) |
 
 Lowercase.
+
+
+### `do_task` (Opcode 448)
+
+|||
+|-|-|
+|TDI Syntax   | `DO_TASK(arg0) ` |
+|Python Syntax| `MDSplus.DO_TASK(arg0) ` |
+|Min arguments| 1 |
+|Max arguments| 1 |
+
+TODO: Move?
+
+TODO: Come Back To This and investigate further
+
+Execute Task
+Executes the task item found in the argument.
+ARGUMENT TASK refers to an ACTION or a TASK
+
+
+### `USING`
+|||
+|-|-|
+|TDI Syntax   | `take_from_Compiler_syntax` |
+(Opcode 384
+|Min arguments| 2
+|Max arguments| 4
+******Compiler syntax: USING(arg0,arg1,arg2,arg3) 
+|Native python|False|
+
+
+|Return Type  |MDS Operation |
+Evaluate expression from a different tree location.
+Arguments Optional: DEFAULT, SHOTID, EXPT. A an expression.
+>>>>>>>>>WARNING, pathnames in the expression A will be relative to the temporary tree location and may not be related to the old tree.
+DEFAULT character, NID, long, or PATH scalar. The new tree path.
+>>>>>>>>>WARNING, relative paths are like the full name in the old tree. SHOTID integer scalar. The shot number. EXPT character scalar. The experiment name.
+|Result       |Depends on the expression at the node in the new tree. The old node, shot, and experiment are used to evaluate the expressions for DEFAULT, SHOTID, and EXPT. If SHOTID or EXPT present, a new tree is opened for reading. The temporary path is set from DEFAULT. If omitted, the values used are those of the current tree and path. There will be an error if the old tree is not open or the old path is bad.
+|Examples     |Say shot 1234 is a "vacuum" subtraction shot for the current shot and we are positioned at \TOP.XRAY:CHAN_01, which has data, then the subtracted data might be
+:DATA -USING(:DATA,,1234)
