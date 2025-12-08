@@ -12,3 +12,4 @@ Guide
     viewdata
     python
     matlab
+    idl
