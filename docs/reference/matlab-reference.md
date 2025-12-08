@@ -4,7 +4,7 @@ Below are the main commands you can use in your MATLAB scripts to interact with 
 
 ## `mdsconnect(SERVER_NAME)`
 
-Connects to the specified remote MDSplus data server via thin client connection. It will cause subsequent invocations of `mdsopen`, `mdsvalue`, `mdsput`, and `mdsclose` to be executed remotely on the specified host. `mdsdisconnect` will destroy this connection, reverting the above described routines to their local behaviors.
+Makes a thin client connection to the specified MDSplus data server. Will cause subsequent invocations of `mdsopen`, `mdsvalue`, `mdsput`, and `mdsclose` to be executed remotely on the specified host. `mdsdisconnect` will destroy this connection, reverting the above described routines to their local behaviors.
 
 |Parameters| |
 |----------|-|
