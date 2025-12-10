@@ -266,6 +266,8 @@ The resulting `data.tsv`:
 
 Connects to the database described in the sybase login file identified by `_NAME`. The sybase login file must be located in your `$HOME`/`%USERPROFILE%` directory. The file name must be `_NAME` (either case-sensitive or lowercase), followed by `.sybase_login`.
 
+Not to be confused with [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration) which for use with site-specific configuration.
+
 For a database named `MyLogbook` the following paths would be valid:
 * `$HOME/MyLogbook.sybase_login`
 * `$HOME/mylogbook.sybase_login`
@@ -304,6 +306,62 @@ TDI> dsql('SELECT column FROM table', _values)
 See also:
 * [`DSQL`](#dsql-execute-sql-query)
 * [`DBLOGIN`](#dblogin-connect-to-sql-database)
+* [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration)
+
+## `SetDatabase` (Connect to SQL Database using Site-Specific Configuration)
+
+|||
+|-|-|
+|TDI Syntax| `SetDatabase(_DBNAME)` |
+|Filepath  | [`tdi/mdssql/SetDatabase.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdssql/SetDatabase.fun) |
+
+**Warning: This will not work out of the box**
+
+Connects to the database identified by `_DBNAME` and described by the site-specific `GetDbInfo()` function. This function should be defined by the site administrators, and must exist on your [`$MDS_PATH`](../environment-variables.md#mds_path) otherwise calling this will cause an error.
+
+After retrieving the connection details with `GetDbInfo(_DBNAME, _DBHOST, _DBUSER, _DBPASS)` this will call:
+
+```tdi
+dblogin(_DBHOST, _DBUSER, _DBPASS);
+dsql('USE ?', _DBNAME);
+```
+
+Additionally, this will check and set the global variable `_currentDBname` to prevent unnecessary reconnections.
+
+Here is an example `GetDbInfo.fun`, which could be customized to suit your site's needs.
+
+```tdi
+public fun GetDbInfo(in _dbname, out _dbhost, out _dbuser, out _dbpass)
+{
+    if (_dbname == "mylogbook") {
+        _dbhost = "dbsrv1";
+        _dbuser = whoami();
+        _dbpass = "pa$$w0rd";
+        return($true);
+    }
+
+    return($false);
+}
+```
+
+```tdi
+TDI> SetDatabase('MyLogbook')
+0
+
+TDI> dsql('SELECT column FROM table', _values)
+1
+
+# Without GetDbInfo() on the $MDS_PATH
+TDI> SetDatabase('MyLogbook')
+<stack trace>
+%TDI Error in EXECUTE("SetDatabase('MyLogbook')")
+
+```
+
+See also:
+* [`DSQL`](#dsql-execute-sql-query)
+* [`DBLOGIN`](#dblogin-connect-to-sql-database)
+* [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login)
 
 ## `DBLOGIN` (Connect to SQL Database)
 
@@ -312,9 +370,16 @@ See also:
 |TDI Syntax| `DBLOGIN(_HOST, _USER, _PASS)` |
 |Filepath  | [`tdi/mdssql/dblogin.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdssql/dblogin.fun) |
 
+Connect to the SQL Database server `_HOST` using the credentials `_USER` and `_PASS.
+
+This is used by both [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login) and [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration).
+
+Note: This does not `USE` any databases, the first query should be something like: `DSQL('USE mydatabase')`.
+
 See also:
 * [`DSQL`](#dsql-execute-sql-query)
-* [`DBLOGIN`](#dblogin-connect-to-sql-database)
+* [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login)
+* [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration)
 
 ## `DSQL` (Execute SQL Query)
 
@@ -324,7 +389,7 @@ See also:
 |Python Syntax| `MDSplus.DSQL(query, [args...], [outputs...])` |
 |Opcode|415|
 
-Run the SQL `_QUERY` on a connection created by [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login) or [`DBLOGIN`](#dblogin-connect-to-sql-database). Any `?`s in the `_QUERY` will be replaced by the corresponding value from `_ARGS`. Each column of the result will be stored in the corresponding variable in `_OUTPUTS`. Returns the number of rows retrieved.
+Run the SQL `_QUERY` on a connection created by [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login), [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration), or [`DBLOGIN`](#dblogin-connect-to-sql-database). Any `?`s in the `_QUERY` will be replaced by the corresponding value from `_ARGS`. Each column of the result will be stored in the corresponding variable in `_OUTPUTS`. Returns the number of rows retrieved.
 
 `_QUERY` must be a string and should be a valid SQL query.
 
@@ -332,15 +397,25 @@ The number of `_ARGS` must match the number of `?`s. Items in `_ARGS` don't need
 
 Items in `_OUTPUTS` can either be variables or strings containing variable names. The variables don't need to be already defined.
 
-> TODO: Stephen, contrive more examples
+> TODO: Stephen, make a small test dabase to verify these
 ```tdi
 TDI> set_database('MyLogbook')
 
-TDI> _rows = dsql('SELECT COUNT(*) FROM entries WHERE value < ?', 42, _count)
+TDI> _rows = dsql('SELECT COUNT(*) FROM entries WHERE shot = ?', 12345, _count)
 1
 
 TDI> write(*, _count)
-123
+5
+
+TDI> _rows = dsql('SELECT user, message FROM entries WHERE shot = ?', 12345, _users, _messages)
+5
+
+TDI> for (_i = 0; _i < _rows; ++_i) { write(*, _users[_i], ': ', _messages[_i]); }
+mdsplus : Creating shot 12345
+mdsplus : Starting acquisition
+operator: Starting shot
+operator: Shot complete
+mdsplus : Shutting down
 ```
 
 # Miscellaneous 
