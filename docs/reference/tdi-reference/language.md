@@ -710,14 +710,13 @@ TDI> if_error(_a, abort())
 See also:
 * `IF_ERROR()`
 
-### `if_error` (Opcode 190)
+### `if_error` (Handle Error, Try/Catch)
 
 |||
 |-|-|
 |TDI Syntax   | `IF_ERROR(arg0,arg1,argn,...)` |
 |Python Syntax| `MDSplus.IF_ERROR(arg0,arg1,argn,...)` |
-|Min arguments| 1   |
-|Max arguments| 254 |
+|Opcode|190|
 
 Evaluate arguments until no error.
 * Arguments can be any expression.

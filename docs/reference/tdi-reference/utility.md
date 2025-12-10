@@ -1,223 +1,431 @@
 
 # File and Console I/O
 
-### `fopen` (Opcode 265)
+## File Unit
+
+A file unit is a [`POINTER`](#) to a C [`FILE`](https://en.cppreference.com/w/c/io/FILE.html) struct that serves as a unique ID for an open file.
+
+## `FOPEN` (Open File)
 
 |||
 |-|-|
-|TDI Syntax   | `fopen(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.fopen(arg0,arg1,argn,...)` |
-|Min arguments| 2   |
-|Max arguments| 254 |
+|TDI Syntax   | `FOPEN(_FILENAME, _MODE)` |
+|Python Syntax| `MDSplus.FOPEN(filename, mode)` |
+|Opcode|265|
 
-Open a file name.
-Arguments FILENAME character scalar with node, disk, file, and extension. 
-* MODE character scalar: r for read, w for write, a for append, and + for update may be added. Note lowercase.
-* Returns: Integer scalar, a pointer to a FILE block.
+Opens the file specified by `_FILENAME` with the given `_MODE` and returns the [file unit](#file-unit), if successful. Otherwise, this returns [`$MISSING`](./language.md#missing-missing-valueargument-null).
 
-Examples:
-* to write.. `_u=fopen('testFile.txt','w'),WRITE(_u,"HELLO WORLD"),fclose(_u)`
-* to read `_u=fopen('testFile.txt','r'),_var=READ(_u),fclose(_u)`
+`_MODE` must be valid [file access flags](https://en.cppreference.com/w/c/io/fopen.html#File_access_flags).
 
+This is a wrapper around [`fopen()`](https://en.cppreference.com/w/c/io/fopen.html) in C.
 
-### `fclose` (Opcode 96)
+```tdi
+TDI> _file = fopen('example.txt', 'r')
+Pointer(0x63abc39a5770)
 
-|||
-|-|-|
-|TDI Syntax   | `take_from_FCLOSE(arg0)Compiler_syntax` |
-|Python Syntax| `MDSplus.FCLOSE(arg0)` |
-|Min arguments| 1
-|Max arguments| 1
+TDI> _file = fopen('does-not-exist.txt', 'r')
+*
+```
 
-Close the file unit opened by FOPEN.
-* Argument: UNIT long integer pointer from FOPEN.
-* Returns Error code or 0 if none.
-
-Examples
-`_u=fopen('testFile.txt','w'),WRITE(_u,"HELLO WORLD"),fclose(_u)`
-`_u=fopen('testFile.txt','r'),_var=READ(_u),fclose(_u)`
-
-See also: `FOPEN`.
-
-### `fseek` (Opcode 309)
+## `FCLOSE` (Close File)
 
 |||
 |-|-|
-|TDI Syntax   | `fseek(_UNIT,[_OFFSET],[_ORIGIN]) ` |
-|Python Syntax| `MDSplus.fseek(_UNIT,[_OFFSET],[_ORIGIN]) ` |
-|Min arguments| 1 |
-|Max arguments| 3 |
-|Native python|False|
+|TDI Syntax   | `FCLOSE(_UNIT)` |
+|Python Syntax| `MDSplus.FCLOSE(unit)` |
+|Opcode|96|
 
-CC IO
-Position a file pointer.
+Closes the file specified by `_UNIT`, which was opened with [`FOPEN`](#fopen-open-file). Returns the result of [`fclose()`](https://en.cppreference.com/w/c/io/fclose.html).
 
-Arguments 
-* `_UNIT` Integer scalar pointer from FOPEN. 
-* `[_OFFSET]` Optional: Long scalar offset (w.r.t. ORIGIN) of file position. 
-* `[_ORIGIN]` Optional: Scalar number:
-    * 0 for absolute (w.r.t. beginning of file),
-    * 1 for relative to current position,
-    * 2 for offset from end of file.
+`_UNIT` must be a valid [file unit](#file-unit) and cannot be [`$MISSING`](./language.md#missing-missing-valueargument-null).
 
-Returns: Error code or 0 if none. 
-WARNING, does not work properly for "record" files, only stream files.
+This is a wrapper around [`fclose()`](https://en.cppreference.com/w/c/io/fclose.html) in C.
 
->TODO: come back to this; it doesn't appear to be working.
+```tdi
+TDI> _file = fopen('example.txt', 'r')
+Pointer(0x63abc39a5770)
+
+TDI> fclose(_file)
+0
 
 
+TDI> _file = fopen('does-not-exist.txt', 'r')
+*
 
-### `ftell` (Opcode 417)
+# Cannot close a file that wasn't opened
+TDI> if (_file) { fclose(_file); }
+```
+
+## `FSEEK` 
+
+|||
+|-|-|
+|TDI Syntax   | `FSEEK(_UNIT, [_OFFSET], [_ORIGIN]) ` |
+|Python Syntax| `MDSplus.FSEEK(unit, [offset], [origin]) ` |
+|Opcode|309|
+
+Sets the file position indicator for the file specified by `_UNIT`, which was opened with [`FOPEN`](#fopen-open-file). Returns the result of [`fseek()`](https://en.cppreference.com/w/c/io/fseek.html).
+
+If `_OFFSET` is specified, it must be a `Scalar` offset in bytes from the `_ORIGIN`. Otherwise, the default is 0.
+
+If `_ORIGIN` is specified, it must be one of:
+* 0 (for `SEEK_SET`, the beginning of the file)
+* 1 (for `SEEK_CUR`, the current position)
+* 2 (for `SEEK_END`, the end of the file)
+Otherwise, the default is 0 (`SEEK_SET`).
+
+Note: These values are libc-dependent, please check the documentation for your system for the correct values.
+
+This is a wrapper around [`fseek()`](https://en.cppreference.com/w/c/io/fseek.html) in C.
+
+```tdi
+TDI> _file = fopen('example.txt', 'r+')
+Pointer(0x63abc39a5770)
+
+TDI> read(_file)
+"first line"
+TDI> read(_file)
+"second line"
+
+# Rewind
+TDI> fseek(_file, *, 0)
+0
+TDI> read(_file)
+"first line"
+
+# Get the file size
+TDI> fseek(_file, *, 2)
+0
+TDI> _size = ftell(_file)
+123
+
+# Append to the end
+TDI> fseek(_file, *, 2)
+0
+TDI> write(_file, "appending a line\n")
+18
+```
+
+## `FTELL` (Get File Position Indicator)
 
 |||
 |-|-|
 |TDI Syntax   | `FTELL(arg0) ` |
 |Python Syntax| `MDSplus.FTELL(arg0) ` |
-|Min arguments| 1 
-|Max arguments| 1
+|Opcode|417|
 
-> TODO: Come back to this and investigate further
+Gets the file position indicator for the file specified by `_UNIT`, which was opened with [`FOPEN`](#fopen-open-file). Returns the result of [`ftell()`](https://en.cppreference.com/w/c/io/ftell.html).
 
-Report position of a file pointer. 
-* Argument: UNIT Integer scalar pointer from FOPEN.
-* Returns: Error code or 0 if none. 
-* WARNING, does not work properly for "record" files, only stream files.
-
-Example
+This is a wrapper around [`ftell()`](https://en.cppreference.com/w/c/io/ftell.html) in C.
 
 ```tdi
-/* Lets say you have a file with two lines of text in it */
-TDI> _u=fopen('testFile.txt','w'),WRITE(_u,"HELLO WORLD", "\n", "This is line two."),fclose(_u)
+TDI> _file = fopen('example.txt', 'r')
+Pointer(0x63abc39a5770)
+
+TDI> read(_file)
+"first line"
+TDI> read(_file)
+"second line"
+TDI> write(, "Read ", ftell(_file), " bytes")
+Read          23 bytes
+
+# Get the file size
+TDI> fseek(_file, *, 2)
 0
+TDI> _size = ftell(_file)
+123
+```
 
-/* open the file */
-TDI> _u=fopen('testFile.txt','r')
-Pointer(0x5cea484bdef0)
+## `READ` (Read from File or Console)
 
-/* begin at position zero and read the file one line at a time */
-TDI> ftell(_u)
-0
-TDI> _var=READ(_u)
-"HELLO WORLD" /* the \n is implied with this*/
+|||
+|-|-|
+|TDI Syntax   | `READ(_UNIT)` |
+|Python Syntax| `MDSplus.READ(unit)` |
+|Opcode|295|
 
-TDI> ftell(_u)
+Reads from the file specified by `_UNIT` until a newline (`\n`) is found or until EOF, then returns the string with the last character removed.
+
+Note: If the line is empty (other than the newline), `READ()` will throw an error. This can be caught with [`IF_ERROR()`](./language.md#if_error-handle-error-trycatch), see the example below.
+
+Note: This does not check if the last character was a newline, it simply removes it. Make sure your input files have a trailing newline.
+
+This is a wrapper around [`fgets()`](https://en.cppreference.com/w/c/io/fgets.html) in C.
+
+```tdi
+TDI> _name = read(*)
+Tom
+"Tom"
+
+TDI> write(*, "Hello, ", _name);
+Hello, Tom
+
+
+TDI> _file = fopen("example.txt", "r")
+TDI> read(_file)
+"first line"
+TDI> read(_file)
+"second line"
+```
+
+Reading lines from a file
+```tdi
+_file = fopen("example.txt", "r")
+if (!_file) {
+    abort();
+}
+
+/* Get the file size */
+fseek(_file, *, 2);
+_end = ftell(_file);
+fseek(_file, *, 0);
+
+while (ftell(_file) < _end) {
+    /* Ignore errors from empty lines */
+    _line = if_error(read(_file), '');
+
+    write(*, _line);
+}
+
+```
+
+## `WRITE` (Write to File or Console)
+
+|||
+|-|-|
+|TDI Syntax   | `WRITE(_UNIT, [_ARGS...])` |
+|Python Syntax| `MDSplus.WRITE(unit, [args...])` |
+|Opcode|370|
+
+Writes `_ARGS` to the file specified by `_UNIT`, or [`stdout`](#) if `_UNIT` is [`$MISSING`](./language.md#missing-missing-valueargument-null). Returns the number of bytes written.
+
+Items in `_ARGS` don't need to be [Text](#), but any other types will be converted using [`TEXT`](./text.md#text-to-string).
+
+Note: While there are no formatting options, you can use `CVT` or `TEXT` to control the output. Be careful, as they can and will remove important digits. e.g., `TEXT(42, 1) == "2"`.
+
+```tdi
+TDI> write(*, "Hello, World!")
+Hello, World!
+14
+
+TDI> write(*, "The number is", 42)
+The number is         42
+25
+
+TDI> write(, [1, 2, 3])
+          1          2          3
+34
+
+TDI> write(, 5, " +", 7, " is", 12)
+          5 +          7 is         12
+39
+
+# Using TEXT()
+TDI> write(, text(5, 1), " + ", text(7, 1), " is ", text(12, 2))
+5 + 7 is 12
 12
-/* the next read will begin at position 12 of the file. */
 
-TDI> _var=READ(_u)
-"This is line two." /* null terminator is implied with this */
-
-TDI> ftell(_u)
-30
+# Using CVT()
+TDI> write(, cvt(4, ' '), " + ", cvt(5, ' '), " is ", cvt(12, '  '))
+4 + 5 is 12
+12
 ```
 
+Writing data to a file:
+```tdi
+_data = [[1,2,3], [4,5,6], [7,8,9]]
 
-### `WRITE`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 370
-|Min arguments| 1
-|Max arguments| 254
-******Compiler syntax: WRITE(arg0,arg1,argn,...)
-|Native python|False|
+_file = fopen("data.tsv", "w")
+if (!_file) {
+    abort();
+}
 
-WRITE ([UNIT],[ARG]...)IO.
-Writes text values to terminal or file.
-Arguments Optional
-UNIT Character scalar or * for stdout. ARG... Any type.
-|Result       |Numeric or text scalars and arrays are converted to text and output to the selected UNIT. Arrays are on separate lines; scalars are packed without space up to the terminal line width. If the data type or class if nonstandard, DECOMPILE is used to make a text string that is output.
->>>>>>>>>WARNING, No explicit formatting is provided. You can use
-CVT(-1.2,"12345678") to get a string "-1.2E+00" or DECOMPILE(-1.2) to get "-1.2".
-Example.. WRITE(*,'x=',1.2,3,[4,5],6) appears as
-x= 1.20000E+00 3 45 6
+for (_i = 0; _i < size(_data[0]); ++_i) {
+    write(_file, _data[,_i]);
+}
 
+fclose(_file)
+```
 
-
-# ???
-
-### `WAIT`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 363
-|Min arguments| 1
-|Max arguments| 1
-******Compiler syntax: WAIT(arg0) 
-|Native python|False|
-
-
-IO.
-Suspend processing for at least the time given.
-|Arguments, Results|SECONDS must be real scalar.
-|Result       |None.
-|Examples     |WAIT(3.5) delays 3 and 1/2 seconds. this might retain a plot or comment for a short time.
-
-### `SPAWN`
-|||
-|-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-|Python Syntax| `MDSplus.takefromCOMPILERSYNTAX__ReplaceDollarSignsWith___d___ANDMAKEITLOWERCASE` |
-(Opcode 327
-|Min arguments| 0
-|Max arguments| 3
-******Compiler syntax: SPAWN(arg0,arg1,arg2) 
-|Native python|False|
-
-
-VMS IO.
-Do commands or command file.
-Arguments. Optional: COMMAND, INPUT, OUTPUT COMMAND character scalar of command to execute. INPUT character scalar name of file for SYS$INPUT. OUTPUT character scalar name of file as SYS$OUTPUT.
-|Signals      |None. |Units        |None. |Form         |Status returned.
-|Result       |None.
->>>>>>>>>WARNING, side effects.
-
-TODO: Stephen and Tim. `!bash`
-
-### `DATE_TIME` (Opcode 114)
-
-|||
-|-|-|
-|TDI Syntax   | `DATE_TIME(arg0)` |
-|Python Syntax| `MDSplus.DATE_TIME(arg0)` |
-|Min arguments| 0 |
-|Max arguments| 1 |
-
-* Returns the current/specified data and time as a text string.
-* Arguments (Optional): TIME must be a quadword (64-bit), VMS time stamp positive absolute time or negative delta time.
-
-|Signals      |None. 
-|Units        |None. 
-|Form         |Character scalar of length 23.
-|Result       |The current date and time.
-
-Examples
-* `DATE_TIME()` might return `26-JAN-1990 15:15:19.54`.
-
+The resulting `data.tsv`:
+```
+          1          2          3
+          4          5          6
+          7          8          9
 
 ```
-TDI> DATE_TIME(35067168000000000Q + (9999999999999999Q))
+
+# Database I/O
+
+## `SET_DATABASE` (Connect to SQL Database using Sybase Login)
+
+|||
+|-|-|
+|TDI Syntax| `SET_DATABASE(_NAME)` |
+|Filepath  | [`tdi/mdssql/set_database.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdssql/set_database.fun) |
+
+Connects to the database described in the sybase login file identified by `_NAME`. The sybase login file must be located in your `$HOME`/`%USERPROFILE%` directory. The file name must be `_NAME` (either case-sensitive or lowercase), followed by `.sybase_login`.
+
+For a database named `MyLogbook` the following paths would be valid:
+* `$HOME/MyLogbook.sybase_login`
+* `$HOME/mylogbook.sybase_login`
+
+The sybase login file must be 5 lines (with a trailing newline `"\n"`) indicating:
+* The MDSplus proxy host, this is not supported by `SET_DATABASE` but this line must still exist.
+* The database host (`_DBHOST`).
+* The database name (`_DBNAME`).
+* The username to use (`_USERNAME`).
+* The password to use (`_PASSWORD`).
+
+Once the sybase login file is parsed, this will call:
+```tdi
+dblogin(_DBHOST, _USERNAME, _PASSWORD);
+dsql('USE ' // _DBNAME);
+dsql('set textsize 8192');
+```
+
+For example, `MyLogbook.sybase_login` could look like:
+```
+
+dbsrv01
+mylogbook
+username
+pa$$w0rd
+```
+
+```tdi
+TDI> set_database('MyLogbook')
+0
+
+TDI> dsql('SELECT column FROM table', _values)
+1
+```
+
+See also:
+* [`DSQL`](#dsql-execute-sql-query)
+* [`DBLOGIN`](#dblogin-connect-to-sql-database)
+
+## `DBLOGIN` (Connect to SQL Database)
+
+|||
+|-|-|
+|TDI Syntax| `DBLOGIN(_HOST, _USER, _PASS)` |
+|Filepath  | [`tdi/mdssql/dblogin.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdssql/dblogin.fun) |
+
+See also:
+* [`DSQL`](#dsql-execute-sql-query)
+* [`DBLOGIN`](#dblogin-connect-to-sql-database)
+
+## `DSQL` (Execute SQL Query)
+
+|||
+|-|-|
+|TDI Syntax   | `DSQL(_QUERY, [_ARGS...], [_OUTPUTS...])` |
+|Python Syntax| `MDSplus.DSQL(query, [args...], [outputs...])` |
+|Opcode|415|
+
+Run the SQL `_QUERY` on a connection created by [`SET_DATABASE`](#set_database-connect-to-sql-database-using-sybase-login) or [`DBLOGIN`](#dblogin-connect-to-sql-database). Any `?`s in the `_QUERY` will be replaced by the corresponding value from `_ARGS`. Each column of the result will be stored in the corresponding variable in `_OUTPUTS`. Returns the number of rows retrieved.
+
+`_QUERY` must be a string and should be a valid SQL query.
+
+The number of `_ARGS` must match the number of `?`s. Items in `_ARGS` don't need to be [Text](#), but any other types will be converted using [`TEXT`](./text.md#text-to-string).
+
+Items in `_OUTPUTS` can either be variables or strings containing variable names. The variables don't need to be already defined.
+
+> TODO: Stephen, contrive more examples
+```tdi
+TDI> set_database('MyLogbook')
+
+TDI> _rows = dsql('SELECT COUNT(*) FROM entries WHERE value < ?', 42, _count)
+1
+
+TDI> write(*, _count)
+123
+```
+
+# Miscellaneous 
+
+## `WAIT` (Wait, Sleep)
+
+|||
+|-|-|
+|TDI Syntax   | `WAIT(_SECONDS)` |
+|Python Syntax| `MDSplus.WAIT(seconds)` |
+|Opcode|363|
+
+Waits (sleeps) for `_SECONDS` seconds.
+
+```tdi
+TDI> wait(2.5)
+# 2.5 seconds later
+*
+```
+
+## `SPAWN` (Spawn, Execute Command)
+
+|||
+|-|-|
+|TDI Syntax   | `SPAWN(_COMMAND) or !COMMAND` |
+|Python Syntax| `MDSplus.SPAWN(command)` |
+|Opcode|327|
+
+Spawn an external command specified by `_COMMAND`.
+
+`_COMMAND` must be a string with the target program and arguments separated by spaces. The program should either be available on the system search (`$PATH`) or a full path to the executable. Returns the exit code from the external process.
+
+This is disabled when the sandbox is enabled with [`MdsEnableSandbox()`](#).
+
+Note: This previously took `_INPUT` and `_OUTPUT`, but this functionality has been removed.
+
+```tdi
+TDI> spawn("whoami")
+mdsplus
+0
+
+TDI> spawn("exit 42")
+42
+
+TDI> !pwd
+/path/to/working/directory
+
+TDI> !ls -la
+<output here>
+
+TDI> !bash
+bash$ echo "Hello, World!"
+Hello, World!
+bash$ exit
+exit
+```
+
+## `DATE_TIME` (String Timestamp)
+
+|||
+|-|-|
+|TDI Syntax   | `DATE_TIME([_TIMESTAMP])` |
+|Python Syntax| `MDSplus.DATE_TIME([timestamp])` |
+|Opcode|114|
+
+Returns a 23-character string representing the `_TIMESTAMP` if specified, otherwise the current time. The current time zone will be used.
+
+If specified, `_TIMESTAMP` must either be a 64-bit VMS timestamp, or 0. VMS timestamps are counts of 100ns clunks since the VMS EPOCH (17 Nov 1858).  If `_TIMESTAMP` is 0, the result will be the UNIX epoch `" 1-JAN-1970 00:00:00.00"`, regardless of the current time zone.
+
+```tdi
+TDI> date_time()
+" 9-DEC-2025 18:54:47.00"
+
+TDI> date_time(0)
+" 1-JAN-1970 00:00:00.00"
+
+TDI> date_time(45067167999999999Q)
 " 9-SEP-2001 01:46:39.99"
-TDI> date_time(getnci(TSTART, "TIME_INSERTED"))
-"28-FEB-2007 12:37:20.83"
 
+TDI> date_time(getnci(:TREE_NODE, 'TIME_INSERTED'))
+"28-FEB-2007 12:37:20.83"
 ```
 
-### `DSQL` (Opcode 415)
+See also:
+* [`GETNCI`](./trees.md#getnci-get-node-characteristic-information)
 
-|||
-|-|-|
-|TDI Syntax   | `DSQL(arg0,arg1,argn,...)` |
-|Python Syntax| `MDSplus.DSQL(arg0,arg1,argn,...)` |
-|Min arguments| 1   |
-|Max arguments| 254 |
-|Native python|False|
-
-> TODO: Come back to this when we have a db to test
-
-Description:
-Execute a MSsql query
-_num=DSQL(sqlcommand,arg0,arg1,...,retarg0,retarg1,...)
-Eample. set_database('logbook') _rows=dsql('select count(*) from entries',_num)
+getenv
+setenv

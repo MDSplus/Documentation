@@ -75,3 +75,14 @@ TDI> 0B1100BU
 12BU
 ```
 
+## Sections
+
+* [Glossary](./tdi-reference/glossary.md)
+* [Array](./tdi-reference/array.md)
+* [Compound](./tdi-reference/compound.md)
+* [Connection](./tdi-reference/conneciton.md)
+* [Language](./tdi-reference/language.md)
+* [Logic](./tdi-reference/logic.md)
+* [Math](./tdi-reference/math.md)
+* [Trees](./tdi-reference/trees.md)
+* [Utility](./tdi-reference/utility.md)
