@@ -7,18 +7,20 @@ MDSplus has an IDL API, allowing you to read, analyze, and write data to and fro
 
 Setup consists of simply pointing IDL to the MDSplus installation folder.
 
-Use this command to set the environment variable `PATH` to the MDSplus installation folder
-(TODO: Mark W please confirm)
+The `$MDSPLUS_DIR/setup.sh` script will set the `$IDL_PATH` environment variable.
+Alternatively, please also see the [instructions provided on the IDL website](https://www.nv5geospatialsoftware.com/docs/Managing_IDL_Paths.html).
+
+
+When running IDL, the `print, !PATH` statement can be used to list all paths that should be searched. Please ensures that it includes the `$MDSPLUS_DIR/idl` directory.
+
+If you are using macOS, make sure your directory is changed to where mdsplus installation folder is. The first line of your IDL script will need a reference to your MDSplus installation folder. For example: 
+
 ```
-command goes here
-TODO: Mark W
+CD '/usr/local/mdsplus/lib' (or wherever you have IDL installed)
 ```
 
-If you are using MacOS, make sure your directory is changed to where mdsplus installation folder is. The first line of your IDL script will need a reference to your MDSplus installation folder. For example: 
+> TODO: Mark W investigate eliminating the CD
 
-```
-`cd /usr/local/mdsplus/lib` (or wherever you have IDL installed)
-```
 
 ## Commands
 
