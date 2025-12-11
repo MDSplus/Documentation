@@ -110,8 +110,8 @@ TDI> write(_file, "appending a line\n")
 
 |||
 |-|-|
-|TDI Syntax   | `FTELL(arg0) ` |
-|Python Syntax| `MDSplus.FTELL(arg0) ` |
+|TDI Syntax   | `FTELL(_UNIT) ` |
+|Python Syntax| `MDSplus.FTELL(_UNIT) ` |
 |Opcode|417|
 
 Gets the file position indicator for the file specified by `_UNIT`, which was opened with [`FOPEN`](#fopen-open-file). Returns the result of [`ftell()`](https://en.cppreference.com/w/c/io/ftell.html).
@@ -146,9 +146,9 @@ TDI> _size = ftell(_file)
 
 Reads from the file specified by `_UNIT` until a newline (`\n`) is found or until EOF, then returns the string with the last character removed.
 
-Note: If the line is empty (other than the newline), `READ()` will throw an error. This can be caught with [`IF_ERROR()`](./language.md#if_error-handle-error-trycatch), see the example below.
+Note: This does not check if the last character is a newline, it simply removes the last character. Make sure your input files have a trailing newline.
 
-Note: This does not check if the last character was a newline, it simply removes it. Make sure your input files have a trailing newline.
+Note: If a line is empty (other than the newline), `READ()` will throw an error. This can be caught with [`IF_ERROR()`](./language.md#if_error-handle-error-trycatch); see the example below.
 
 This is a wrapper around [`fgets()`](https://en.cppreference.com/w/c/io/fgets.html) in C.
 
@@ -264,16 +264,16 @@ The resulting `data.tsv`:
 |TDI Syntax| `SET_DATABASE(_NAME)` |
 |Filepath  | [`tdi/mdssql/set_database.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdssql/set_database.fun) |
 
-Connects to the database described in the sybase login file identified by `_NAME`. The sybase login file must be located in your `$HOME`/`%USERPROFILE%` directory. The file name must be `_NAME` (either case-sensitive or lowercase), followed by `.sybase_login`.
+Connects to the database described in the sybase login file (see below) identified by `_NAME`. The sybase login file must be located in your `$HOME`/`%USERPROFILE%` directory. The file name must be `_NAME` (either case-sensitive or lowercase), followed by `.sybase_login`.
 
-Not to be confused with [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration) which for use with site-specific configuration.
+Not to be confused with [`SetDatabase`](#setdatabase-connect-to-sql-database-using-site-specific-configuration) which is for use with site-specific configuration.
 
 For a database named `MyLogbook` the following paths would be valid:
 * `$HOME/MyLogbook.sybase_login`
 * `$HOME/mylogbook.sybase_login`
 
-The sybase login file must be 5 lines (with a trailing newline `"\n"`) indicating:
-* The MDSplus proxy host, this is not supported by `SET_DATABASE` but this line must still exist.
+Follow these directions to create the sybase login file. It must have 5 lines (with a trailing newline `"\n"`) indicating:
+* The MDSplus proxy host; this is not supported by `SET_DATABASE` but this line must still exist.
 * The database host (`_DBHOST`).
 * The database name (`_DBNAME`).
 * The username to use (`_USERNAME`).
@@ -317,7 +317,7 @@ See also:
 
 **Warning: This will not work out of the box**
 
-Connects to the database identified by `_DBNAME` and described by the site-specific `GetDbInfo()` function. This function should be defined by the site administrators, and must exist on your [`$MDS_PATH`](../environment-variables.md#mds_path) otherwise calling this will cause an error.
+Connects to the database identified by `_DBNAME` and described by the site-specific `GetDbInfo()` function. This function should be defined by the site administrators, and must exist on your [`$MDS_PATH`](../environment-variables.md#mds_path), otherwise calling this will cause an error.
 
 After retrieving the connection details with `GetDbInfo(_DBNAME, _DBHOST, _DBUSER, _DBPASS)` this will call:
 
