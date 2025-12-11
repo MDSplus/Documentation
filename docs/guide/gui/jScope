@@ -1,0 +1,12 @@
+## jScope
+
+**jScope** allows you to view individual data points similar to the output you would receive in an oscilloscope.
+
+To open in Linux, open a terminal window and type the following. This command is case sensitve in Linux.
+
+
+```sh
+jScope
+```
+
+
