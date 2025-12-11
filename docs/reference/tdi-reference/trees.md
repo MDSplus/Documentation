@@ -1,6 +1,53 @@
 
 # Trees
 
+> TODO: Standardize example tree to main? Or provide an example tree described at the top/bottom?
+
+## Node ID (NID)
+
+A unique ID representing a node.
+
+> TODO: Expand
+
+## Shot Stack
+
+A stack of the open shots.
+
+[show db](../mdstcl.md#show-db)
+
+> TODO:
+
+## Default Node
+
+The default node will be used as the reference point for all relative tree paths.
+This is analogous to changing directory in a filesystem. When opening a tree, the initial default node will be [`TOP`](#).
+
+See [set default](../mdstcl.md#set-default-node_path) for more information.
+
+The path of the default node can be retrieved with [`$DEFAULT`](#default-default-node-path).
+
+The default [NID](#node-id-nid) can be retrieved with [`GetDefaultNid`](#getdefaultnid-get-nid-of-the-default-node).
+
+The default node can be set with [`TreeSetDefault`](#treesetdefault-set-default-node-by-path) or [`SetDefaultNid`](#setdefaultnid-set-default-node-by-nid).
+
+## Reading the Data from a Node
+> TODO: Rename
+
+While a tree is open, simply use the name or path to a node to access the data
+
+TODO> Expand, explain how to use nodes as parameters, explain issues with using nodes without data without quotes e.g. `TreeSetDefault(admin)` vs `TreeSetDefault("admin")`
+
+```tdi
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+TDI> first
+1234
+
+TDI> first:second
+
+```
+
 ## `$DEFAULT` (Default Node Path)
 
 |||
@@ -116,6 +163,319 @@ See also:
 * `$SHOT`
 
 
+## `TreeOpen` (Open Tree)
+
+|||
+|-|-|
+|TDI Syntax| `TreeOpen(_TREE, [_SHOT], [_READONLY])`  |
+|Filepath  | [`tdi/treeshr/TreeOpen.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpen.fun) |
+
+Open the shot file identified by (`_TREE`, `_SHOT`) for use with other `Tree*` functions or to access nodes by path. If `_SHOT` is not specified, the model shot (-1) will be used. If `_READONLY` is specified and nonzero, the tree will be open read-only, otherwise it will be open for read/write.
+
+If the shot was already open, it will be moved to the top of the [stack](#shot-stack).
+
+This will search [$<tree>_path](../environment-variables.md#tree_path) or [$default_tree_path](../environment-variables.md#default_tree_path) as described there.
+
+```tdi
+```
+
+## `TreeOpenNew` (Create/Overwrite a Tree and Open for Structure Editing)
+
+|||
+|-|-|
+|TDI Syntax| `TreeOpenNew(_TREE, _SHOT)`  |
+|Filepath  | [`tdi/treeshr/TreeOpenNew.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpenNew.fun) |
+
+For use with [structure editing](#).
+
+TODO:
+
+## `TreeOpenEdit` (Open Tree for Structure Editing)
+
+|||
+|-|-|
+|TDI Syntax| `TreeOpenEdit(_TREE, _SHOT)`  |
+|Filepath  | [`tdi/treeshr/TreeOpenEdit.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpenEdit.fun) |
+
+For use with [structure editing](#).
+
+TODO:
+
+## `TreeClose` (Close Tree)
+
+|||
+|-|-|
+|TDI Syntax| `TreeClose([_TREE], [_SHOT])`  |
+|Filepath  | [`tdi/treeshr/TreeClose.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeClose.fun) |
+
+Close a shot that was opened with [`TreeOpen`](#treeopen-open-tree). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be closed. Otherwise, the shot at the top of the [stack](#shot-stack) will be closed.
+
+A useful expression to close all open trees (as used by `closeAllTrees()` in the various `Connection` classes):
+```tdi
+_i=0; while(iand(TreeClose(), 1)) _i++;
+# _i will be the number of trees closed
+```
+
+```tdi
+```
+
+## `TreeWrite` (Write Structure Changes)
+
+|||
+|-|-|
+|TDI Syntax| `TreeWrite([_TREE], [_SHOT])`  |
+|Filepath  | [`tdi/treeshr/TreeWrite.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeWrite.fun) |
+
+For use with [structure editing](#).
+
+Writes the structure changes to disk of a shot that was opened with [`TreeOpenEdit`](#treeopenedit-open-tree-for-structure-editing) or [`TreeOpenNew`](#treeopennew-createoverwrite-a-tree-and-open-for-structure-editing). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be written. Otherwise, the shot at the top of the [stack](#shot-stack) will be written.
+
+## `TreeQuit` (Discard Structure Changes and Close Tree)
+
+|||
+|-|-|
+|TDI Syntax| `TreeQuit([_TREE], [_SHOT])`  |
+|Filepath  | [`tdi/treeshr/TreeQuit.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeQuit.fun) |
+
+For use with [structure editing](#).
+
+Discard the structure changes and close a shot that was opened with [`TreeOpenEdit`](#treeopenedit-open-tree-for-structure-editing) or [`TreeOpenNew`](#treeopennew-createoverwrite-a-tree-and-open-for-structure-editing). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be quit. Otherwise, the shot at the top of the [stack](#shot-stack) will be quit.
+
+## `TreeFileName` (Get Shot File Path)
+
+|||
+|-|-|
+|TDI Syntax| `TreeFileName([_TREE], [_SHOT])`  |
+|Filepath  | [`tdi/treeshr/TreeFileName.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeFileName.fun) |
+
+Returns the local or remote path to the shot file. If `_SHOT` is specified, the shot identified by (`_TREE`, `_SHOT`) will be used (regardless of whether it is open or not). If `_TREE` is specified, but `_SHOT` is not, the shot identified by (`_TREE`, [`$SHOT`](#shot-current-shot-number)) will be used. Otherwise, the shot at the top of the [stack](#shot-stack) will be used.
+
+To get the directory of a shot file, use [`TreeDirName`](#treedirname-get-shot-directory-path).
+
+The `.characteristics` and `.datafile` files will be stored in the same directory, and the paths can be inferred like so:
+```tdi
+TDI> _tree_path = TreeFileName()
+"/path/to/trees/mytree/mytree_12345.tree"
+
+TDI> _base_path = extract(0, index(_tree_path, '.', $true), _tree_path)
+"/path/to/trees/mytree/mytree_12345"
+
+TDI> _characteristics_path = _base_path // '.characteristics'
+"/path/to/trees/mytree/mytree_12345.characteristics"
+
+TDI> _datafile_path = _base_path // '.datafile'
+"/path/to/trees/mytree/mytree_12345.datafile"
+```
+
+```tdi
+TDI> TreeFileName()
+""
+
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+# If the files are local
+TDI> TreeFileName()
+"/path/to/trees/mytree/mytree_12345.tree"
+
+# If the files are remote
+TDI> TreeFileName()
+"mydatasrv::/path/to/trees/mytree/mytree_12345.tree"
+```
+
+## `TreeDirName` (Get Shot Directory Path)
+
+|||
+|-|-|
+|TDI Syntax| `TreeDirName(_TREE, _SHOT)`  |
+|Filepath  | [`tdi/treeshr/TreeDirName.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeDirName.fun) |
+
+Returns the local or remote path to the directory containing the shot file. If `_SHOT` is specified, the shot identified by (`_TREE`, `_SHOT`) will be used (regardless of whether it is open or not). If `_TREE` is specified, but `_SHOT` is not, the shot identified by (`_TREE`, [`$SHOT`](#shot-current-shot-number)) will be used. Otherwise, the shot at the top of the [stack](#shot-stack) will be used.
+
+To get the path to a shot file, use [`TreeFileName`](#treefilename-get-shot-file-path).
+
+```tdi
+TDI> TreeDirName()
+""
+
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+# If the files are local
+TDI> TreeDirName()
+"/path/to/trees/mytree"
+
+# If the files are remote
+TDI> TreeDirName()
+"mydatasrv::/path/to/trees/mytree"
+```
+
+## `TreeGetCurrentShot` (Get Current Shot Number or Zero)
+
+|||
+|-|-|
+|TDI Syntax| `TreeGetCurrentShot(_TREE)`  |
+|Filepath  | [`tdi/treeshr/TreeGetCurrentShot.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeGetCurrentShot.fun) |
+
+Return the current shot number for the given `_TREE`. If no current shot number is found, this will return `0`.
+
+To throw an error if the current shot is not found, use [`CURRENT_SHOT`](#current_shot-get-current-shot-number-or-error).
+
+```tdi
+TDI> TreeGetCurrentShot("mytree")
+12345
+
+TDI> TreeGetCurrentShot("nocurrent")
+0
+```
+
+## `TreeSetCurrentShot` (Set Current Shot Number)
+
+|||
+|-|-|
+|TDI Syntax| `TreeSetCurrentShot(_TREE)`  |
+|Filepath  | [`tdi/treeshr/TreeSetCurrentShot.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeSetCurrentShot.fun) |
+
+TODO: 
+
+## `CURRENT_SHOT` (Get Current Shot Number or Error)
+
+|||
+|-|-|
+|TDI Syntax| `CURRENT_SHOT(_TREE)`  |
+|Filepath  | [`tdi/treeshr/current_shot.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/current_shot.fun) |
+
+Return the current shot number for the given `_TREE`. If no current shot number is found, `abort()` will be called.
+
+To get the current shot number without potentially throwing an error, use [`TreeGetCurrentShot`](#treegetcurrentshot-get-current-shot-number-or-zero).
+
+```tdi
+TDI> current_shot("mytree")
+12345
+
+TDI> current_shot("nocurrent")
+<stack trace>
+%TDI Error in EXECUTE('current_shot("nocurrent")')
+```
+
+## `GetDefaultNid` (Get NID of the Default Node)
+
+|||
+|-|-|
+|TDI Syntax| `GetDefaultNid()`  |
+|Filepath  | [`tdi/treeshr/GetDefaultNid.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/GetDefaultNid.fun) |
+
+Return the [NID](#node-id-nid) of the [default node](#default-node), otherwise `"error"`.
+
+To get the path of the [default node](#default-node), use `$DEFAULT`.
+
+```tdi
+TDI> GetDefaultNid()
+"error"
+
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+# TOP, the initial default NID
+TDI> GetDefaultNid()
+0
+
+TDI> TreeSetDefault("MYNODE")
+
+TDI> GetDefaultNid()
+42
+```
+
+## `SetDefaultNid` (Set Default Node by NID)
+
+|||
+|-|-|
+|TDI Syntax| `SetDefaultNid(_NID)`  |
+|Filepath  | [`tdi/treeshr/SetDefaultNid.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/SetDefaultNid.fun) |
+
+Sets the [default node](#default-node) to the node indicated by `_NID`.
+
+To set the [default node](#default-node) using a path, use [`TreeSetDefault`](#treesetdefault-set-default-node-by-path).
+
+```tdi
+# With no tree open, 265388200 is TreeNOT_OPEN
+TDI> SetDefaultNid(0)
+265388200
+
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+TDI> $DEFAULT
+"\\MYTREE::TOP"
+
+TDI> _nid = getnci('first', 'NID_NUMBER')
+1
+
+TDI> SetDefaultNid(_nid)
+265389633
+
+TDI> $DEFAULT
+"\\MYTREE::TOP:FIRST"
+```
+
+## `TreeSetDefault` (Set Default Node by Path)
+
+|||
+|-|-|
+|TDI Syntax| `TreeSetDefault(_PATH)`  |
+|Filepath  | [`tdi/treeshr/TreeSetDefault.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeSetDefault.fun) |
+
+Sets the [default node](#default-node) to the node indicated by `_PATH`.
+
+`_PATH` can either be a string indicating the path or a [node](#), however it is recommended to use a string, if the node doesn't have data it will be an error.
+> TODO: Improve
+
+To set the [default node](#default-node) using a path, use [`TreeSetDefault`](#treesetdefault-set-default-node-by-path).
+
+```tdi
+# With no tree open, 265388200 is TreeNOT_OPEN
+TDI> SetDefaultNid('first')
+265388200
+
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+TDI> $DEFAULT
+"\\MYTREE::TOP"
+
+TDI> SetDefaultNid('first')
+265389633
+
+TDI> $DEFAULT
+"\\MYTREE::TOP:FIRST"
+```
+
+## `GetExtendedAttribute` (Get XNCI/Extended Attribute)
+
+|||
+|-|-|
+|TDI Syntax| `GetExtendedAttribute(_NODE, [_NAME])`  |
+|Filepath  | [`tdi/treeshr/GetExtendedAttribute.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/GetExtendedAttribute.fun) |
+
+TODO:
+
+`_NODE` can be a node, nid, or path.
+
+If `_NAME` is not specified, `"attributenames"` will be used.
+> TODO: What is that?
+
+## `SetExtendedAttribute` (Set XNCI/Extended Attribute)
+
+|||
+|-|-|
+|TDI Syntax| `SetExtendedAttribute(_NODE, _NAME, _VALUE)`  |
+|Filepath  | [`tdi/treeshr/SetExtendedAttribute.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/SetExtendedAttribute.fun) |
+
+TODO:
+
+`_NODE` can be a node, nid, or path.
+
+
 ## `GETDBI` (Get Tree/DataBase Information)
 
 |||
@@ -172,36 +532,8 @@ of NIDs and PATHs. Scalar for non-array results of single input. All data types 
 
 
 
+## `USING`
 
-## `TreeOpen` (Open Tree)
-
-|||
-|-|-|
-|TDI Syntax| `TreeOpen(_TEXT)`  |
-|Filepath  | [`tdi/treeshr/TreeOpen.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpen.fun) |
-
-Lowercase.
-
-
-### `do_task` (Opcode 448)
-
-|||
-|-|-|
-|TDI Syntax   | `DO_TASK(arg0) ` |
-|Python Syntax| `MDSplus.DO_TASK(arg0) ` |
-|Min arguments| 1 |
-|Max arguments| 1 |
-
-TODO: Move?
-
-TODO: Come Back To This and investigate further
-
-Execute Task
-Executes the task item found in the argument.
-ARGUMENT TASK refers to an ACTION or a TASK
-
-
-### `USING`
 |||
 |-|-|
 |TDI Syntax   | `take_from_Compiler_syntax` |
@@ -221,3 +553,19 @@ DEFAULT character, NID, long, or PATH scalar. The new tree path.
 |Result       |Depends on the expression at the node in the new tree. The old node, shot, and experiment are used to evaluate the expressions for DEFAULT, SHOTID, and EXPT. If SHOTID or EXPT present, a new tree is opened for reading. The temporary path is set from DEFAULT. If omitted, the values used are those of the current tree and path. There will be an error if the old tree is not open or the old path is bad.
 |Examples     |Say shot 1234 is a "vacuum" subtraction shot for the current shot and we are positioned at \TOP.XRAY:CHAN_01, which has data, then the subtracted data might be
 :DATA -USING(:DATA,,1234)
+
+### `do_task` 
+
+|||
+|-|-|
+|TDI Syntax   | `DO_TASK(arg0) ` |
+|Python Syntax| `MDSplus.DO_TASK(arg0) ` |
+|Opcode|448|
+
+TODO: Move?
+
+TODO: Come Back To This and investigate further
+
+Execute Task
+Executes the task item found in the argument.
+ARGUMENT TASK refers to an ACTION or a TASK

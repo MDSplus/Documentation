@@ -406,6 +406,8 @@ Determine if an optional argument present.
 ******Compiler syntax: PUBLIC(arg0) 
 |Native python|False|
 
+global
+
 
 Variable Operation.
 Specifies the use of a public variable.

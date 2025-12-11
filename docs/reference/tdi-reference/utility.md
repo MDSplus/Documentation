@@ -336,8 +336,9 @@ public fun GetDbInfo(in _dbname, out _dbhost, out _dbuser, out _dbpass)
     if (_dbname == "mylogbook") {
         _dbhost = "dbsrv1";
         _dbuser = whoami();
-        _dbpass = "pa$$w0rd";
-        return($true);
+        write(*, 'Enter password for ', _dbuser, '@', _dbhost, ':');
+        _dbpass = read(*);
+        return(len(_dbpass) > 0);
     }
 
     return($false);
@@ -407,7 +408,7 @@ TDI> _rows = dsql('SELECT COUNT(*) FROM entries WHERE shot = ?', 12345, _count)
 TDI> write(*, _count)
 5
 
-TDI> _rows = dsql('SELECT user, message FROM entries WHERE shot = ?', 12345, _users, _messages)
+TDI> _rows = dsql('SELECT user, message FROM entries WHERE shot = ?', 12345, _users, "_messages")
 5
 
 TDI> for (_i = 0; _i < _rows; ++_i) { write(*, _users[_i], ': ', _messages[_i]); }
@@ -419,6 +420,70 @@ mdsplus : Shutting down
 ```
 
 # Miscellaneous 
+
+## `TranslateLogical` (Get Environment Variable)
+
+|||
+|-|-|
+|TDI Syntax| `TranslateLogical(_NAME)` |
+|Filepath  | [`tdi/mdsshr/TranslateLogical.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/TranslateLogical.fun) |
+
+Returns the value of the environment variable identified by `_NAME` if it exists, otherwise `""`.
+
+See [Environment Variables](../environment-variables.md) for a full list of environment variables.
+
+## `GETENV` (Get Environment Variable)
+
+|||
+|-|-|
+|TDI Syntax| `GETENV(_NAME)` |
+|Filepath  | [`tdi/mdsshr/getenv.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/getenv.fun) |
+
+Alias for [`TranslateLogical`](#translatelogical-get-environment-variable).
+
+## `SETENV`
+
+|||
+|-|-|
+|TDI Syntax| `SETENV(_COMMAND)` |
+|Filepath  | [`tdi/mdsshr/setenv.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/setenv.fun) |
+
+Sets the environment variable name/value defined by `_COMMAND`. `_COMMAND` is a string with the name and value separated by an '='. If `_COMMAND` does not contain an '=', the environment variable will be unset instead. Returns a number, sure does.
+
+See [Environment Variables](../environment-variables.md) for a full list of environment variables.
+
+Note: References to other environment variables (such as `$PATH` or `%PATH%`) will not evaluate, the literal string will be used. See examples below.
+
+Note: Attempts to set `MDSPLUS_SPAWN_WRAPPER` or `MDSPLUS_LIBCALL_WRAPPER` will be ignored.
+
+```tdi
+TDI> setenv("foo=bar")
+65545
+
+TDI> getenv("foo")
+"bar"
+
+# unset
+TDI> setenv("foo")
+65545
+
+TDI> getenv("foo")
+""
+
+
+TDI> setenv("mytree_path=/path/to/trees/~t")
+65545
+
+
+TDI> getenv("MDS_PATH")
+"/usr/local/mdsplus/tdi"
+
+TDI> setenv("MDS_PATH=./tdi;" // getenv("MDS_PATH"))
+65545
+
+TDI> getenv("MDS_PATH")
+"./tdi;/usr/local/mdsplus/tdi"
+```
 
 ## `WAIT` (Wait, Sleep)
 
