@@ -66,7 +66,7 @@ TODO: Crosslink to TDI `getnci`
 
 * Flags: will have other things in it (TODO more to come from Stephen/Fernando)
 
-    |Usage Flag       | Description|
+    |Flag               | Description|
     |-|-|
     | `cached`          | Cached data. False=on, True=off.|
     |`compress_on_put`  | Compress data when stored in this node|
@@ -193,6 +193,7 @@ DBIs have almost the same interface, except it's about the whole tree (aka The D
 
 we'll document these for completeness, but it's very rarely used
 
+> TABLE HERE
 
 ## XNCI
 

@@ -16,3 +16,4 @@ TreeNidHook(type=, tree=, shot=, nid=)
 TreeNidDataHook(type=, tree=, shot=, nid=, data=)
 ```
 
+See [`tdi/treeshr/TreeShrHook.py.example`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeShrHook.py.example)

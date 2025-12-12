@@ -1,21 +1,139 @@
 
 # Trees
 
-> TODO: Standardize example tree to main? Or provide an example tree described at the top/bottom?
+## Referencing Nodes in TDI
+
+While a shot is open, an expression may simply use a Node's name or [path](#node-paths) to reference it. However, these paths may not contain wildcards as they are meant to reference a single node.
+
+Only nodes in the top-most shot of the [stack](#shot-stack) can be referenced in this way.
+
+When possible, a node referenced in this way will compile to a [`NID`](#node-id-nid), which allows for storing references to other nodes in the tree.
+
+Warning: Storing a reference to a tag will compile to a NID, and won't update if you update the tag
+> TODO: Reword/improve
+
+Warning: Passing nodes as parameters to functions will fail if the node does not contain data, even if the function was not intending to use the data of the node. It is recommended to always pass them as [Text](#) instead to avoid this issue. See the example below.
+
+```tdi
+TDI> TreeOpen("mytree", 12345)
+265388067
+
+TDI> analysis:current
+[1,2,3,4,5]
+
+# : and . are interchangable here
+TDI> analysis.current
+[1,2,3,4,5]
+
+TDI> TreeSetDefault(HARDWARE)
+# TODO: fails
+
+TDI> TreeSetDefault('HARDWARE')
+# TODO:succeeds
+```
+
+See [here](#dummy-tree) for the tree used in the examples.
 
 ## Node ID (NID)
 
-A unique ID representing a node.
+A unique ID representing a node. Internally, this is a 32-bit integer representing a specific node in a specific tree.
 
-> TODO: Expand
+Most functions that accept a NID will also accept a [Node](#referencing-nodes-in-tdi) or a [Path](#node-paths).
+
+NIDs can be retrieved with [`GETNCI(<node here>, 'NID_NUMBER')`](#getnci-get-node-characteristic-information).
+
+## Children and Members
+
+A parent node can have both children and member nodes. These are functionally equivalent and mostly exist for historical reasons. However, children should nominally be used for structure, and members should nominally be used for nodes with data.
+
+* Children start with `.`
+* Members start with `:`
+
+See [node path](#node-paths) for more examples.
+
+The decision of whether a node will be a member or a child is made when [adding](#) the node, determined by the `.` or `:` prefixed on the name.
+> TODO: Mark, help
+
+Note: A parent node cannot have both a child and member of the same name.
+
+Note: When referencing [Nodes](#referencing-nodes-in-tdi), `.` and `:` can be used interchangably.
+
+Some commands, like [mdstcl dir](../mdstcl.md#directory-node_path_wild1node_path_wild2-full-usageusage-usageusage1usage2) will separate children and members.
+
+```
+TDI> Tcl('dir')
+
+\CMOD::TOP
+
+ :START_TIME
+
+  ANALYSIS      HARDWARE
+
+
+Total of 3 nodes.
+1
+```
+
+See [here](#dummy-tree) for the tree used in the examples.
 
 ## Shot Stack
 
-A stack of the open shots.
+When multiple shots are open, they will be stored in a stack. Only the top-most tree will be used by any functions. However, "opening" a tree that is already open in the stack will be instant.
 
-[show db](../mdstcl.md#show-db)
+See [show db](../mdstcl.md#show-db) for more information.
 
 > TODO:
+
+## Node Paths
+> TODO: Mark, help reword/improve/organize
+
+A node path is similar to a file path, however you can use any of the separators below to refine the search path. Unless prefixed with a `\`, node paths will be relative to the [default node](#default-default-node-path).
+
+For convenience, when searching for nodes, `.`, `:` and `~` are now often interchangable.
+
+`-` or `^` can be used to access a node's parent.
+
+When adding nodes, `.` and `:` will be used as described in [children and members](#children-and-members), and `~` cannot be used at all.
+
+Relative paths can be prefixed with `.` or `:`, however `~` as a prefix will be interpreted as a [bitwise not](./logic.md#inot-bitwise-not).
+
+## Wildcards
+> TODO: Mark, help reword/improve/organize
+
+A wildcard is a [node path](#node-paths) with one or more of the following:
+
+|Syntax|Meaning|
+|-|-|
+|`*`  |Any node at this level|
+|`***`|All nodes recursive|
+|`:*` |Any member at this level|
+|`:::`|All members recursive|
+|`.*` |Any child at this level|
+|`...`|All children recursive|
+|`-`  |The parent node|
+|`^`  |Ancestor (equivalent to `-`)|
+|`^^^`|All ancestors recursive|
+|`~*` |Any child or member at this level|
+|`~~~`|All children and members recursive (equivalent to `***`)|
+
+> TODO: `%` in node names?
+
+Note: Not all functions can take wildcards, see the documentation for each function to be sure.
+
+```tdi
+TDI> getnci('***', 'path')
+TODO: Output
+
+TDI> getnci('...', 'path')
+TODO: Output
+
+TDI> getnci(':::', 'path')
+TODO: Output
+
+# Get the path to a node as individual nodes
+TDI> getnci('\\temp_sensor^^^', 'node_name')
+["ADC     ","HARDWARE","TOP     "]
+```
 
 ## Default Node
 
@@ -30,22 +148,71 @@ The default [NID](#node-id-nid) can be retrieved with [`GetDefaultNid`](#getdefa
 
 The default node can be set with [`TreeSetDefault`](#treesetdefault-set-default-node-by-path) or [`SetDefaultNid`](#setdefaultnid-set-default-node-by-nid).
 
-## Reading the Data from a Node
-> TODO: Rename
 
-While a tree is open, simply use the name or path to a node to access the data
+## `Tcl` (Run MDSTCL Command)
 
-TODO> Expand, explain how to use nodes as parameters, explain issues with using nodes without data without quotes e.g. `TreeSetDefault(admin)` vs `TreeSetDefault("admin")`
+|||
+|-|-|
+|TDI Syntax| `Tcl(_COMMAND, [_OUTPUT], [_ERROR])` |
+|Filepath  | [`tdi/tcl/Tcl.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/tcl/Tcl.fun) |
+
+Run an [`mdstcl`](../mdstcl.md) command. If `_OUTPUT` is specified, it will contain the output text of the command, otherwise it will print to stdout. If `_ERROR` is specified, it will contain the error text of the command, otherwise it will print to `stderr`. Returns the return code from executing the given command.
+
+If specified, `_OUTPUT` and `_ERROR` can either be variables or strings containing variable names. The variables don't need to be already defined.
+
+This can be used to open/close trees, change the [default node](#default-default-node-path), or query information about the current context. For example:
+* `Tcl("show version")` can be used to query the MDSplus version of a server you are connected to.
+* `Tcl("set def .-.")` can be used to easily move the [default node](#default-default-node-path) up one level (`cd ..`).
+* `Tcl("show db")` can be used to easily see the open [shot stack](#shot-stack).
 
 ```tdi
+TDI> Tcl("show version")
+
+
+MDSplus version: 7.157.0
+----------------------
+  Release:  alpha_release-7-157-0
+  Date:     Thu Nov 20 23:04:24 UTC 2025
+  Browse:   https://github.com/MDSplus/mdsplus/tree/alpha_release-7-157-0
+  Download: https://github.com/MDSplus/mdsplus/releases/tag/alpha_release-7-157-0
+
+
+1
+
+
 TDI> TreeOpen("mytree", 12345)
 265388067
 
-TDI> first
-1234
+TDI> Tcl("show db", _out)
+265389633
 
-TDI> first:second
+TDI> _out
+"000  MYTREE        shot: 12345 [\\MYTREE::TOP]   \n\n"
 
+
+# The current tree / default node will be used
+TDI> TreeSetDefault('HARDWARE')
+TODO: Output
+
+TDI> Tcl("dir /full")
+TODO: Output
+
+
+# Query the MDSplus version of a server
+TDI> mdsconnect('oldserver')
+
+TDI> write(, mdsvalue('Tcl("show version", _out); _out'))
+
+
+MDSplus version: 7.112.1
+----------------------
+  Release:  alpha_release_7.112.1
+  Browse:   https://github.com/MDSplus/mdsplus/tree/alpha_release_7.112.1
+  Download: https://github.com/MDSplus/mdsplus/archive/alpha_release_7.112.1.tar.gz
+
+
+
+245
 ```
 
 ## `$DEFAULT` (Default Node Path)
@@ -59,7 +226,7 @@ TDI> first:second
 
 The path to the current default tree node.
 
-Same as `getdbi('DEFAULT')`.
+Same as `GETDBI('DEFAULT')`.
 
 ```tdi
 # With a tree open
@@ -86,7 +253,7 @@ See also
 
 The name of the current tree.
 
-Same as `getdbi('NAME')`.
+Same as `GETDBI('NAME')`.
 
 ```tdi
 # With a tree open
@@ -112,7 +279,7 @@ See also:
 
 The shot number of the current tree.
 
-Same as `getdbi('shot')` or `getdbi('shotid')`.
+Same as `GETDBI('shot')` or `GETDBI('shotid')`.
 
 ```tdi
 # With a tree open
@@ -175,6 +342,8 @@ Open the shot file identified by (`_TREE`, `_SHOT`) for use with other `Tree*` f
 If the shot was already open, it will be moved to the top of the [stack](#shot-stack).
 
 This will search [$<tree>_path](../environment-variables.md#tree_path) or [$default_tree_path](../environment-variables.md#default_tree_path) as described there.
+
+This will trigger the [OpenTree hook](../tree-hooks.md#opentree).
 
 ```tdi
 ```
@@ -380,7 +549,7 @@ TDI> TreeOpen("mytree", 12345)
 TDI> GetDefaultNid()
 0
 
-TDI> TreeSetDefault("MYNODE")
+TDI> TreeSetDefault("HARDWARE")
 
 TDI> GetDefaultNid()
 42
@@ -450,6 +619,46 @@ TDI> $DEFAULT
 "\\MYTREE::TOP:FIRST"
 ```
 
+## `TreeTurnOn` (Turn Node On)
+
+|||
+|-|-|
+|TDI Syntax| `TreeTurnOn(_NID)`  |
+|Filepath  | [`tdi/treeshr/TreeTurnOn.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeTurnOn.fun) |
+
+Sets the [NCI](../metadata.md#nci) `state` flag to 0, indicating that the node is [on](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 0 as well.
+
+```tdi
+TDI> TreeTurnOn('A')
+
+# state, 0 means on
+TDI> btest(getnci('A', 'get_flags'), 0)
+0BU
+# parent_state, 0 means on
+TDI> btest(getnci('A:B', 'get_flags'), 1)
+0BU
+```
+
+## `TreeTurnOff` (Turn Node Off)
+
+|||
+|-|-|
+|TDI Syntax| `TreeTurnOff(_NID)`  |
+|Filepath  | [`tdi/treeshr/TreeTurnOff.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeTurnOff.fun) |
+
+Sets the [NCI](../metadata.md#nci) `state` flag to 1, indicating that the node is [off](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 1 as well.
+
+```tdi
+TDI> TreeTurnOff('A')
+
+# state, 1 means on
+TDI> btest(getnci('A', 'get_flags'), 0)
+1BU
+# parent_state, 1 means on
+TDI> btest(getnci('A:B', 'get_flags'), 1)
+1BU
+```
+
 ## `GetExtendedAttribute` (Get XNCI/Extended Attribute)
 
 |||
@@ -475,62 +684,64 @@ TODO:
 
 `_NODE` can be a node, nid, or path.
 
+## `TreeSetDbiItm` (Set Tree/DataBase Information)
+
+|||
+|-|-|
+|TDI Syntax| `TreeSetDbiItm(_CODE, _VALUE)`  |
+|Filepath  | [`tdi/treeshr/TreeSetDbiItm.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeSetDbiItm.fun) |
 
 ## `GETDBI` (Get Tree/DataBase Information)
 
 |||
 |-|-|
-|TDI Syntax   | `GETDBI(_NODE, _NAME)` |
-|Python Syntax| `MDSplus.GETDBI(node, name)` |
+|TDI Syntax   | `GETDBI(_NAME)` |
+|Python Syntax| `MDSplus.GETDBI(name)` |
 |Opcode|389|
 
-> TODO: Come back to this after we do tree stuff and write proper examples
+Returns the [DBI](../metadata.md#dbi) indicated by `_NAME` from the shot's metadata.
 
-Get database information.
-Arguments 
- STRING character scalar. The string may be abbreviated in upper or lower case to any unique form.
-Logical OPEN_FOR_EDIT modifiable MODIFIED changes made
-Long SHOTID shot number NUMBER_OPENED database pointers active MAX_OPEN database pointers allowed
-Character NAME experiment name DEFAULT default/current node
-INDEX integer scalar less than MAX_OPEN value. Determines which tree location is reported. The default value of 0 is the current tree.
-|Result       |Depends on the experiment, shot number, and history.
-|See also     |$DEFAULT, $EXPT, $SHOT, and $SHOTNAME constants.
+`_NAME` must be [Text](#) and is case-insensitive.
+
+> TODO: Document that substrings are allowed? or not?
+
+```tdi
+TDI> getdbi('shot')
+12345
+
+TDI> getdbi('name')
+"MYTREE"
+```
+
+See also:
+* [`$DEFAULT`](#default-default-node-path)
+* [`$EXPT`](#expt-treeexperiment-name)
+* [`$SHOT`](#shot-current-shot-number)
+* [`$SHOTNAME`](#shotname-current-shot-number-string)
+
+## `TreeSetNciItm` (Set Node Characteristic Information)
+
+|||
+|-|-|
+|TDI Syntax| `TreeSetNciItm(_NID, _CODE, _VALUE)`  |
+|Filepath  | [`tdi/treeshr/TreeSetNciItm.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeSetNciItm.fun) |
 
 ## `GETNCI` (Get Node Characteristic Information)
 
 |||
 |-|-|
-|TDI Syntax   | `GETNCI(_NODE, _NAME)` |
-|Python Syntax| `MDSplus.GETNCI(node, name)` |
+|TDI Syntax   | `GETNCI(_NODE, _NAME, [_USAGE])` |
+|Python Syntax| `MDSplus.GETNCI(node, name, [usage])` |
 |Opcode|175|
 
-> TODO: Come back to this after we do tree stuff and write proper examples
+Returns the [NCI](../metadata.md#dbi) indicated by `_NAME` from the `_NODE`. If `_USAGE` is specified, only nodes with matching [usages](../node-usages.md) will be used.
 
-|Return Type  |MDS Operation |
-Get node characteristic information about tree elements. Arguments Optional: NODE and USAGE.
-NODE a NID or long node identifier or a PATH or character form of the path of a tree element--child or member, or a wildcarded path. May be an array. Default is current position in tree.
-* WARNING, path names are case-sensitive. STRING character scalar. The string may be abbreviate in upper or lower case to any unique form. Case-insensitive.
-USAGE character scalar or vector. This limits the search of NODE names. It must be a valid usage name like "ALL", "ANY", or "TEXT".
-The STRING names by returned type follow. Byte unsigned CLASS storage classification DTYPE storage data type USAGE allowed data type Character FULLPATH path from top of tree MINPATH shortest relative path NODE_NAME last part of pathname ORIGINAL_PART_NAME Original node name in device PATH path from top or tagLogicals COMPRESSIBLE has arrays COMPRESS_ON_PUT use comprssion on put DO_NOT_COMPRESS no compression allowed ESSENTIAL node is essential IS_CHILD parent relationshipIS_MEMBER parent relationshipNID_REFERENCE contains nid references NO_WRITE_MODEL write to model disabled NO_WRITE_SHOT write to shot disabled PARENT_STATE parent on or off PATH_REFERENCE contains path references SETUP_INFORMATION has setup operations STATE on or off USAGE_ACTION allows only action USAGE_ANY allows any data USAGE_AXIS allows only axis USAGE_COMPOUND_DATA allows only compound_data USAGE_DEVICE allows only conglomerate USAGE_DISPATCH allows only dispatch USAGE_NUMERIC allows VMS data USAGE_SIGNAL allows only signal USAGE_STRUCTURE allows no data, was NONE USAGE_SUBTREE allows only subtree USAGE_TASK allows only task USAGE_TEXT allows only text USAGE_WINDOW allows only window WRITE_ONCE change only once Long DEPTH tree parents above LENGTH data size NID_NUMBER tree logical offset NUMBER_OF_CHILDREN number of child nodes NUMBER_OF_MEMBERS number of member nodes PARENT_RELATIONSHIP child or member Long unsigned GET_FLAGS bit flags OWNER ID rights identifier
-_
-STATUS
-status
-NID
-BROTHER
-next child or member
-CHILD
-first child
-MEMBER
-first member
-PARENT the one above in tree NID arrays CHILDREN_NIDS list of children CONGLOMERATE_NIDS MEMBER_NIDS list of members Quadword unsigned TIME_INSERTED VMS date and time Word unsigned CONGLOMERATE_ELT number of elements Node data RECORD actual data
-|Signals      |None, except for RECORD. |Units        |None, except for RECORD. |Form         |VECTOR concatenation of all elements found for the list
-of NIDs and PATHs. Scalar for non-array results of single input. All data types are the same for one request except possibly for RECORD. Character names varyin length except for NODE_NAME, which has length 12.
-|Result       |A scalar or simple vector list of results. RECORD may not be able to VECTOR the results of a list of NIDs/PATHs. Logicals allow easy testing of bit or value.
->>>>>>>>>WARNING, only GETNCI can handle arrays of NIDs/PATHs.
->>>>>>>>>WARNING, a NID/PATH result used in an expression will have its data taken--just as if the node name had been used. Thus GETNCI(\TOP.XRAY,"MEMBER")//" Z" might be "Xray diagnostic Z" if the first member were the description.
-|Examples     |GETNCI(\TOP.XRAY,"PARENT") is \TOP as is GETNCI("\TOP.XRAY","par").
+`_NODE` can be a [Scalar](#) or [Array](#) of [NIDs](#node-id-nid), [Nodes](#reading-the-data-from-a-node), or [Paths](#node-paths). Paths can contain [wildcards](#wildcards).
 
+`_USAGE` can be a [Scalar](#) or [Array](#) of case-insensitive [Text](#) describing the allowed [usages](../node-usages.md).
 
+```tdi
+```
 
 ## `USING`
 
@@ -569,3 +780,59 @@ TODO: Come Back To This and investigate further
 Execute Task
 Executes the task item found in the argument.
 ARGUMENT TASK refers to an ACTION or a TASK
+
+## Tree Hooks
+
+> TODO: Write a little bit more here
+> TODO: Add links to relevant hooks
+
+See [Tree Hooks](../tree-hooks.md).
+
+## Dummy Tree
+
+() usage
+[] data
+
+`mytree`
+```
+:START_TIME (NUMERIC)
+
+.ANALYSIS (STRUCTURE)
+    :CURRENT [Path("\\CURRENT_SENSOR")]
+    :TEMP [Path("\\TEMP_SENSOR")]
+
+.HARDWARE (STRUCTURE)
+
+    .ADC (DEVICE) \ADC # Analog-to-Digital Converter
+        .ACTIONS (STRUCTURE)
+            :INIT (ACTION)
+            :STORE (ACTION)
+
+        :IN_01 (SIGNAL) \CURRENT_SENSOR [Build_Signal($VALUE * :CAL, ..., ...)]
+            :CAL (NUMERIC)
+        :IN_02 (SIGNAL) \TEMP_SENSOR
+            :CAL (NUMERIC)
+        :IN_03 (SIGNAL)
+            :CAL (NUMERIC)
+
+    .DAC (DEVICE) \DAC # Digital-to-Analog Converter
+        .ACTIONS (STRUCTURE)
+            :INIT (ACTION)
+
+        :OUT_01 (SIGNAL)
+        :OUT_02 (SIGNAL)
+        :OUT_03 (SIGNAL)
+```
+
+too git first output of dac:
+.HARDWARE.DAC:OUT_01 (path, maybe)
+\DAC:OUT_1 (minpath)
+\MYTREE::TOP.HARDWARE.DAC:OUT_01 (fullpath)
+***:OUT_01 (~~~ too)
+\ADC^:DAC:OUT_01
+
+find all of the devices with outputs
+union(getnci('***OUT*^', 'nid_number'))
+
+get the fullpath of every signal node via usage mask
+getnci(***, 'FULLPATH', 'SIGNAL')

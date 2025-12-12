@@ -56,7 +56,7 @@ TDI> _file = fopen('does-not-exist.txt', 'r')
 TDI> if (_file) { fclose(_file); }
 ```
 
-## `FSEEK` 
+## `FSEEK` (Set File Position Indicator)
 
 |||
 |-|-|
@@ -428,9 +428,7 @@ mdsplus : Shutting down
 |TDI Syntax| `TranslateLogical(_NAME)` |
 |Filepath  | [`tdi/mdsshr/TranslateLogical.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/TranslateLogical.fun) |
 
-Returns the value of the environment variable identified by `_NAME` if it exists, otherwise `""`.
-
-See [Environment Variables](../environment-variables.md) for a full list of environment variables.
+See [`GETENV`](#getenv-get-environment-variable).
 
 ## `GETENV` (Get Environment Variable)
 
@@ -439,7 +437,11 @@ See [Environment Variables](../environment-variables.md) for a full list of envi
 |TDI Syntax| `GETENV(_NAME)` |
 |Filepath  | [`tdi/mdsshr/getenv.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/getenv.fun) |
 
-Alias for [`TranslateLogical`](#translatelogical-get-environment-variable).
+Returns the value of the environment variable identified by `_NAME` if it exists, otherwise `""`.
+
+This is implemented through [`TranslateLogical`](#translatelogical-get-environment-variable).
+
+See [Environment Variables](../environment-variables.md) for a full list of environment variables.
 
 ## `SETENV`
 
@@ -448,7 +450,7 @@ Alias for [`TranslateLogical`](#translatelogical-get-environment-variable).
 |TDI Syntax| `SETENV(_COMMAND)` |
 |Filepath  | [`tdi/mdsshr/setenv.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/mdsshr/setenv.fun) |
 
-Sets the environment variable name/value defined by `_COMMAND`. `_COMMAND` is a string with the name and value separated by an '='. If `_COMMAND` does not contain an '=', the environment variable will be unset instead. Returns a number, sure does.
+Sets the environment variable name/value defined by `_COMMAND`. `_COMMAND` is a string with the name and value separated by an '='. If `_COMMAND` does not contain an '=', the environment variable will be unset instead. Returns `MDSplusSUCCESS` (65545) or `MDSplusERROR` (65554).
 
 See [Environment Variables](../environment-variables.md) for a full list of environment variables.
 
@@ -566,6 +568,3 @@ TDI> date_time(getnci(:TREE_NODE, 'TIME_INSERTED'))
 
 See also:
 * [`GETNCI`](./trees.md#getnci-get-node-characteristic-information)
-
-getenv
-setenv

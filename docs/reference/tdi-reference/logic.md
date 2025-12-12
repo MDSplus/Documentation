@@ -1301,7 +1301,7 @@ Examples
 * `INOR_NOT(3BU,5BU)` in binary is `0B00000100BU`.
 
 
-### `INOT`
+### `INOT` (Bitwise NOT)
 |||
 |-|-|
 |TDI Syntax   | `INOT(_J)` |
