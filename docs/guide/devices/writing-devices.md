@@ -386,6 +386,7 @@ class DIG_32_ST(MDSplus.Device):
                 # Configure settings
                 dig.setFrequency(int(dev.FREQUENCY.data()))
 
+                # .on queries the NCI which is cheap. TODO: improve as needed
                 segment_index = 0
                 dev.RUNNING.on = True
                 while segment_index < segcount and dev.RUNNING.on:

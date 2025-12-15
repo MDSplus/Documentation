@@ -3,14 +3,14 @@
 
 ## Referencing Nodes in TDI
 
-While a shot is open, an expression may simply use a Node's name or [path](#node-paths) to reference it. However, these paths may not contain wildcards as they are meant to reference a single node.
+While a shot is open, an expression may simply use a Node's name or [path](#node-paths) to reference it. However, these paths may not contain wildcards as they are meant to reference a single node. Additionally, `-` and `^` cannot be used to reference parent nodes. (TODO: Stephen to verify)
 
 Only nodes in the top-most shot of the [stack](#shot-stack) can be referenced in this way.
 
 When possible, a node referenced in this way will compile to a [`NID`](#node-id-nid), which allows for storing references to other nodes in the tree.
 
-Warning: Storing a reference to a tag will compile to a NID, and won't update if you update the tag
-> TODO: Reword/improve
+Warning: Storing a reference to a tag will compile to a NID, and won't update if you update the tag.
+> TODO: Reword/improve. these are all true sentences, just need to be repackaged into something more coherent
 
 Warning: Passing nodes as parameters to functions will fail if the node does not contain data, even if the function was not intending to use the data of the node. It is recommended to always pass them as [Text](#) instead to avoid this issue. See the example below.
 
@@ -44,26 +44,23 @@ NIDs can be retrieved with [`GETNCI(<node here>, 'NID_NUMBER')`](#getnci-get-nod
 
 ## Children and Members
 
-A parent node can have both children and member nodes. These are functionally equivalent and mostly exist for historical reasons. However, children should nominally be used for structure, and members should nominally be used for nodes with data.
+A parent node can have both children and member nodes. These are functionally equivalent and mostly exist for historical reasons, however, children should nominally be used for structure, and members should nominally be used for nodes with data. The decision of whether a node will be a member or a child is made when [adding](#) the node, and determined by the `.` or `:` prefixed on the name:
 
 * Children start with `.`
 * Members start with `:`
 
 See [node path](#node-paths) for more examples.
 
-The decision of whether a node will be a member or a child is made when [adding](#) the node, determined by the `.` or `:` prefixed on the name.
-> TODO: Mark, help
+Note: When referencing [nodes](#referencing-nodes-in-tdi), `.` and `:` can be used interchangably. In other words, as long as the node name is correct, it will be used whether it is technically a child or member. Some commands, like [mdstcl dir](../mdstcl.md#directory-node_path_wild1node_path_wild2-full-usageusage-usageusage1usage2) will distinguish between children and members.
 
 Note: A parent node cannot have both a child and member of the same name.
 
-Note: When referencing [Nodes](#referencing-nodes-in-tdi), `.` and `:` can be used interchangably.
-
-Some commands, like [mdstcl dir](../mdstcl.md#directory-node_path_wild1node_path_wild2-full-usageusage-usageusage1usage2) will separate children and members.
+TODO: stephen to confirm
 
 ```
 TDI> Tcl('dir')
 
-\CMOD::TOP
+\MYTREE::TOP
 
  :START_TIME
 
@@ -82,20 +79,29 @@ When multiple shots are open, they will be stored in a stack. Only the top-most 
 
 See [show db](../mdstcl.md#show-db) for more information.
 
-> TODO:
 
 ## Node Paths
-> TODO: Mark, help reword/improve/organize
 
-A node path is similar to a file path, however you can use any of the separators below to refine the search path. Unless prefixed with a `\`, node paths will be relative to the [default node](#default-default-node-path).
+A node path is similar to a file path, however you may use any of the separators below to refine the search path.
 
-For convenience, when searching for nodes, `.`, `:` and `~` are now often interchangable.
+Node paths will be relative to the [default node](#default-default-node-path) unless prefixed with a backslash character (`\`), which is used to prefix a [`tag`](#) name. 
 
-`-` or `^` can be used to access a node's parent.
+Note: when referencing a tag inside a string, remember to escape the backslash by doubling it (e.g., `"\\tagnamegoeshere"`)
 
-When adding nodes, `.` and `:` will be used as described in [children and members](#children-and-members), and `~` cannot be used at all.
+Managing wildcards:
 
-Relative paths can be prefixed with `.` or `:`, however `~` as a prefix will be interpreted as a [bitwise not](./logic.md#inot-bitwise-not).
+* For convenience, when searching for nodes, `.`, `:` and `~` are often interchangable. (See also: [wildcards](#wildcards))
+
+* `-` or `^` can be used to access a node's parent. 
+
+* When adding nodes, `.` and `:` will be used as described in [children and members](#children-and-members), and `~` cannot be used at all.
+
+* Relative paths can be prefixed with `.` or `:`, however `~` as a prefix will be interpreted as a [bitwise not](./logic.md#inot-bitwise-not).
+
+> TODO: Stephen to verify
+
+> TODO: examples
+
 
 ## Wildcards
 > TODO: Mark, help reword/improve/organize
@@ -156,7 +162,7 @@ The default node can be set with [`TreeSetDefault`](#treesetdefault-set-default-
 |TDI Syntax| `Tcl(_COMMAND, [_OUTPUT], [_ERROR])` |
 |Filepath  | [`tdi/tcl/Tcl.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/tcl/Tcl.fun) |
 
-Run an [`mdstcl`](../mdstcl.md) command. If `_OUTPUT` is specified, it will contain the output text of the command, otherwise it will print to stdout. If `_ERROR` is specified, it will contain the error text of the command, otherwise it will print to `stderr`. Returns the return code from executing the given command.
+Runs an [`mdstcl`](../mdstcl.md) command. If `_OUTPUT` is specified, it will contain the output text of the command, otherwise it will print to stdout. If `_ERROR` is specified, it will contain the error text of the command, otherwise it will print to `stderr`. Returns the return code from executing the given command.
 
 If specified, `_OUTPUT` and `_ERROR` can either be variables or strings containing variable names. The variables don't need to be already defined.
 
@@ -337,11 +343,11 @@ See also:
 |TDI Syntax| `TreeOpen(_TREE, [_SHOT], [_READONLY])`  |
 |Filepath  | [`tdi/treeshr/TreeOpen.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeOpen.fun) |
 
-Open the shot file identified by (`_TREE`, `_SHOT`) for use with other `Tree*` functions or to access nodes by path. If `_SHOT` is not specified, the model shot (-1) will be used. If `_READONLY` is specified and nonzero, the tree will be open read-only, otherwise it will be open for read/write.
+Opens the shot file identified by (`_TREE`, `_SHOT`) for use with other `Tree*` functions or to access nodes by path. If `_SHOT` is not specified, the model shot (-1) will be used. If `_READONLY` is specified and nonzero, the tree will be open read-only, otherwise it will be open for read/write.
 
 If the shot was already open, it will be moved to the top of the [stack](#shot-stack).
 
-This will search [$<tree>_path](../environment-variables.md#tree_path) or [$default_tree_path](../environment-variables.md#default_tree_path) as described there.
+This will search [`$<tree>_path`](../environment-variables.md#tree_path) or [`$default_tree_path`](../environment-variables.md#default_tree_path) as described there.
 
 This will trigger the [OpenTree hook](../tree-hooks.md#opentree).
 
@@ -377,7 +383,7 @@ TODO:
 |TDI Syntax| `TreeClose([_TREE], [_SHOT])`  |
 |Filepath  | [`tdi/treeshr/TreeClose.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeClose.fun) |
 
-Close a shot that was opened with [`TreeOpen`](#treeopen-open-tree). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be closed. Otherwise, the shot at the top of the [stack](#shot-stack) will be closed.
+Closes a shot that was opened with [`TreeOpen`](#treeopen-open-tree). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be closed. Otherwise, the shot at the top of the [stack](#shot-stack) will be closed.
 
 A useful expression to close all open trees (as used by `closeAllTrees()` in the various `Connection` classes):
 ```tdi
@@ -408,7 +414,7 @@ Writes the structure changes to disk of a shot that was opened with [`TreeOpenEd
 
 For use with [structure editing](#).
 
-Discard the structure changes and close a shot that was opened with [`TreeOpenEdit`](#treeopenedit-open-tree-for-structure-editing) or [`TreeOpenNew`](#treeopennew-createoverwrite-a-tree-and-open-for-structure-editing). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be quit. Otherwise, the shot at the top of the [stack](#shot-stack) will be quit.
+Discards the structure changes and close a shot that was opened with [`TreeOpenEdit`](#treeopenedit-open-tree-for-structure-editing) or [`TreeOpenNew`](#treeopennew-createoverwrite-a-tree-and-open-for-structure-editing). If `_TREE` is specified, the shot identified by (`_TREE`, `_SHOT`) will be quit. Otherwise, the shot at the top of the [stack](#shot-stack) will be quit.
 
 ## `TreeFileName` (Get Shot File Path)
 
@@ -514,7 +520,7 @@ TODO:
 |TDI Syntax| `CURRENT_SHOT(_TREE)`  |
 |Filepath  | [`tdi/treeshr/current_shot.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/current_shot.fun) |
 
-Return the current shot number for the given `_TREE`. If no current shot number is found, `abort()` will be called.
+Returns the current shot number for the given `_TREE`. If no current shot number is found, `abort()` will be called.
 
 To get the current shot number without potentially throwing an error, use [`TreeGetCurrentShot`](#treegetcurrentshot-get-current-shot-number-or-zero).
 
@@ -626,7 +632,7 @@ TDI> $DEFAULT
 |TDI Syntax| `TreeTurnOn(_NID)`  |
 |Filepath  | [`tdi/treeshr/TreeTurnOn.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeTurnOn.fun) |
 
-Sets the [NCI](../metadata.md#nci) `state` flag to 0, indicating that the node is [on](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 0 as well.
+Sets the [NCI](../metadata.md#nci) `state` flag to 0, indicating that the node is [on](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 0 as well. Note: this is the opposite of boolean convention (0=false, 1=true) and may be counter-intuitive, so it may be helpful to understand that historically, this was written to satisfy an "ignore" function; thus, if ignore=0, then the tree is turned on, and vice versa.
 
 ```tdi
 TDI> TreeTurnOn('A')
@@ -646,15 +652,15 @@ TDI> btest(getnci('A:B', 'get_flags'), 1)
 |TDI Syntax| `TreeTurnOff(_NID)`  |
 |Filepath  | [`tdi/treeshr/TreeTurnOff.fun`](https://github.com/MDSplus/mdsplus/blob/alpha/tdi/treeshr/TreeTurnOff.fun) |
 
-Sets the [NCI](../metadata.md#nci) `state` flag to 1, indicating that the node is [off](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 1 as well.
+Sets the [NCI](../metadata.md#nci) `state` flag to 1, indicating that the node is [off](#node-on-off). Additionally, this sets the [NCI](../metadata.md#nci) `parent_state` flag of any [children](#) or [members](#) to 1 as well. Note: this is the opposite of boolean convention (0=false, 1=true) and may be counter-intuitive, so it may be helpful to understand that historically, this was written to satisfy an "ignore" function; thus, if ignore=1, then the tree is turned off, and vice versa.
 
 ```tdi
 TDI> TreeTurnOff('A')
 
-# state, 1 means on
+# state, 1 means off
 TDI> btest(getnci('A', 'get_flags'), 0)
 1BU
-# parent_state, 1 means on
+# parent_state, 1 means off
 TDI> btest(getnci('A:B', 'get_flags'), 1)
 1BU
 ```
@@ -734,7 +740,7 @@ See also:
 |Python Syntax| `MDSplus.GETNCI(node, name, [usage])` |
 |Opcode|175|
 
-Returns the [NCI](../metadata.md#dbi) indicated by `_NAME` from the `_NODE`. If `_USAGE` is specified, only nodes with matching [usages](../node-usages.md) will be used.
+Returns the [NCI](../metadata.md#nci) indicated by `_NAME` from the `_NODE`. If `_USAGE` is specified, only nodes with matching [usages](../node-usages.md) will be used.
 
 `_NODE` can be a [Scalar](#) or [Array](#) of [NIDs](#node-id-nid), [Nodes](#reading-the-data-from-a-node), or [Paths](#node-paths). Paths can contain [wildcards](#wildcards).
 
@@ -747,22 +753,29 @@ Returns the [NCI](../metadata.md#dbi) indicated by `_NAME` from the `_NODE`. If 
 
 |||
 |-|-|
-|TDI Syntax   | `take_from_Compiler_syntax` |
-(Opcode 384
+|TDI Syntax   | `USING(_A, [_DEFAULT], [_SHOTID], [_EXPT])` |
+(Opcode 384)
 |Min arguments| 2
 |Max arguments| 4
-******Compiler syntax: USING(arg0,arg1,arg2,arg3) 
+******Compiler syntax: `USING(_A, [_DEFAULT], [_SHOTID], [_EXPT])` 
 |Native python|False|
 
+TODO: Stephen
 
-|Return Type  |MDS Operation |
 Evaluate expression from a different tree location.
-Arguments Optional: DEFAULT, SHOTID, EXPT. A an expression.
->>>>>>>>>WARNING, pathnames in the expression A will be relative to the temporary tree location and may not be related to the old tree.
-DEFAULT character, NID, long, or PATH scalar. The new tree path.
->>>>>>>>>WARNING, relative paths are like the full name in the old tree. SHOTID integer scalar. The shot number. EXPT character scalar. The experiment name.
-|Result       |Depends on the expression at the node in the new tree. The old node, shot, and experiment are used to evaluate the expressions for DEFAULT, SHOTID, and EXPT. If SHOTID or EXPT present, a new tree is opened for reading. The temporary path is set from DEFAULT. If omitted, the values used are those of the current tree and path. There will be an error if the old tree is not open or the old path is bad.
-|Examples     |Say shot 1234 is a "vacuum" subtraction shot for the current shot and we are positioned at \TOP.XRAY:CHAN_01, which has data, then the subtracted data might be
+Arguments
+* `_A` an expression.  
+    WARNING, pathnames in the expression will be relative to the temporary tree location and may not be related to the old tree.
+* `_DEFAULT` character, NID, long, or PATH scalar. The new tree path.   
+    WARNING, relative paths are like the full name in the old tree.
+* `_SHOTID` integer scalar. The shot number.
+* `_EXPT` character scalar. The experiment name.
+
+Result
+Depends on the expression at the node in the new tree. The old node, shot, and experiment are used to evaluate the expressions for DEFAULT, SHOTID, and EXPT. If SHOTID or EXPT present, a new tree is opened for reading. The temporary path is set from DEFAULT. If omitted, the values used are those of the current tree and path. There will be an error if the old tree is not open or the old path is bad.
+
+Examples
+Say shot 1234 is a "vacuum" subtraction shot for the current shot and we are positioned at \TOP.XRAY:CHAN_01, which has data, then the subtracted data might be
 :DATA -USING(:DATA,,1234)
 
 ### `do_task` 
@@ -823,16 +836,3 @@ See [Tree Hooks](../tree-hooks.md).
         :OUT_02 (SIGNAL)
         :OUT_03 (SIGNAL)
 ```
-
-too git first output of dac:
-.HARDWARE.DAC:OUT_01 (path, maybe)
-\DAC:OUT_1 (minpath)
-\MYTREE::TOP.HARDWARE.DAC:OUT_01 (fullpath)
-***:OUT_01 (~~~ too)
-\ADC^:DAC:OUT_01
-
-find all of the devices with outputs
-union(getnci('***OUT*^', 'nid_number'))
-
-get the fullpath of every signal node via usage mask
-getnci(***, 'FULLPATH', 'SIGNAL')
