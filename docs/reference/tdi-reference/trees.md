@@ -42,6 +42,8 @@ Most functions that accept a NID will also accept a [Node](#referencing-nodes-in
 
 NIDs can be retrieved with [`GETNCI(<node here>, 'NID_NUMBER')`](#getnci-get-node-characteristic-information).
 
+when a node can't be found but is in the tree, it is stored as a path rather than a nid, in hopes that it can be resolved later.
+
 ## Children and Members
 
 A parent node can have both children and member nodes. These are functionally equivalent and mostly exist for historical reasons, however, children should nominally be used for structure, and members should nominally be used for nodes with data. The decision of whether a node will be a member or a child is made when [adding](#) the node, and determined by the `.` or `:` prefixed on the name:
