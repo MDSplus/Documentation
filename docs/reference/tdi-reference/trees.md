@@ -1,11 +1,12 @@
-
 # Trees
+
+> TODO: the first couple of sections should probably live in ..guide/trees-read-write.md?
 
 ## Referencing Nodes in TDI
 
-While a shot is open, an expression may simply use a Node's name or [path](#node-paths) to reference it. However, these paths may not contain wildcards as they are meant to reference a single node. Additionally, `-` and `^` cannot be used to reference parent nodes. (TODO: Stephen to verify)
+While a shot is open, a TDI expression may simply use a node's name or [path](#node-paths) to reference it. However, these paths may not contain wildcards as they are meant to reference a single node. Additionally, `-` and `^` cannot be used to reference parent nodes. (TODO: Stephen to verify)
 
-Only nodes in the top-most shot of the [stack](#shot-stack) can be referenced in this way.
+Only nodes in the top-most shot of the [stack](#shot-stack) can be referenced in this way. (TODO: as opposed to what?)
 
 When possible, a node referenced in this way will compile to a [`NID`](#node-id-nid), which allows for storing references to other nodes in the tree.
 

@@ -1,4 +1,4 @@
-# Tree Design & Configuration
+# Tree Setup and Storage
 
 MDSplus stores data as trees. Before you begin your experiment, you should take the time to design your trees to take in the raw data your experiment will generate, plus room for the processed data that your team will create as they analyze the raw data. Some things are easier to change than others once they have been set in place.
 

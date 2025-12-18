@@ -1,50 +1,45 @@
 
-# Reading/Writing Data
-
-## Reading Data
-
-DATA(node) or TreeGetRecord(node)
-
-## Writing TDI Expressions into Nodes
-
-## Writing Data
-
-TreePut(node)
-
-## Segments
-
-## GetMany / PutMany
-
-
 # Creating/Editing Tree Structures
 
-If you are looking to write data, this is not the right section
-
-'edit' means edit *structure*, use 'normal' to open for data read/write
+If your goal is simply to write data, go to the page on [Trees: Reading and Writing Data](../guide/trees-read-write.md). In this context, 'edit' means editing **structure**, which involves creating/deleting nodes, turning nodes on/off, moving nodes under other nodes, etc.
 
 ## Beware: Take Extra Precautions
+
+TODO: Checklist?
 
 Please take extra care while creating/editing trees as mistakes made during these operations can cause permanent data loss.
 
 Double check the tree you have open and the shot number
 
-Verify with coworkers that nobody else is making structure modifications
+Verify with colleagues that nobody else is making structure modifications before committing your own.
 
-Do not call `openNew()` on shots that already exist, they will be **overwritten**.
+Do not call `openNew()` on shots that already exist:  they will be **overwritten**.
 
-The last person to write wins, stay in edit mode for as little time as possible
-
-TODO: Checklist?
+The last person to write will "win", so stay in edit mode for as little time as possible.
 
 Permissions: Inherited from the filesystem, specifically the .tree file
+
+## Open a Tree for Editing
+
+```tcl
+edit TREE_NAME [/shot=SHOT_NUMBER] [/new]
+```
+Edit or create an MDSplus tree file. Before you can edit or create a tree file, you must have either the `treename_path` or `default_tree_path` environment variable set to define the location of the tree files (e.g., `mytree_path=/home/me/mytreedir`).
+
+* The `/shot` qualifier is used to specify a shot number to edit or create. If the `/shot` qualifier is not specified, the `edit` command will default to shot number -1, the "model" tree.
+
+* If the `/new` qualifier is specified, then a new empty tree will be created, overwriting any existing tree if one exists.
+
+* **Note**: Once you are done editing a tree you must use the `write` command to save any
+structural changes you might have made to the tree.
 
 ## Structure 'EDIT' mode limitations
 
 `openEdit()` or `openNew()` will both land you in structure 'edit' mode.
 
-Subtrees will not be opened, you can only edit one tree at a time
+Subtrees will not be opened; you can only edit one tree at a time.
 
-The last person to write wins, stay in edit mode for as little time as possible
+The last person to write "win", stay in edit mode for as little time as possible
 
 You must `write()` to save changes, `close()` will fail (TODO: verify) otherwise, use `quit()` to disregard changes
 
@@ -52,7 +47,7 @@ Structure 'edit' mode also allows read/write data access, but try to limit using
 
 ## Adding Nodes
 
-When adding nodes, be sure to use the intended prefix to control whether node is a `child` (`.`) or a `member` (`:`)
+When adding nodes, be sure to use the intended prefix to control whether node is a `child` (`.`) or a `member` (`:`).
 
 You actually pass a [path](), not just a name, so you can add a node like `.path.to.parent:newnode`
 
