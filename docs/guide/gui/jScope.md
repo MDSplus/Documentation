@@ -30,8 +30,8 @@ click `apply`
 `Customize > Setup data source...` (or `right click > Setup data source...`)
 
 [screenshot goes here: the setup  screen]
-Y axis: 
-X Axis
+Y Axis:  
+X Axis:  
 7
 
 

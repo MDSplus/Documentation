@@ -113,7 +113,7 @@ A wildcard is a [node path](#node-paths) with one or more of the following:
 
 |Syntax|Meaning|
 |-|-|
-|`*`  |Any node at this level|
+|`*`  |Any node at this level that matches the wildcard. TODO: example|
 |`***`|All nodes recursive|
 |`:*` |Any member at this level|
 |`:::`|All members recursive|
@@ -839,3 +839,4 @@ See [Tree Hooks](../tree-hooks.md).
         :OUT_02 (SIGNAL)
         :OUT_03 (SIGNAL)
 ```
+

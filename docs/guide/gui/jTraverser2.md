@@ -21,13 +21,14 @@ If this fails, you check that the `$MDSPLUS_DIR/setup.sh` is correctly [sourced]
 
 ## Connect to Server
 
+[screenshot goes here: menu for "file> connect"]
 [screenshot goes here: the window that appears when you go to "file> connect"]
 
 `File > Connect` opens a new [thin client](/docs/guide/thin.md) connection to the specified server in a new tab. Whatever you type in this field will be passed to [MDSCONNECT](TODO: link). Once connected, follow the directions above (`file > open` to open a specific tree)
 
 [screenshot goes here: window with new tab]
 
-`File > Disconnect` calls a disconnect() function and disconnects from the current server
+`File > Disconnect` calls the `disconnect()` function and disconnects from the current server
 
 
 
@@ -37,6 +38,7 @@ If this fails, you check that the `$MDSPLUS_DIR/setup.sh` is correctly [sourced]
 
 ## Open Tree
 
+[screenshot goes here: menu for "file> open"]
 [screenshot goes here: the window that appears when you go to "file> open"]
 
 `File > Open >`

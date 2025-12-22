@@ -1,7 +1,7 @@
 
 # Mathematical Constants
 
-> TODO: Mark, structure/improve/order
+> TODO: structure/improve/order. Alphabetical "plus"? (2pi and pi next to each other, ATM and P0)
 
 |Constants|||
 |-|-|-|
@@ -622,8 +622,11 @@ Returns the result of `_X` added to `_Y`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be; The data parts of the signal will be added together ignoring the time base. However, if only one is a [Signal](#signal), the result will be as well.
+If either `_X` or `_Y` is a [Signal](#signal), but not both, the result will also be a signal. However, if both are signals, only the `DATA()` of each signal will be used, and the result will not be a signal.
+
+> TODO: replicate the above paragraph as needed  
+
+> TODO: Example with 2 signals
 
 Integer overflows will be truncated.
 
@@ -690,8 +693,7 @@ Returns the result of `_Y` subtracted from `_X`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
+If either `_X` or `_Y` is a [Signal](#signal), but not both, the result will also be a signal. However, if both are signals, only the `DATA()` of each signal will be used, and the result will not be a signal.
 
 Integer underflows will be truncated.
 
@@ -756,8 +758,7 @@ Returns the result of `_X` multiplied by `_Y`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword // I think this is fine!
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
+If either `_X` or `_Y` is a [Signal](#signal), but not both, the result will also be a signal. However, if both are signals, only the `DATA()` of each signal will be used, and the result will not be a signal.
 
 Integer overflows will be truncated.
 
@@ -852,8 +853,7 @@ Returns the result of `_X` divided by `_Y`.
 
 If `_X` and `_Y` are both an [Array](#array) or a [Signal](#signal), but do not have the same length, the result will be truncated to the shorter one.
 
-> TODO: Mark, help reword
-If `_X` and `_Y` are both a [Signal](#signal), the result will not be. However, if only one is a [Signal](#signal), the result will be as well.
+If either `_X` or `_Y` is a [Signal](#signal), but not both, the result will also be a signal. However, if both are signals, only the `DATA()` of each signal will be used, and the result will not be a signal.
 
 > TODO: Rounding
 
@@ -1564,7 +1564,7 @@ See also: `ceiling` and `nint`.
 
 Returns `_X`, with all numbers after the decimal point removed (not rounded), and converted to a [Floating Point Number](#floating-point).
 
-> TODO: Mark, check/reword all of these references.
+> TODO: replicate
 
 To round, use [`ANINT`](#anint-nearest-integer-round-floating-point-number). To round up, use [`CEILING`](#ceiling-round-up). To round down, use [`FLOOR`](#floor-round-down).
 
@@ -2935,7 +2935,6 @@ To get the imaginary part, use [`AIMAG`](#aimag-imaginary-part-of-complex-number
 
 `_COMPLEX` must be [Numeric](#numeric), and should be a [Complex Number](#complex-number). If `_COMPLEX` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-> TODO: Mark, help reword, "if complex is not complex"
 If `_COMPLEX` is a [Real Number](#real-number), it will be converted [Floating Point](#floating-point) and returned.
 
 Note: Passing a second argument to this will cause a segmentation fault.
@@ -2976,7 +2975,6 @@ To get the real part, use [`REAL`](#real-real-part-of-complex-number).
 
 `_COMPLEX` must be [Numeric](#numeric), and should be a [Complex Number](#complex-number). If `_COMPLEX` is an [Array](#array) or [Signal](#signal), the shape will be preserved.
 
-> TODO: Mark, help reword, "if complex is not complex"
 If `_COMPLEX` is a [Real Number](#real-number), the result will be 0.
 
 [`BUILD_WITH_UNITS()`](#build_with_units) will be preserved.

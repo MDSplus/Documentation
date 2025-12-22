@@ -172,6 +172,10 @@ TDI> data(build_with_units(1 : 10, 'm'))
 build - immediate
 make - delayed
 
+Difference between our `build_` and `make_` functions in TDI is that `build_` leaves variable references as variable references:
+* `build_signal(_A,*,0:100)` creates a record that refers to the current (at evaluation time) value of the variable `_A`.
+* `make_signal(_A,*,0:100)` creates a record that contains the current value of the variable `_A`.
+
 ### `build_action` 
 |||
 |-|-|

@@ -128,3 +128,90 @@ Used by the `mdsobjects` java library to find `libJavaMds.*` to be passed to `Sy
 
 #### UIDPATH
 The default is `/usr/local/mdsplus/uid`.
+
+
+> TODO: everything below
+
+
+
+## mds_event_server
+If set, when a TCP event is received, (...). 
+>TODO: Stephen asked Mark W. do more research. We really don't recommend TCP events
+
+## mds_rpc_server // dwscope
+> TODO: more TK Stephen (actually more info TK Josh)
+
+## MDS_EVENT_HOST # dwscope
+> TODO: more TK Stephen (actually more info TK Josh)
+
+
+## UDP_EVENTS
+TODO
+
+Allegedly the way to enable/disable UDP events, but no library code references it
+
+> per Mark Winkel: Regarding the `UDP_EVENTS`, it is only used by a few Python routines.   The default is UDP events.   TCP events require setting two other environment variables: `mds_event_target` on the sending system and `mds_event_server` on the receiving system(s).   Event behavior (ports, etc.) can also be configured via the `eventsConfig.xml` file.
+
+This is deprecated and unused.
+
+
+
+
+# SQL
+## SYBASE_HOST
+SQL database host, used by mdssql.pro, dbinfo.pro, and entry_display.pro
+> TODO: Probably deprecated. Stephen to do more research
+
+
+# Uncategorized
+
+## MDSPLUS_SPAWN_WRAPPER
+> TODO
+
+## MDSIP_PORT_RANGE
+> TODO
+
+## PSEUDO_LIBRARY
+> TODO
+
+## PTDATA_LIBRARY
+> TODO
+
+# NONVMS_COMPATIBLE 
+Does something scary in put_datafile which is a core function (it writes the data)
+> TODO
+
+## NEXT_ROW_FIX 
+Replaced with TreeSetRowsFilled function therefore no reason to call out
+
+
+
+# Library search path
+## MDS_SHLIB_PATH # 
+Only used in mdsconnect.pro and mdsidlimage.pro
+> TODO
+
+## SHLIB_PATH
+Only used by mdsevent.pro, and the java apps ?
+> TODO
+
+## JavaMdsLib
+Used to find java classpath maybe?
+> TODO
+
+# Python
+## ExcludeMitCamacDevices
+Used to disable searching for Camac devices in MITDEVICES.fun
+> TODO
+
+## ExcludeMitObsoleteDevices
+Used to disable searching for Obsolete devices in MITDEVICES.fun
+> TODO
+
+# Environment Modules
+basically packages of variables grouped together, useful for installing things for example
+> TODO
+
+# Custom Variables
+make a note that if you do a search for an environment variable and it's not here, it might have been set up by your site's admin. (GA for example has their own custom environment variables)
+> TODO

@@ -16,10 +16,10 @@ When running IDL, the `print, !PATH` statement can be used to list all paths tha
 If you are using macOS, make sure your directory is changed to where mdsplus installation folder is. The first line of your IDL script will need a reference to your MDSplus installation folder. For example: 
 
 ```
-CD '/usr/local/mdsplus/lib' (or wherever you have IDL installed)
+CD '/usr/local/mdsplus/lib'  (or wherever you have IDL installed)
 ```
 
-> TODO: Mark W investigate eliminating the CD
+> TODO: Mark W. will investigate eliminating the CD
 
 
 ## Commands
@@ -35,7 +35,9 @@ Once connected, the following six commands will be most essential for communicat
 
 
 ### `mdsconnect`
-Makes a thin client connection to the specified MDSplus data server.  Will cause subsequent invocations of `mdsopen`, `mdsvalue`, `mdsput`, and `mdsclose` to be executed remotely on the specified host. `mdsdisconnect` will destroy this connection, reverting the above described routines to their local behaviors.
+Makes a thin client connection to the specified MDSplus data server.  Will cause subsequent invocations of `mdsopen`, `mdsvalue`, `mdsput`, and `mdsclose` to be executed remotely on the specified host. `mdsdisconnect` will destroy this connection~~~, reverting the above described routines to their local behaviors.~~~ (TODO: Mark W. to revisit after github issue#3001)
+
+TODO: Mark W. will investigate local behavior.
 
 Syntax: `mdsconnect, SERVERNAME [, port=PORTNAME] [, socket=ID] [, status=ISTAT] [, /quiet]`
 
@@ -61,13 +63,15 @@ Syntax: `MDSOPEN,TREE,SHOT[,/quiet][,status=ISTAT]`
 | `SHOT` | input: shot number of the file. |
 |`/quiet`| keyword: if present, suppresses IDL error message if MDSplus TCL command fails |
 |`status` | output:<BR> If omitted, no status is returned. If present, then `=1` for success, `=0` for failure |
+|`socket` | keyword: if present, connects to a specific socket. |
 
+> TODO: from Mark W. Issue#2996 needs to be fixed so that Mdsopen, MdsClose and mdsput will accept the socket keyword.
 
 ### `mdsvalue`
 
-Return the value of an MDSplus expression
+Return the value of an MDSplus expression.
 
-Syntax: `answer = mdsvalue(EXPRESSION[,ARG1,...,ARGN][,/quiet][status=STAT])`
+Syntax: `answer = mdsvalue(EXPRESSION[,ARG1,...,ARG16][, /quiet] [status=STAT] [socket=SOCKET])`
 
 |Parameters||
 |-|-|
@@ -75,13 +79,15 @@ Syntax: `answer = mdsvalue(EXPRESSION[,ARG1,...,ARGN][,/quiet][status=STAT])`
 | `arg1,...,argn` | Optional input parameters. Can take up to : values to substitute into the expression where `"$"` or `"$n"` placeholders indicate. |
 |`/quiet`| keyword: if present, suppresses IDL error message if MDSplus TCL command fails |
 |`status` | output:<BR> If omitted, no status is returned. If present, then `=1` for success, `=0` for failure |
+|`socket` | keyword: if present, connects to a specific socket. |
+
+> TODO: from Mark W. Issue#2996 needs to be fixed so that Mdsopen, MdsClose and mdsput will accept the socket keyword.
 
 
 Example
 ```
-function mds$value,expression,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12, $; arg13,arg14,arg15,arg16,arg17,arg18,arg19,arg20,arg21,arg22,arg23,arg24,arg25, $; arg26,arg27,arg28,arg29,arg30,arg31,arg32,status=status,quiet=quiet; return,answer
-;end
-
+plasma_current = mdsvalue('\IP')
+result = mdsvalue( '5 * 11 + $’, 15)   ; the result is 70
 ```
 
 ### `mdsput`
@@ -96,6 +102,9 @@ syntax: `mdsput, NODE, EXPRESSION [, ARG1 to ARG16] [, status=ISTAT] [, /quiet]`
 | `ARG1 .. ARG16` | input: the expression can accept up to 16 optional arguments
 | `status` | output:<BR> If omitted, no status is returned. If present, then `=1` for success, `=0` for failure |
 | `/quiet` | keyword: if present, suppresses IDL error message if MDSplus TCL command fails |
+|`socket` | keyword: if present, connects to a specific socket. |
+
+> TODO: from Mark W. Issue#2996 needs to be fixed so that Mdsopen, MdsClose and mdsput will accept the socket keyword.
 
 Example: `mdsput, 'top.fruit.grape.quantity', '5 * 11 + $', offset, status=ISTAT`
 
@@ -104,11 +113,11 @@ Example: `mdsput, 'top.fruit.grape.quantity', '5 * 11 + $', offset, status=ISTAT
 
 Closes an open MDSplus experiment model or pulse file.
 
-syntax: `mdsclose[,EXPERIMENT,SHOT][,/quiet,status=ISTAT]`
+syntax: `mdsclose[,TREE,SHOT][,/quiet,status=ISTAT]`
 
 |PARAMETERS||
 |-|-|
-|`EXPERIMENT` | name of the experiment used in an invocation of MDSOPEN.|
+|`TREE`       | name of the experiment used in an invocation of MDSOPEN.|
 |`SHOT`       | shot number of the file. <BR>If both experiment and shot are omitted, all files will be closed. |
 |`/quiet`     | keyword: if present, suppresses IDL error message if MDSplus TCL command fails |
 |`status`     | output:<BR> If omitted, no status is returned. If present, then `=1` for success, `=0` for failure |
@@ -117,7 +126,7 @@ syntax: `mdsclose[,EXPERIMENT,SHOT][,/quiet,status=ISTAT]`
 ### `mdsdisconnect`
 Disconnects from  a remote mdsplus data server.
 
-syntax: `mdsdisconnect, [, socket=ID] [, status=ISTAT] [, /quiet]`
+syntax: `mdsdisconnect [, socket=ID] [, status=ISTAT] [, /quiet]`
 
 |Parameters||
 |-|-|
@@ -127,24 +136,24 @@ syntax: `mdsdisconnect, [, socket=ID] [, status=ISTAT] [, /quiet]`
 
 Example: `mdsdisconnect, socket=connid`
 
+TODO: Mark W. investigation needed (see Issue #2996).
+
 
 ## example script
 
 ```idl
+; CD, '/usr/local/mdsplus/lib'  ; might have to use this statement so IDL can load the MDSplus libraries
+;
 function mds_demo
-; CD, '/usr/local/mdsplus/lib'   ; changes current directory in IDL to the MDSplus install directory 
-; mdsconnect, 'localhost'        ;
-mdsconnect, 'alcdata-archives'
-mdsopen, 'cmod', 1090909009
-d = mdsvalue('\IP')
-print, d[0:20]
-print, 'average = ', MEAN(d)
-; plot, d
-return, d
+mdsconnect, 'archive-server'
+mdsopen, 'fusion', 12345
+current = mdsvalue('\IP')  
+return, current
 end
+
 ```
 
-TODO: Mark W / Stephen to look at these commands:
+TODO: Mark W. / Stephen to look at these commands:
 ```
 The Maybe List
 * Mds_keyword_set.pro
@@ -156,6 +165,9 @@ The Uncertain List
 
 
 ## Troubleshooting
-Make sure your path is set correctly.
+Make sure your IDL_PATH is set correctly; in IDL, use this command to check:
 
+```idl
+print, !PATH
+```
 
