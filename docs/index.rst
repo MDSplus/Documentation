@@ -8,22 +8,20 @@ Welcome to MDSplus, the most widely used system for data management in magnetic 
     :titlesonly:
     :maxdepth: 2
 
-    Guide <guide/index>
-    Reference <reference/index>
-
-
-    .. Guide
-    ..     daq/trees
-    ..     daq/shot_numbers
-    ..     daq/tree_path_variables
-    ..     daq/access
-    ..     daq/experiment
-    ..     daq/faq
-    ..     devices/using_devices
-    ..     devices/writing_devices
-
-    .. Reference
-    ..     reference/index
+    introduction
+    install/index
+    apis/index
+    tools/index
+    tdi/index
+    devices/index
+    events
+    trees/index
+    environment-variables
+    tree-access/index
+    administration/index
+    history
+    build-system
+    GitHub <https://github.com/MDSplus/mdsplus>
 
 
 
