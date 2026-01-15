@@ -1,4 +1,6 @@
-# mdstcl / TCL
+# mdstcl
+
+`mdstcl` is a command-line tool that allows you to manage and explore trees. As one of the tools built on [./index.md](mdsdcl), it inherits all of the commands such as `show version`.
 
 For use with `mdstcl` (MDSplus Tree Command Language). This information also resides in the program's built-in help text (simply type `help` into the `TCL>` prompt); reproduced here for convenience and edited for clarity.
 
