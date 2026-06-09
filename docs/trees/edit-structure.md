@@ -117,3 +117,14 @@ Be careful: Tags have to be unique among a tree and all related parent/subtrees.
 ## Removing Tags
 
 Fairly safe, no extra warnings
+
+## Subtrees
+
+https://github.com/MDSplus/mdsplus/pull/3018
+Note: To rationalize the STATE and PARENT_STATE of the nodes in a subtree when it is opened independently, toggle its TOP node's state off and back on.
+
+TCL> set node \top /off
+TCL> set node \top /on
+or python
+tree._TOP.on = False
+tree._TOP.on = True
