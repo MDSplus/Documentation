@@ -6,23 +6,38 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'mdsplus-documentation'
-copyright = '2025, MIT'
+project = 'MDSplus Documentation'
+copyright = '2026, MIT'
 author = 'MIT'
-release = '1.1'
+
+release = '1.0.0'
+version = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    'myst_parser',
+    'sphinx_copybutton',
+    'sphinx_rtd_theme',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.doctest',
+    'sphinx.ext.duration',
+    'sphinx.ext.intersphinx',
+]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.venv']
 
-
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'classic'
-html_static_path = ['_static']
+html_theme = 'sphinx_rtd_theme'
+html_static_path = []
