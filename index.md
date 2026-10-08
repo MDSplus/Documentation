@@ -9,6 +9,7 @@ Welcome to MDSplus, the most widely used system for data management in magnetic 
 install/index
 apis/index
 tools/index
+tree-access
 environment-variables
 GitHub <https://github.com/MDSplus/mdsplus>
 ```
