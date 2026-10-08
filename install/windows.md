@@ -37,6 +37,14 @@ When downloading or running the installer, several security warnings may appear.
 
     ![](windows_installation09.png)
 
+## Silent Install
+
+For installing MDSplus without using the installer GUI, the silent flag may be passed.
+
+```
+<installer_exe> /S /AllUsers
+<installer_exe> /S /CurrentUser
+```
 
 ## Uninstall
 
