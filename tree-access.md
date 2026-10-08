@@ -3,7 +3,7 @@
 
 When accessing data stored in MDSplus, you will need to choose one of the following access methods. Alternatively, your site may dictate which access methods are permitted. The methods available are described below, along with their pros, cons, and our recommendations.
 
-# Local
+## Local
 
 Local access is, of course, the fastest method available. It should be used for writing data and for large analysis jobs when possible. When creating an mdsip server to serve data to a site, this server should have local access to the data if possible. "Local" access to shared filesystems such as NFS is not recommended, as the number of locks will tank your performance. Not every language API supports local access, as some require an mdsip server to communicate with.
 
@@ -20,7 +20,7 @@ export default_tree_path=/path/to/trees/~t
 
 *Note:* Some language APIs support [Local](#local) access with a [Thin Client](#thin-client) style API using connection strings such as "local://0" or "thread://0".
 
-# Thin Client
+## Thin Client
 
 Thin client provides the fastest method for reading data over a network, and the most minimal installation. It should be used for reading data from a centralized server and is available from all languages supported by MDSplus. It is not recommended to use thin client for writing data, especially segmented records or structured data. 
 
