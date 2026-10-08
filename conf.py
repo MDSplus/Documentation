@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'MDSplus Documentation'
+project = 'MDSplus'
 copyright = '2026, MIT'
 author = 'MIT'
 
