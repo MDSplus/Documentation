@@ -161,7 +161,7 @@ By selecting **Add to Dashboard** a new panel will be generated with the current
 
 ## Bugs and planned upgrades
 
-While striving to provide the best experience we need to balance that with the realities of time constraints and actually releasing the tools. We are doing our best to acknowledge the limitations the web tools currently have as well as share thoughts on how to make them better. If you have a bug to report or a feature to request you can do so on the [GitHub](www.github.com/heidthecamp/mdsplus-webtools/issues).  
+While striving to provide the best experience we need to balance that with the realities of time constraints and actually releasing the tools. We are doing our best to acknowledge the limitations the web tools currently have as well as share thoughts on how to make them better. If you have a bug to report or a feature to request you can do so on the [GitHub](http://www.github.com/heidthecamp/mdsplus-webtools/issues).  
 
 ### Planned feature upgrades:
 
