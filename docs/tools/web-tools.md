@@ -1,6 +1,18 @@
 
 # Web Tools
 
+<style>
+    img[alt=Export] { max-height: 250px; }
+    img[alt="open button"] { max-height: 250px; }
+    img[alt="traverser open form"] { max-height: 200px; }
+    img[alt="traverser with shot open"] { max-width: 200px; }
+    img[alt="reveal node"] { max-height: 150px; }
+    img[alt="traverser with shot expanded"] { max-width: 200px; }
+    img[alt="hover node"] { max-height: 500px; }
+    img[alt="node options"] { max-width: 500px; }
+
+</style>
+
 ## Installing / Running
 
 The web tools can be run from a terminal (akin to a Jupyter Notebook) or installed on a server for a whole site. See [GitHub](http://github.com/heidthecamp/mdsplus-web-tools) for instructions.  
@@ -24,11 +36,12 @@ For many projects you may want to use common fields (such as tree, shot or min/m
 ## Global Settings
 
 ![Global settings](assets/global-settings-form.png)
+<small>*Global settings form*</small>
 
 ### Settings
 
- **Title:** This will be evaluated and then set the page title. *This will be evaluated before and after all the panels (before: so any variables put into this field will propagate through the rest of the TDI expressions; after: so the results of the page can be displayed in the title).*  
-**Resample:** This controls the behavior of how expressions are evaluated and then returned. This adds a wrapper to expressions that will shrink the data being returned to just twice the number of pixels along the x axis taking the high and low values allowing maintained fidelity with a faster network call. *It is recommended to have this on, however if you notice anomalous behavior in your graphs it can be turned off. This can only be controlled for the page and not individual panels.*  
+ **Title:** This will be evaluated and then set the page title. This will be evaluated before and after all the panels (before: so any variables put into this field will propagate through the rest of the TDI expressions; after: so the results of the page can be displayed in the title).  
+**Resample:** This controls the behavior of how expressions are evaluated and then returned. This adds a wrapper to expressions that will shrink the data being returned to just twice the number of pixels along the x axis taking the high and low values allowing maintained fidelity with a faster network call. It is recommended to have this on, however if you notice anomalous behavior in your graphs it can be turned off. This can only be controlled for the page and not individual panels.    
 
 ### Global Panel Defaults
 
@@ -43,14 +56,23 @@ Note: TDI Variables in these values are evaluated during the evaluation of the t
 ## Panels
 
 A Panel can display one or more traces from different trees, shots, nodes, etc on the same plot. Panels can be resized by dragging the bottom right corner and moved to the desired width and height.  
+
 ![full width panel](assets/panel-full-width.png)  
+<small>*Full width panel*</small>  
+
 ![half width panel](assets/panel-half-width.png)  
+<small>*Half width panel*</small>  
+
 Panels can also be moved by dragging the white space in the panel header.  
 
-To modify the panel, open the ![Gear icon](assets/gear.svg) icon and select edit.  
+To modify the panel, open the ![Gear icon](assets/gear.svg) icon and select edit. This will open the panel edit form.   
+
 ![panel edit button](./assets/panel-gear-dropdown-edit.png)  
-This will open the panel edit form.  
+<small>*Settings dropdown*</small>  
+
 ![panel edit form](assets/panel-form.png)  
+<small>*Settings Form*</small>  
+
 From here you can modify features of the panel, such as the panel title and min/max height and width, as well as the individual [Traces](#traces).  
 
 Next to all the fields listed below you will see a checkbox. When checked, this will default the value to the [Global Defaults](#global-panel-defaults).  
@@ -86,32 +108,54 @@ Next to all the fields listed below you will see a checkbox. When checked, this 
 For quickly moving between nearby shots, the shot scrubber allows you to add or subtract one from the current shot number as defined in the [Global Trace Defaults](#global-trace-defaults). This can be very useful for looking at subsequent shots in a given day or run. This offset will not be saved, and will be reset to 0 when reloading.  
 
 ![Header with shot scrubbing](assets/header-shot-scrubbing.png)  
+<small>*Header with shot scubbing hovered*</small>  
 
 ## Saving/Loading
 
 The page is automatically saved periodically using the browser's local storage. To save a file off line go to the top right and select the ![Three bars](assets/three-bars.svg) menu and select export. This will save a file called `scope.json` to your downloads.  
+
 ![Export](assets/settings-dropdown-export.png)  
+<small>*Settings dropdown with export hovered*</small>  
 
 The scope can load exported files, as well as dwscope and jScope files (`.dat` and `.jscp`). When importing older files the scope does its best approximation of how the old files were configured.  
 
-## Sidebar Traverser
+## Traverser Sidebar
 
 To the left, you will find a Traverser that can explore trees and even create panels from nodes.  
 To open a tree click the dropdown and select `Open`, then enter the desired tree and shot.  
+
 ![open button](assets/traverser-dropdown-open.png)  
+<small>*Traverser dropdown*</small>  
+
 ![traverser open form](assets/traverser-open-shot-form.png)  
+<small>*Open traverser form*</small>  
+
 ![traverser with shot open](assets/traverser-trophy-shot-collapsed.png)  
+<small>*Opened traverser*</small>  
+
 
 You can search the tree manually, or if you know the node you are looking for you can use the **Reveal Node** function.  
+
 ![reveal node](assets/traverser-find-node.png)  
+<small>*Reveal node form*</small>  
+
 ![traverser with shot expanded](assets/traverser-trophy-shot-expand-ip.png)  
+<small>*Open traverser expanded to shearched node*</small>  
 
 You can preview a node's data by hovering.  
+
 ![hover node](assets/traverser-trophy-shot-hover-ip.png)  
+<small>*Traverser with node hovered*</small>  
 
 Or you can do a deeper dive into its data/metadata by clicking the ![Gear icon](assets/gear.svg) and selecting display.  
+
 ![node options](assets/traverser-torphy-shot-ip-node-options.png)  
+<small>*Node options*</small>  
+
+
 ![node data](assets/traverser-trophy-shot-ip-data.png)  
+<small>*Node data display*</small>  
+
 
 By selecting **Add to Dashboard** a new panel will be generated with the current tree, shot, and node as the Y Axis.  
 
@@ -121,11 +165,11 @@ While striving to provide the best experience we need to balance that with the r
 
 ### Planned feature upgrades:
 
-Traverser Page  
-Third party database support  
-Better mobile support  
+- Traverser Page  
+- Third party database support  
+- Better mobile support  
 
 ### Known bugs
 
-Certain page widths can cause elements to overlap (ie the scope and the side bar traverser) (work around: expand browser width)  
-Occasionally when resizing a panel the plot does not correctly resize (workaround: reloading the page)  
+- Certain page widths can cause elements to overlap (ie the scope and the side bar traverser) (work around: expand browser width)  
+- Occasionally when resizing a panel the plot does not correctly resize (workaround: reloading the page)  
